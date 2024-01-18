@@ -5,8 +5,8 @@ import SignUpFooter from "./SignUpFooter";
 
 const SignUpForm = () => {
   return (
-    <div className="lg:basis-1/2  h-full flex justify-center items-center">
-      <section className="lg:h-[700px]  lg:w-96 overflow-hidden h-[700px] w-80  ">
+    <div className="lg:basis-1/2  h-full flex justify-center items-center  ">
+      <section className="lg:h-[700px]  lg:w-96  h-[800px] w-80 ">
         <p className="text-4xl font-bold text-left mb-10">Get start now!</p>
         <FormSignUp />
         <Divider className="my-4 mb-5" />
