@@ -4,33 +4,33 @@ import face from "../../images/facebook.png";
 
 const AnotherSignIn = () => {
   return (
-    <div className="flex justify-center items-center gap-3 mt-10">
+    <div className="lg:flex lg:justify-center lg:items-center lg:gap-3 mt-10">
       <Button
         className="w-full mt-4 font-bold text-xs bg-white text-black "
         color="default"
         variant="bordered"
       >
-        Sign in with Google
+        <p className="ml-4">Sign in with Google</p>
         <img
           src={google}
           alt="google"
           width={15}
           height={15}
-          className="absolute left-4"
+          className="absolute lg:left-4 left-16"
         />
       </Button>
       <Button
         variant="bordered"
-        className="w-full mt-4 font-bold text-xs bg-white text-black "
+        className="w-full mt-4  font-bold text-xs bg-white text-black "
         color="default"
       >
-        Sign in with Facebook
+        <p className="ml-4">Sign in with Facebook</p>
         <img
           src={face}
           alt="google"
           width={20}
           height={20}
-          className="absolute left-3 decoration-white"
+          className="absolute lg:left-3 left-16 decoration-white"
         />
       </Button>
     </div>

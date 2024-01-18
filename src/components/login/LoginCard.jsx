@@ -7,8 +7,8 @@ import FooterLogin from "./FooterLogin";
 
 const LoginCard = () => {
   return (
-    <div className="lg:basis-1/2 h-full  flex justify-center   items-center bg-white   ">
-      <div className="w-96 h-[600px]   ">
+    <div className="lg:basis-1/2 h-full  flex justify-center items-center bg-white   ">
+      <div className="lg:h-[700px]  lg:w-96 overflow-hidden h-[600px] w-80  ">
         <NavLogin />
         <FormLogin />
         <Divider className="my-4 mt-12" />

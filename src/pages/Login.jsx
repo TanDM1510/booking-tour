@@ -5,7 +5,7 @@ import LoginCard from "../components/login/LoginCard";
 const Login = () => {
   return (
     <Layout>
-      <main className="flex flex-row  justify-center items-center h-full relative  ">
+      <main className="flex flex-row  justify-center items-center h-full relative ">
         <LoginCard />
         <Carousel />
       </main>
