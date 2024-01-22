@@ -177,9 +177,19 @@ const FormSignUp = () => {
       <MyButton
         type="submit"
         className="w-full font-bold mb-7  text-white"
-        color="blue"
+        color={
+          isInvalidPassword || isInvalidEmail || isValidFullName || isValidPhone
+            ? "hidden"
+            : "blue"
+        }
         size="md"
-        disabled={isSubmitting}
+        disabled={
+          isSubmitting ||
+          isInvalidEmail ||
+          isInvalidPassword ||
+          isValidFullName ||
+          isValidPhone
+        }
       >
         {isSubmitting ? (
           <div className="flex justify-center items-center">

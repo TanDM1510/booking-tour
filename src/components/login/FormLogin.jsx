@@ -111,7 +111,7 @@ const FormLogin = () => {
       <MyButton
         type="submit"
         className="text-white w-full mt-8 font-bold text-base bg-gradient-135deg"
-        color={isInvalidPassword || isInvalidEmail ? "default" : "blue"}
+        color={isInvalidPassword || isInvalidEmail ? "hidden" : "blue"}
         size="md"
         disabled={isSubmitting || isInvalidEmail || isInvalidPassword}
       >
