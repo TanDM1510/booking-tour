@@ -84,7 +84,7 @@ const FormSignUp = () => {
         name="fullName"
         value={fullName}
         isInvalid={isValidFullName}
-        color={isValidFullName ? "danger" : "success"}
+        color={isValidFullName ? "danger" : "default"}
         errorMessage={
           isValidFullName &&
           "Should be at least 3 characters and start with a letter in the name"
@@ -101,7 +101,7 @@ const FormSignUp = () => {
         label="Phone number"
         value={phone}
         isInvalid={isValidPhone}
-        color={isValidPhone ? "danger" : "success"}
+        color={isValidPhone ? "danger" : "default"}
         errorMessage={isValidPhone && "Invalid phone number"}
         onValueChange={setPhone}
       />
@@ -114,7 +114,7 @@ const FormSignUp = () => {
         name="email"
         value={email}
         isInvalid={isInvalidEmail}
-        color={isInvalidEmail ? "danger" : "success"}
+        color={isInvalidEmail ? "danger" : "default"}
         errorMessage={isInvalidEmail && "Please enter a valid email"}
         onValueChange={setEmail}
       />
@@ -140,7 +140,7 @@ const FormSignUp = () => {
         className="mb-3"
         value={password}
         isInvalid={isInvalidPassword}
-        color={isInvalidPassword ? "danger" : "success"}
+        color={isInvalidPassword ? "danger" : "default"}
         errorMessage={
           isInvalidPassword &&
           "Minimum eight characters, at least one letter and one number"

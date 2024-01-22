@@ -71,7 +71,7 @@ const FormLogin = () => {
         isRequired
         value={email}
         isInvalid={isInvalidEmail}
-        color={isInvalidEmail ? "danger" : "success"}
+        color={isInvalidEmail ? "danger" : "default"}
         errorMessage={isInvalidEmail && "Please enter a valid email"}
         onValueChange={setEmail}
       />
@@ -97,7 +97,7 @@ const FormLogin = () => {
         size="md"
         value={password}
         isInvalid={isInvalidPassword}
-        color={isInvalidPassword ? "danger" : "success"}
+        color={isInvalidPassword ? "danger" : "default"}
         errorMessage={
           isInvalidPassword &&
           "Minimum eight characters, at least one letter and one number"
