@@ -14,9 +14,6 @@ const LoginCard = () => {
         <Divider className="my-4 mt-12" />
         <AnotherSignIn />
         <FooterLogin />
-        <p className="font-bold text-gray-400 text-sm absolute lg:bottom-2 lg:left-3 bottom-0 left-0">
-          HellaTeam
-        </p>
       </div>
     </div>
   );

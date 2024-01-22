@@ -12,9 +12,6 @@ const SignUpForm = () => {
         <Divider className="my-4 mb-5" />
         <AnotherSignIn />
         <SignUpFooter />
-        <p className="font-bold text-gray-400 text-sm absolute lg:bottom-2 lg:left-3 bottom-0 left-0">
-          HellaTeam
-        </p>
       </section>
     </div>
   );

@@ -4,7 +4,7 @@ import face from "../../images/facebook.png";
 
 const AnotherSignIn = () => {
   return (
-    <div className="lg:flex lg:justify-center lg:items-center lg:gap-3 mt-10">
+    <div className="lg:flex lg:justify-center lg:items-center lg:gap-3 mt-5">
       <Button
         className="w-full mt-4 font-bold text-xs bg-white text-black "
         color="default"

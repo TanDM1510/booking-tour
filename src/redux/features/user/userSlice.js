@@ -14,7 +14,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loginUser: (state, action) => {
-      const user = { ...action.payload.user, token: action.payload.jwt };
+      const user = { ...action.payload.user, token: action.payload.id };
       state.user = user;
       localStorage.setItem("user", JSON.stringify(user));
     },
