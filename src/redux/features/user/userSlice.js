@@ -1,31 +1,100 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import { customFetch } from "../../../utils";
 
+const addUserToLocalStorage = (user) => {
+  localStorage.setItem("user", JSON.stringify(user));
+};
+
+const removeUserFromLocalStorage = () => {
+  localStorage.removeItem("user");
+};
 const getUserFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem("user")) || null;
+  const result = localStorage.getItem("user");
+  const user = result ? JSON.parse(result) : null;
+  return user;
 };
 
 const initialState = {
+  isLoading: false,
   user: getUserFromLocalStorage(),
 };
 
+export const registerUser = createAsyncThunk(
+  "api/v1/signUp",
+  async (user, thunkApi) => {
+    try {
+      const resp = await customFetch.post("/signUp", user);
+      console.log(resp);
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const loginsUser = createAsyncThunk(
+  "api/v1/signIn",
+  async (user, thunkApi) => {
+    try {
+      const resp = await customFetch.post("/signIn", user);
+      console.log(resp);
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    loginUser: (state, action) => {
-      const user = { ...action.payload.user, token: action.payload.id };
-      state.user = user;
-      localStorage.setItem("user", JSON.stringify(user));
-    },
-    logoutUser: (state) => {
-      state.user = null;
-      localStorage.removeItem("user");
-      toast.success("Logged out successfully");
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
+        if (toString(payload.message) === "Existing email") {
+          toast.error(payload.message);
+          state.isLoading = false;
+          return;
+        } else {
+          const { user } = payload;
+          state.isLoading = false;
+          state.user = user;
+          toast.success("Hello there");
+        }
+      })
+      .addCase(registerUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(loginsUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginsUser.fulfilled, (state, action) => {
+        if (parseInt(action.payload.status) === 500) {
+          toast.error(action.payload.message);
+          state.isLoading = false;
+          return;
+        } else {
+          const user = {
+            ...action.payload.user,
+            token: action.payload.token.accessToken,
+          };
+          state.user = user;
+          state.isLoading = false;
+          localStorage.setItem("user", JSON.stringify(user));
+
+          toast.success(action.payload.message);
+        }
+      })
+      .addCase(loginsUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error("there was an error");
+      });
   },
 });
-
-export const { loginUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

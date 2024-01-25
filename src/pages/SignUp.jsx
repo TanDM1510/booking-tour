@@ -1,6 +1,5 @@
 import SignUpForm from "../components/SignUp/SignUpForm";
 import Layout from "../components/common/Layout";
-
 import Carousel from "../components/login/Carousel";
 
 const SignUp = () => {
