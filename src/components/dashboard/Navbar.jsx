@@ -1,5 +1,9 @@
 import {
-  Button,
+  Avatar,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -14,7 +18,6 @@ import { useState } from "react";
 
 const NavbarDashBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const menuItems = [
     "Profile",
     "Dashboard",
@@ -25,13 +28,12 @@ const NavbarDashBoard = () => {
     "My Settings",
     "Team Settings",
     "Help & Feedback",
-    "Log Out",
   ];
 
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
-      className="bg-gradient-to-br bg-stone-100 border-b-3  h-24"
+      className="bg-gradient-to-br bg-stone-100  h-24"
     >
       <NavbarContent>
         <NavbarMenuToggle
@@ -39,25 +41,41 @@ const NavbarDashBoard = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <AcmeLogo />
+          <span style={{ fontSize: "500px" }}>
+            {" "}
+            <AcmeLogo />
+          </span>
+
           <p className="font-bold text-inherit">ACME</p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <p className="text-3xl font-bold ">Dash Board</p>
+          <p className="text-3xl font-bold ">DASHBOARD</p>
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+
+      <NavbarContent as="div" justify="end">
+        <Dropdown placement="bottom-end">
+          <DropdownTrigger>
+            <Avatar
+              isBordered
+              as="button"
+              className="transition-transform"
+              color="secondary"
+              name="Jason Hughes"
+              size="sm"
+              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+            />
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownItem key="settings">My Profile</DropdownItem>
+            <DropdownItem key="logout" color="danger">
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (

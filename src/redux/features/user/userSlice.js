@@ -82,6 +82,7 @@ const userSlice = createSlice({
           const user = {
             ...action.payload.user,
             token: action.payload.token.accessToken,
+            role: action.payload.userData.role,
           };
           state.user = user;
           state.isLoading = false;
@@ -92,7 +93,7 @@ const userSlice = createSlice({
       })
       .addCase(loginsUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        toast.error("there was an error");
+        toast.error(payload.response.data.message);
       });
   },
 });

@@ -13,7 +13,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/dashboard" element={<ShareLayout />}>
-          <Route index element={<Stats />} />
+          <Route path="/dashboard/stats" element={<Stats />} />
           <Route path="/dashboard/city" element={<City />} />
           <Route path="/dashboard/location" element={<Location />} />
         </Route>
