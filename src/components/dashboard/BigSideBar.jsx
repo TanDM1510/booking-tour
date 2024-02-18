@@ -1,14 +1,11 @@
 import { NavLink } from "react-router-dom";
 import links from "../../utils/links";
-import { AcmeLogo } from "./AcmeLogo";
 
 const BigSideBar = () => {
   return (
-    <div className=" hidden  lg:basis-1/6 h-full lg:block  bg-stone-100">
+    <div className=" hidden  lg:basis-1/6 h-full lg:block  bg-stone-100 overflow-y-auto">
       <div className="pt-8 flex flex-col  items-center  h-full">
-        <div className="mb-7 text-10">
-          <AcmeLogo />
-        </div>
+        <div className="mb-7 text-10"></div>
 
         {links.map((link) => {
           const { id, text, path, icon } = link;
@@ -41,8 +38,8 @@ const BigSideBar = () => {
                   <p
                     className={
                       isActive
-                        ? " font-bold text-blue-500 text-2xl hover:text-blue-500"
-                        : "font-bold text-2xl hover:text-blue-500"
+                        ? " font-bold text-blue-500 text-base hover:text-blue-500"
+                        : "font-bold text-base hover:text-blue-500"
                     }
                   >
                     {text}

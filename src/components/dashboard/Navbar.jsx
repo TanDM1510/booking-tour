@@ -15,21 +15,26 @@ import {
 import { Link } from "react-router-dom";
 import { AcmeLogo } from "./AcmeLogo";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/features/user/userSlice";
 
 const NavbarDashBoard = () => {
+  const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuItems = [
     "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
+    "Stats",
+    "Location",
+    "City",
     "System",
     "Deployments",
     "My Settings",
     "Team Settings",
     "Help & Feedback",
   ];
-
+  const handleLogout = () => {
+    dispatch(logoutUser("Logging out ...."));
+  };
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
@@ -71,8 +76,8 @@ const NavbarDashBoard = () => {
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="settings">My Profile</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
+            <DropdownItem key="logout" color="danger" onClick={handleLogout}>
+              Logout
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -89,7 +94,7 @@ const NavbarDashBoard = () => {
                   : "foreground"
               }
               className="w-full"
-              href="#"
+              to={item}
               size="lg"
             >
               {item}

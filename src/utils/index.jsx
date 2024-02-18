@@ -4,10 +4,6 @@ const productionUrl = "https://hella-booking.onrender.com/api/v1";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
-  withCredentials: true,
-  headers: {
-    "Content-type": "application/json",
-  },
 });
 
 export const genders = [

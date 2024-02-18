@@ -25,7 +25,7 @@ const FormLogin = () => {
   const validateEmail = (value) =>
     value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
   const validatePassword = (value) =>
-    value.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i);
+    value.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/i);
 
   const isInvalidEmail = useMemo(() => {
     if (values.email === "") return false;
@@ -110,8 +110,8 @@ const FormLogin = () => {
         size="md"
         type="submit"
         className="text-white w-full mt-8 font-bold text-base"
-        color={isInvalidPassword || isInvalidEmail ? "hidden" : "blue"}
-        disabled={isLoading || isInvalidEmail || isInvalidPassword}
+        color={isInvalidEmail ? "hidden" : "blue"}
+        disabled={isLoading || isInvalidEmail}
       >
         {isLoading ? (
           <div className="flex justify-center items-center">

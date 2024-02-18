@@ -17,46 +17,51 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
+
 import { Link } from "react-router-dom";
-import { getAllLocation } from "../../../redux/features/location/allLocation";
+
+import { getAllActivities } from "../../../redux/features/activities/allActivities";
 
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
 
-export default function Location() {
+export default function Activities() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllLocation());
-  }, []);
-  const { location, isLoading } = useSelector((store) => store.allLocation);
-  console.log(location);
-  const renderCell = React.useCallback((location, columnKey) => {
-    const cellValue = location[columnKey];
 
+  useEffect(() => {
+    dispatch(getAllActivities());
+  }, []);
+  const { activities, isLoading } = useSelector((store) => store.allActivities);
+  console.log(activities);
+  const renderCell = React.useCallback((activity, columnKey) => {
+    const cellValue = activity[columnKey];
     switch (columnKey) {
-      case "cityId":
+      case "locationId":
         return (
           <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize">{cellValue}</p>
             <p className="text-bold text-sm capitalize text-default-400">
-              {location.cityId}
+              {activities.locationId}
             </p>
           </div>
         );
-      case "locationName":
+      case "activityName":
         return (
           <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize">{cellValue}</p>
             <p className="text-bold text-sm capitalize text-default-400">
-              {location.locationName}
+              {activities.activityName}
             </p>
           </div>
         );
-      case "locationAddress":
+      case "activityDuration":
         return (
           <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize">{cellValue}</p>
             <p className="text-bold text-sm capitalize text-default-400">
-              {location.locationAddress}
+              {activities.activityDuration}
             </p>
           </div>
         );
@@ -64,7 +69,7 @@ export default function Location() {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[location.status]}
+            color={statusColorMap[activities.status]}
             size="sm"
             variant="flat"
           >
@@ -103,16 +108,16 @@ export default function Location() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search Location name" size="md" className="w-[300px]" />
+        <Input label="Search activity name" size="md" className="w-[300px]" />
         <Link to="/dashboard/addCity">
-          <Button color="success">+ Add Location</Button>
+          <Button color="success">+ Add city</Button>
         </Link>
       </div>
 
       {isLoading ? (
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
-        <Table aria-label="Example table with custom cells111">
+        <Table aria-label="Example table with custom cellsaaa">
           <TableHeader columns={columns}>
             {(column) => (
               <TableColumn
@@ -123,7 +128,7 @@ export default function Location() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={location}>
+          <TableBody items={activities}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
