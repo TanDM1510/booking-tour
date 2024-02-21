@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -11,6 +11,11 @@ import {
   Button,
   Input,
   Spinner,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  useDisclosure,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
@@ -18,7 +23,12 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllLocation } from "../../../redux/features/location/allLocation";
+import {
+  deleteLocation,
+  getAllLocation,
+} from "../../../redux/features/location/allLocation";
+import { getAllCity } from "../../../redux/features/city/allCity";
+import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 
 const statusColorMap = {
   true: "success",
@@ -26,24 +36,28 @@ const statusColorMap = {
 };
 
 export default function Location() {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllLocation());
+    dispatch(getAllCity());
   }, []);
+  const handleDelete = () => {
+    if (deleteLocation) {
+      dispatch(deleteLocation({ id: deleteId }));
+    }
+    onClose();
+  };
+
+  const { city } = useSelector((store) => store.allCity);
+  console.log(city.cityName);
   const { location, isLoading } = useSelector((store) => store.allLocation);
   console.log(location);
   const renderCell = React.useCallback((location, columnKey) => {
     const cellValue = location[columnKey];
 
     switch (columnKey) {
-      case "cityId":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {location.cityId}
-            </p>
-          </div>
-        );
       case "locationName":
         return (
           <div className="flex flex-col">
@@ -52,6 +66,15 @@ export default function Location() {
             </p>
           </div>
         );
+      case "cityId":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {city.find((c) => c.id === location.cityId)?.cityName}
+            </p>
+          </div>
+        );
+
       case "locationAddress":
         return (
           <div className="flex flex-col">
@@ -73,27 +96,46 @@ export default function Location() {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <Link to="/city/:id">
-                  <EyeIcon />
-                </Link>
-              </span>
-            </Tooltip>
-            <Tooltip content={`Edit city`}>
-              <Link to="/dashboard/addCity">
-                <button className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <EditIcon />
-                </button>
-              </Link>
-            </Tooltip>
-            <Tooltip color="danger" content={`Delete city`}>
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-          </div>
+          <Dropdown>
+            <DropdownTrigger className="ml-6 cursor-pointer">
+              <p>...</p>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions" className="w-10">
+              <DropdownItem key="new">
+                {" "}
+                <Tooltip content="Details">
+                  <Link to={`/dashboard/location/${location.id}`}>
+                    <span className="cursor-pointer active:opacity-50">
+                      <EyeIcon />
+                    </span>
+                  </Link>
+                </Tooltip>
+              </DropdownItem>
+              <DropdownItem key="copy">
+                {" "}
+                <Tooltip content={`Edit city`}>
+                  <Link to={`/dashboard/location/update/${location.id}`}>
+                    <button className="cursor-pointer active:opacity-50">
+                      <EditIcon />
+                    </button>
+                  </Link>
+                </Tooltip>
+              </DropdownItem>
+              <DropdownItem
+                key="edit"
+                onPress={() => {
+                  setDeleteId(location.id);
+                  onOpen();
+                }}
+                className="text-danger"
+                color="danger"
+              >
+                <Tooltip color="danger" content="Delete Location">
+                  <DeleteIcon />
+                </Tooltip>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         );
       default:
         return cellValue;
@@ -104,7 +146,7 @@ export default function Location() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Input label="Search Location name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/addCity">
+        <Link to="/dashboard/location/addLocation">
           <Button color="success">+ Add Location</Button>
         </Link>
       </div>
@@ -134,6 +176,11 @@ export default function Location() {
           </TableBody>
         </Table>
       )}
+      <ModelLocation
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }

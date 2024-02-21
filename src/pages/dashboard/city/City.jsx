@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -11,6 +11,11 @@ import {
   Button,
   Input,
   Spinner,
+  useDisclosure,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
@@ -18,8 +23,9 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCity } from "../../../redux/features/city/allCity";
-import { Link } from "react-router-dom";
-import { setEditCity } from "../../../redux/features/city/citySlice";
+import { Link, NavLink } from "react-router-dom";
+import { deleteCity } from "../../../redux/features/city/citySlice";
+import ModelCity from "../../../components/dashboard/City/ModelCity";
 
 const statusColorMap = {
   true: "success",
@@ -28,20 +34,24 @@ const statusColorMap = {
 
 export default function App() {
   const dispatch = useDispatch();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [deleteId, setDeleteId] = useState(null);
+  const { city, isLoading } = useSelector((store) => store.allCity);
 
+  // get All city
   useEffect(() => {
     dispatch(getAllCity());
   }, []);
-  const { city, isLoading } = useSelector((store) => store.allCity);
+  // handleDelete
+  const handleDelete = () => {
+    if (deleteCity) {
+      dispatch(deleteCity({ id: deleteId }));
+    }
+    onClose();
+  };
 
   const renderCell = React.useCallback((city, columnKey) => {
     const cellValue = city[columnKey];
-
-    const country = city.country;
-    const cityName = city.cityName;
-    const status = city.status;
-    console.log(city["cityName"]);
-    console.log();
     switch (columnKey) {
       case "cityName":
         return (
@@ -72,37 +82,46 @@ export default function App() {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <Link to="/city/:id">
-                  <EyeIcon />
+          <Dropdown>
+            <DropdownTrigger className="ml-6 cursor-pointer">
+              <button>...</button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions" className="w-10">
+              <DropdownItem key="new">
+                {" "}
+                <Link to={`/dashboard/city/${city.id}`}>
+                  <Tooltip content="Details">
+                    <button className="cursor-pointer active:opacity-50">
+                      <EyeIcon />
+                    </button>
+                  </Tooltip>
                 </Link>
-              </span>
-            </Tooltip>
-            <Tooltip content={`Edit city`}>
-              <Link to="/dashboard/addCity">
-                <button
-                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                  onClick={dispatch(
-                    setEditCity({
-                      editCityId: city["id"],
-                      country,
-                      status,
-                      cityName,
-                    })
-                  )}
-                >
-                  <EditIcon />
-                </button>
-              </Link>
-            </Tooltip>
-            <Tooltip color="danger" content={`Delete city`}>
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-          </div>
+              </DropdownItem>
+              <DropdownItem key="copy">
+                {" "}
+                <Link to={`/dashboard/city/update/${city.id}`}>
+                  <Tooltip content={`Edit city`}>
+                    <button className="cursor-pointer active:opacity-50">
+                      <EditIcon />
+                    </button>
+                  </Tooltip>
+                </Link>
+              </DropdownItem>
+              <DropdownItem
+                key="edit"
+                onPress={() => {
+                  setDeleteId(city.id);
+                  onOpen();
+                }}
+                className="text-danger"
+                color="danger"
+              >
+                <Tooltip color="danger" content="Delete city">
+                  <DeleteIcon />
+                </Tooltip>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         );
       default:
         return cellValue;
@@ -113,9 +132,9 @@ export default function App() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Input label="Search city name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/addCity">
+        <NavLink to="/dashboard/addCity">
           <Button color="success">+ Add city</Button>
-        </Link>
+        </NavLink>
       </div>
 
       {isLoading ? (
@@ -143,6 +162,11 @@ export default function App() {
           </TableBody>
         </Table>
       )}
+      <ModelCity
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -9,42 +10,42 @@ import {
   RadioGroup,
   Spinner,
 } from "@nextui-org/react";
-
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { updateCity } from "../../../redux/features/city/citySlice";
 
-import { toast } from "react-toastify";
-import {
-  createCity,
-  handleChange,
-} from "../../../redux/features/city/citySlice";
-import { Link } from "react-router-dom";
-
-const AddCity = () => {
+const UpdateCity = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { isLoading, cityName, country, status } = useSelector(
-    (store) => store.city
-  );
+  const { city } = useSelector((state) => state.allCity);
+  const { isLoading } = useSelector((state) => state.city);
+  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  console.log(updateData);
+  useEffect(() => {
+    if (id) {
+      const findCity = city.find((us) => us.id == id);
+      setUpdateData(findCity || {}); // Nếu không tìm thấy user, sử dụng object trống
+    }
+  }, [id]); // Thêm id vào mảng phụ thuộc
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!cityName || !country) {
-      toast.error("Please fill all the blank");
-      return;
-    }
+    console.log(updateData);
+    dispatch(updateCity(updateData));
+  };
 
-    dispatch(createCity({ cityName, country, status }));
+  const inputChangeHandler = (e) => {
+    const value =
+      e.target.name === "status" ? e.target.value === "true" : e.target.value;
+    setUpdateData({ ...updateData, [e.target.name]: value });
   };
-  const handleChanged = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    const parsedValue = name === "status" ? value === "true" : value;
-    dispatch(handleChange({ name, value: parsedValue }));
-  };
+
   return (
     <>
       <Card className="grid place-items-center ">
         <form>
-          <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add City"}
+          <CardHeader className="flex flex-col gap-3 lg:w-96 font-bold text-3xl">
+            {"Edit City"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Input
@@ -52,27 +53,27 @@ const AddCity = () => {
               label="City Name"
               name="cityName"
               type="text"
-              onChange={handleChanged}
-              value={cityName}
+              onChange={inputChangeHandler}
+              value={updateData && updateData.cityName}
             />
             <Input
               required
               label="Country"
               name="country"
               type="text"
-              onChange={handleChanged}
-              value={country}
+              onChange={inputChangeHandler}
+              value={updateData && updateData.country}
             />
             <RadioGroup
               isRequired
               className="mt-3"
               name="status"
               label="Active or Disable"
-              value={status}
-              onChange={handleChanged}
+              value={updateData && updateData.status}
+              onChange={inputChangeHandler}
             >
-              <Radio value={false}>Disable</Radio>
               <Radio value={true}>Active</Radio>
+              <Radio value={false}>Disable</Radio>
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
@@ -81,7 +82,6 @@ const AddCity = () => {
                 Close
               </Button>
             </Link>
-
             <Button
               color="primary"
               type="submit"
@@ -103,4 +103,5 @@ const AddCity = () => {
     </>
   );
 };
-export default AddCity;
+
+export default UpdateCity;
