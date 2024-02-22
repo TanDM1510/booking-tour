@@ -5,6 +5,7 @@ import cityReducer from "./features/city/citySlice";
 import allCityReducer from "./features/city/allCity";
 import allLocationReducer from "./features/location/allLocation";
 import allActivitiesReducer from "./features/activities/allActivities";
+import allLocationInTourReducer from "./features/locationInTour/locationInTour";
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -12,5 +13,6 @@ export const store = configureStore({
     allCity: allCityReducer,
     allLocation: allLocationReducer,
     allActivities: allActivitiesReducer,
+    locationInTour: allLocationInTourReducer,
   },
 });

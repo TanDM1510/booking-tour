@@ -14,6 +14,7 @@ import ViewCity from "./pages/dashboard/city/ViewCity";
 import AddLocation from "./pages/dashboard/location/AddLocation";
 import ViewLocation from "./pages/dashboard/location/ViewLocation";
 import UpdateLocation from "./pages/dashboard/location/UpdateLocation";
+import LocationInTours from "./pages/dashboard/locationInTour/LocationInTours";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           />
           <Route path="/dashboard/location/:id" element={<ViewLocation />} />
           <Route path="/dashboard/activities" element={<Activities />} />
+          <Route path="/dashboard/locationTour" element={<LocationInTours />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="signUp" element={<SignUp />} />

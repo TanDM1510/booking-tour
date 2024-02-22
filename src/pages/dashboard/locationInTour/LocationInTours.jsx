@@ -11,8 +11,8 @@ import {
   Button,
   Input,
   Spinner,
-  Dropdown,
   DropdownTrigger,
+  Dropdown,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
@@ -21,56 +21,48 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
 
-import { Link } from "react-router-dom";
-
-import { getAllActivities } from "../../../redux/features/activities/allActivities";
+import { getAllLocationInTour } from "../../../redux/features/locationInTour/locationInTour";
 
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
 
-export default function Activities() {
+export default function LocationInTours() {
   const dispatch = useDispatch();
+  const { pois, isLoading } = useSelector((store) => store.locationInTour);
 
+  // get All city
   useEffect(() => {
-    dispatch(getAllActivities());
+    dispatch(getAllLocationInTour());
   }, []);
-  const { activities, isLoading } = useSelector((store) => store.allActivities);
-  console.log(activities);
-  const renderCell = React.useCallback((activities, columnKey) => {
-    const cellValue = activities[columnKey];
+  // handleDelete
+  //   const handleDelete = () => {
+  //     if (deleteCity) {
+  //       dispatch(deleteCity({ id: deleteId }));
+  //     }
+  //     onClose();
+  //   };
+
+  const renderCell = React.useCallback((pois, columnKey) => {
+    const cellValue = pois[columnKey];
     switch (columnKey) {
-      case "locationId":
+      case "categoryName":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {activities.locationId}
+              {pois.categoryName}
             </p>
           </div>
         );
-      case "activityName":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {activities.activityName}
-            </p>
-          </div>
-        );
-      case "activityDuration":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {activities.activityDuration}
-            </p>
-          </div>
-        );
+
       case "status":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[activities.status]}
+            color={statusColorMap[pois.status]}
             size="sm"
             variant="flat"
           >
@@ -86,7 +78,7 @@ export default function Activities() {
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/city/${activities.id}`}>
+                <Link to={`/dashboard/city/${pois.id}`}>
                   <Tooltip content="Details">
                     <button className="cursor-pointer active:opacity-50">
                       <EyeIcon />
@@ -96,7 +88,7 @@ export default function Activities() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link to={`/dashboard/city/update/${activities.id}`}>
+                <Link to={`/dashboard/city/update/${pois.id}`}>
                   <Tooltip content={`Edit city`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
@@ -128,16 +120,20 @@ export default function Activities() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search activity name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/addCity">
-          <Button color="success">+ Add activity</Button>
-        </Link>
+        <Input
+          label="Search location in tour name"
+          size="md"
+          className="w-[300px]"
+        />
+        <NavLink to="/dashboard/addCity">
+          <Button color="success">+ Add location in tour</Button>
+        </NavLink>
       </div>
 
       {isLoading ? (
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
-        <Table aria-label="Example table with custom cellsaaa">
+        <Table aria-label="Example table with custom cells">
           <TableHeader columns={columns}>
             {(column) => (
               <TableColumn
@@ -148,7 +144,7 @@ export default function Activities() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={activities}>
+          <TableBody items={pois}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -159,6 +155,11 @@ export default function Activities() {
           </TableBody>
         </Table>
       )}
+      {/* <ModelCity
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        handleDelete={handleDelete}
+      /> */}
     </>
   );
 }
