@@ -22,12 +22,12 @@ export const getAllTours = createAsyncThunk(
   }
 );
 
-export const createLocation = createAsyncThunk(
-  "createLocation",
-  async (location, thunkAPI) => {
+export const createTour = createAsyncThunk(
+  "createTour",
+  async (tour, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locations", location);
-      console.log(location);
+      const resp = await customFetch.post("/tours", tour);
+      console.log(tour);
       console.log(resp.data);
 
       return resp.data;
@@ -93,14 +93,14 @@ const allTourSlice = createSlice({
         state.isLoading = false;
         toast.error("Failed to load location");
       })
-      .addCase(createLocation.pending, (state) => {
+      .addCase(createTour.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLocation.fulfilled, (state) => {
+      .addCase(createTour.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create location successful !!!");
+        toast.success("Create tour successful !!!");
       })
-      .addCase(createLocation.rejected, (state) => {
+      .addCase(createTour.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to load location");
       })

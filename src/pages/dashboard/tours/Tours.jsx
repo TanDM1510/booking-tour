@@ -27,6 +27,7 @@ import { deleteLocation } from "../../../redux/features/location/allLocation";
 
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import { getAllTours } from "../../../redux/features/tours/tours";
+import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
 
 const statusColorMap = {
   true: "success",
@@ -39,7 +40,9 @@ export default function Tours() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllTours());
+    dispatch(getAllVehicles());
   }, []);
+  const { vehicles } = useSelector((store) => store.vehicles);
   const { tours, isLoading } = useSelector((store) => store.tours);
   const handleDelete = () => {
     if (deleteLocation) {
@@ -73,7 +76,7 @@ export default function Tours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {tours.vehicleTypeId}
+              {vehicles.find((v) => v.id === tours.vehicleTypeId)?.vehicleName}
             </p>
           </div>
         );
@@ -148,7 +151,7 @@ export default function Tours() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Input label="Search Location name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/location/addLocation">
+        <Link to="/dashboard/tours/addTour">
           <Button color="success">+ Add Tour</Button>
         </Link>
       </div>

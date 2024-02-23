@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -15,6 +15,7 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  useDisclosure,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
@@ -23,7 +24,13 @@ import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
-import { getAllLocationInTour } from "../../../redux/features/locationInTour/locationInTour";
+import {
+  deleteLocationInTour,
+  getAllLocationInTour,
+} from "../../../redux/features/locationInTour/locationInTour";
+import { getAllTours } from "../../../redux/features/tours/tours";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
+import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 
 const statusColorMap = {
   true: "success",
@@ -31,22 +38,27 @@ const statusColorMap = {
 };
 
 export default function LocationInTours() {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
   const { locationInTours, isLoading } = useSelector(
     (store) => store.locationInTour
   );
-
+  const { location } = useSelector((store) => store.allLocation);
+  const { tours } = useSelector((store) => store.tours);
   // get All city
   useEffect(() => {
     dispatch(getAllLocationInTour());
+    dispatch(getAllTours());
+    dispatch(getAllLocation());
   }, []);
-  // handleDelete
-  //   const handleDelete = () => {
-  //     if (deleteCity) {
-  //       dispatch(deleteCity({ id: deleteId }));
-  //     }
-  //     onClose();
-  //   };
+
+  const handleDelete = () => {
+    if (deleteLocationInTour) {
+      dispatch(deleteLocationInTour({ id: deleteId }));
+    }
+    onClose();
+  };
 
   const renderCell = React.useCallback((locationInTours, columnKey) => {
     const cellValue = locationInTours[columnKey];
@@ -55,7 +67,7 @@ export default function LocationInTours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {locationInTours.tourId}
+              {tours.find((t) => t.id == locationInTours.tourId)?.tourName}
             </p>
           </div>
         );
@@ -63,7 +75,10 @@ export default function LocationInTours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {locationInTours.locationId}
+              {
+                location.find((t) => t.id == locationInTours.locationId)
+                  ?.locationName
+              }
             </p>
           </div>
         );
@@ -119,7 +134,7 @@ export default function LocationInTours() {
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/city/${locationInTours.id}`}>
+                <Link to={`/dashboard/locationTour/view/${locationInTours.id}`}>
                   <Tooltip content="Details">
                     <button className="cursor-pointer active:opacity-50">
                       <EyeIcon />
@@ -129,7 +144,9 @@ export default function LocationInTours() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link to={`/dashboard/city/update/${locationInTours.id}`}>
+                <Link
+                  to={`/dashboard/locationTour/update/${locationInTours.id}`}
+                >
                   <Tooltip content={`Edit city`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
@@ -139,10 +156,10 @@ export default function LocationInTours() {
               </DropdownItem>
               <DropdownItem
                 key="edit"
-                // onPress={() => {
-                //   setDeleteId(city.id);
-                //   onOpen();
-                // }}
+                onPress={() => {
+                  setDeleteId(locationInTours.id);
+                  onOpen();
+                }}
                 className="text-danger"
                 color="danger"
               >
@@ -166,11 +183,10 @@ export default function LocationInTours() {
           size="md"
           className="w-[300px]"
         />
-        <NavLink to="/dashboard/addCity">
+        <NavLink to="/dashboard/locationTour/add">
           <Button color="success">+ Add location in tour</Button>
         </NavLink>
       </div>
-
       {isLoading ? (
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
@@ -196,11 +212,13 @@ export default function LocationInTours() {
           </TableBody>
         </Table>
       )}
-      {/* <ModelCity
+
+      <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
-      /> */}
+        isLoading={isLoading}
+      />
     </>
   );
 }

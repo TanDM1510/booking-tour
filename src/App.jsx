@@ -22,6 +22,10 @@ import Trips from "./pages/dashboard/Trips/Trips";
 import AddActivity from "./pages/dashboard/Activities/AddActivity";
 import ViewActivity from "./pages/dashboard/Activities/ViewActivity";
 import UpdateActivity from "./pages/dashboard/Activities/UpdateActivity";
+import AddLocationInTour from "./pages/dashboard/locationInTour/AddLocationInTour";
+import UpdateLocationInTour from "./pages/dashboard/locationInTour/UpdateLocationInTour";
+import ViewLocationInTour from "./pages/dashboard/locationInTour/LocationInTour";
+import AddTour from "./pages/dashboard/tours/AddTour";
 
 export default function App() {
   return (
@@ -34,7 +38,6 @@ export default function App() {
           <Route path="/dashboard/addCity" element={<AddCity />} />
           <Route path="/dashboard/city/:id" element={<ViewCity />} />
           <Route path="/dashboard/location" element={<Location />} />
-
           <Route
             path="/dashboard/location/addLocation"
             element={<AddLocation />}
@@ -52,7 +55,20 @@ export default function App() {
           />
           <Route path="/dashboard/activities/:id" element={<ViewActivity />} />
           <Route path="/dashboard/locationTour" element={<LocationInTours />} />
+          <Route
+            path="/dashboard/locationTour/add"
+            element={<AddLocationInTour />}
+          />
+          <Route
+            path="/dashboard/locationTour/update/:id"
+            element={<UpdateLocationInTour />}
+          />
+          <Route
+            path="/dashboard/locationTour/view/:id"
+            element={<ViewLocationInTour />}
+          />
           <Route path="/dashboard/tours" element={<Tours />} />
+          <Route path="/dashboard/tours/addTour" element={<AddTour />} />
           <Route path="/dashboard/vehicles" element={<Vehicles />} />
           <Route path="/dashboard/pois" element={<Pois />} />
           <Route path="/dashboard/trips" element={<Trips />} />

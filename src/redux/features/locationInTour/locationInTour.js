@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import customFetch from "../../../utils";
 import { toast } from "react-toastify";
+import { logoutUser } from "../user/userSlice";
 
 const initialState = {
   isLoading: false,
@@ -20,61 +21,60 @@ export const getAllLocationInTour = createAsyncThunk(
   }
 );
 
-// export const createLocation = createAsyncThunk(
-//   "createLocation",
-//   async (location, thunkAPI) => {
-//     try {
-//       const resp = await customFetch.post("/locations", location);
-//       console.log(location);
-//       console.log(resp.data);
+export const createLocationInTour = createAsyncThunk(
+  "createLocationInTour",
+  async (locationInTour, thunkAPI) => {
+    try {
+      const resp = await customFetch.post("/locationInTours", locationInTour);
+      console.log(location);
+      console.log(resp.data);
+      return resp.data;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
+export const deleteLocationInTour = createAsyncThunk(
+  "deleteLocationInTour",
+  async (location, thunkAPI) => {
+    try {
+      const resp = await customFetch.delete(
+        `/locationInTours/${location.id}`,
+        location
+      );
+      console.log(location);
+      console.log(resp.data);
+      thunkAPI.dispatch(getAllLocationInTour());
+      return resp.data.message;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
+export const updateLocationInTour = createAsyncThunk(
+  "updateLocationInTour",
+  async (data, thunkAPI) => {
+    try {
+      const resp = await customFetch.patch(`/locationInTours/${data.id}`, data);
 
-//       return resp.data;
-//     } catch (error) {
-//       if (error.response.status === 401) {
-//         thunkAPI.dispatch(logoutUser());
-//         return thunkAPI.rejectWithValue("Unauthorized");
-//       }
-//       return thunkAPI.rejectWithValue(error.response.message);
-//     }
-//   }
-// );
-// export const deleteLocation = createAsyncThunk(
-//   "deleteLocation",
-//   async (location, thunkAPI) => {
-//     try {
-//       const resp = await customFetch.delete(
-//         `/locations/${location.id}`,
-//         location
-//       );
-//       console.log(location);
-//       console.log(resp.data);
-//       thunkAPI.dispatch(getAllLocationInTour());
-//       return resp.data.message;
-//     } catch (error) {
-//       if (error.response.status === 401) {
-//         thunkAPI.dispatch(logoutUser());
-//         return thunkAPI.rejectWithValue("Unauthorized");
-//       }
-//       return thunkAPI.rejectWithValue(error.response.message);
-//     }
-//   }
-// );
-// export const updateLocation = createAsyncThunk(
-//   "city/updateLocation",
-//   async (data, thunkAPI) => {
-//     try {
-//       const resp = await customFetch.patch(`/locations/${data.id}`, data);
-
-//       return resp.data;
-//     } catch (error) {
-//       if (error.response.status === 401) {
-//         thunkAPI.dispatch(logoutUser());
-//         return thunkAPI.rejectWithValue("Unauthorized");
-//       }
-//       return thunkAPI.rejectWithValue(error.response.message);
-//     }
-//   }
-// );
+      return resp.data;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
 const allLocationInTourSlice = createSlice({
   name: "allLocationInTour",
   initialState,
@@ -90,41 +90,41 @@ const allLocationInTourSlice = createSlice({
       .addCase(getAllLocationInTour.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to load Location In Tour");
+      })
+      .addCase(createLocationInTour.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createLocationInTour.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Create location in tour successful !!!");
+      })
+      .addCase(createLocationInTour.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("There was an error XD");
+      })
+      .addCase(updateLocationInTour.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateLocationInTour.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Updated successful ");
+      })
+      .addCase(updateLocationInTour.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("Failed to update");
+      })
+      .addCase(deleteLocationInTour.pending, (state) => {
+        state.isLoading = true;
+        toast.warning("Please wait...");
+      })
+      .addCase(deleteLocationInTour.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Deleted successful ");
+      })
+      .addCase(deleteLocationInTour.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
       });
-    //   .addCase(createLocation.pending, (state) => {
-    //     state.isLoading = true;
-    //   })
-    //   .addCase(createLocation.fulfilled, (state) => {
-    //     state.isLoading = false;
-    //     toast.success("Create location successful !!!");
-    //   })
-    //   .addCase(createLocation.rejected, (state) => {
-    //     state.isLoading = false;
-    //     toast.error("There was an error XD");
-    //   })
-    //   .addCase(deleteLocation.pending, (state) => {
-    //     state.isLoading = true;
-    //     toast.warning("Please wait...");
-    //   })
-    //   .addCase(deleteLocation.fulfilled, (state) => {
-    //     state.isLoading = false;
-    //     toast.success("Deleted successful ");
-    //   })
-    //   .addCase(deleteLocation.rejected, (state, { payload }) => {
-    //     state.isLoading = false;
-    //     toast.error(payload);
-    //   })
-    //   .addCase(updateLocation.pending, (state) => {
-    //     state.isLoading = true;
-    //   })
-    //   .addCase(updateLocation.fulfilled, (state) => {
-    //     state.isLoading = false;
-    //     toast.success("Updated successful ");
-    //   })
-    //   .addCase(updateLocation.rejected, (state) => {
-    //     state.isLoading = false;
-    //     toast.error("Failed to update");
-    //   });
   },
 });
 
