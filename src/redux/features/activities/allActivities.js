@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { customFetch } from "../../../utils";
+import customFetch from "../../../utils";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -34,7 +34,7 @@ const allActivitiesSlice = createSlice({
       })
       .addCase(getAllActivities.rejected, (state) => {
         state.isLoading = false;
-        toast.error("there was an error");
+        toast.error("Failed to load activities");
       });
   },
 });

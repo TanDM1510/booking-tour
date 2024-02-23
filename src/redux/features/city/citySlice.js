@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { customFetch } from "../../../utils";
+import customFetch from "../../../utils";
 import { logoutUser } from "../user/userSlice";
 import { toast } from "react-toastify";
 import { getAllCity } from "./allCity";

@@ -10,7 +10,7 @@ const ShareLayout = () => {
 
   return (
     <>
-      {user?.token && user?.role === 0 ? (
+      {user?.accessToken && user?.role === 0 ? (
         <main className="flex flex-row   h-screen ">
           <BigSideBar />
           <div className="  w-full lg:basis-5/6 h-full ">

@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { getAllActivities } from "../../../redux/features/activities/allActivities";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
 
 const statusColorMap = {
   true: "success",
@@ -33,9 +34,10 @@ const statusColorMap = {
 
 export default function Activities() {
   const dispatch = useDispatch();
-
+  const { location } = useSelector((store) => store.allLocation);
   useEffect(() => {
     dispatch(getAllActivities());
+    dispatch(getAllLocation());
   }, []);
   const { activities, isLoading } = useSelector((store) => store.allActivities);
   console.log(activities);
@@ -46,7 +48,10 @@ export default function Activities() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {activities.locationId}
+              {
+                location.find((c) => c.id === activities.locationId)
+                  ?.locationName
+              }
             </p>
           </div>
         );
@@ -86,7 +91,7 @@ export default function Activities() {
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/city/${activities.id}`}>
+                <Link to={`/dashboard/activity/${activities.id}`}>
                   <Tooltip content="Details">
                     <button className="cursor-pointer active:opacity-50">
                       <EyeIcon />
@@ -96,7 +101,7 @@ export default function Activities() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link to={`/dashboard/city/update/${activities.id}`}>
+                <Link to={`/dashboard/activity/update/${activities.id}`}>
                   <Tooltip content={`Edit city`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />

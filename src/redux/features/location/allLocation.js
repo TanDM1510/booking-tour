@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { customFetch } from "../../../utils";
+import customFetch from "../../../utils";
 import { toast } from "react-toastify";
 import { logoutUser } from "../user/userSlice";
 
@@ -91,7 +91,7 @@ const allLocationSlice = createSlice({
       })
       .addCase(getAllLocation.rejected, (state) => {
         state.isLoading = false;
-        toast.error("there was an error");
+        toast.error("Failed to load location");
       })
       .addCase(createLocation.pending, (state) => {
         state.isLoading = true;
@@ -102,7 +102,7 @@ const allLocationSlice = createSlice({
       })
       .addCase(createLocation.rejected, (state) => {
         state.isLoading = false;
-        toast.error("There was an error XD");
+        toast.error("Failed to load location");
       })
       .addCase(deleteLocation.pending, (state) => {
         state.isLoading = true;

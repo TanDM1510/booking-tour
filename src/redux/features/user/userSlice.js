@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { customFetch } from "../../../utils";
+import customFetch from "../../../utils";
 
 // const addUserToLocalStorage = (user) => {
 //   localStorage.setItem("user", JSON.stringify(user));
@@ -90,8 +90,10 @@ const userSlice = createSlice({
         } else {
           const user = {
             ...action.payload.user,
-            token: action.payload.token.accessToken,
+            accessToken: action.payload.token.accessToken,
             role: action.payload.userData.role,
+            id: action.payload.userData.id,
+            refreshToken: action.payload.token.refreshToken,
           };
           state.user = user;
           state.isLoading = false;

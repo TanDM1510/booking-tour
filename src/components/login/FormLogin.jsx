@@ -110,7 +110,7 @@ const FormLogin = () => {
         size="md"
         type="submit"
         className="text-white w-full mt-8 font-bold text-base"
-        color={isInvalidEmail ? "hidden" : "blue"}
+        color={isInvalidEmail || isInvalidPassword ? "hidden" : "blue"}
         disabled={isLoading || isInvalidEmail || isInvalidPassword}
       >
         {isLoading ? (
