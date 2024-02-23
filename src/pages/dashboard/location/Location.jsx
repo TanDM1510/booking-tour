@@ -180,6 +180,7 @@ export default function Location() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
+        isLoading={isLoading}
       />
     </>
   );

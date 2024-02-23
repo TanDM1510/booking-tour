@@ -7,11 +7,13 @@ import {
   Button,
   Spinner,
 } from "@nextui-org/react";
-import { useSelector } from "react-redux";
 
-export default function ModelLocation({ isOpen, onOpenChange, handleDelete }) {
-  const { isLoading } = useSelector((state) => state.allLocation);
-
+export default function ModelLocation({
+  isOpen,
+  onOpenChange,
+  handleDelete,
+  isLoading,
+}) {
   return (
     <>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">

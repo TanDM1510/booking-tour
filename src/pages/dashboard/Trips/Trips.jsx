@@ -22,65 +22,75 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
+import { deleteLocation } from "../../../redux/features/location/allLocation";
 
-import {
-  deleteActivity,
-  getAllActivities,
-} from "../../../redux/features/activities/allActivities";
-import { getAllLocation } from "../../../redux/features/location/allLocation";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
+import { getAllTours } from "../../../redux/features/tours/tours";
+import { getAllTrips } from "../../../redux/features/trips/trips";
 
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
 
-export default function Activities() {
-  const dispatch = useDispatch();
+export default function Trips() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [deleteId, setDeleteId] = useState(null);
-  const { location } = useSelector((store) => store.allLocation);
-  const { activities, isLoading } = useSelector((store) => store.allActivities);
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllActivities());
-    dispatch(getAllLocation());
+    dispatch(getAllTrips());
   }, []);
+  const { trips, isLoading } = useSelector((store) => store.trips);
   const handleDelete = () => {
-    if (deleteActivity) {
-      dispatch(deleteActivity({ id: deleteId }));
+    if (deleteLocation) {
+      dispatch(deleteLocation({ id: deleteId }));
     }
     onClose();
   };
 
-  const renderCell = React.useCallback((activities, columnKey) => {
-    const cellValue = activities[columnKey];
+  const renderCell = React.useCallback((trips, columnKey) => {
+    const cellValue = trips[columnKey];
+
     switch (columnKey) {
-      case "locationId":
+      case "tourGuideId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {
-                location.find((c) => c.id === activities.locationId)
-                  ?.locationName
-              }
+              {trips.tourGuideId}
             </p>
           </div>
         );
-      case "activityName":
+      case "tourId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {activities.activityName}
+              {trips.tourId}
             </p>
           </div>
         );
-      case "activityDuration":
+
+      case "totalCustomer":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {activities.activityDuration}
+              {trips.totalCustomer}
+            </p>
+          </div>
+        );
+      case "startDate":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {trips.startDate}
+            </p>
+          </div>
+        );
+      case "endDate":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {trips.endDate}
             </p>
           </div>
         );
@@ -88,7 +98,7 @@ export default function Activities() {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[activities.status]}
+            color={statusColorMap[trips.status]}
             size="sm"
             variant="flat"
           >
@@ -99,39 +109,39 @@ export default function Activities() {
         return (
           <Dropdown>
             <DropdownTrigger className="ml-6 cursor-pointer">
-              <button>...</button>
+              <p>...</p>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/activities/${activities.id}`}>
-                  <Tooltip content="Details">
-                    <button className="cursor-pointer active:opacity-50">
+                <Tooltip content="Details">
+                  <Link to={`/dashboard/location/${trips.id}`}>
+                    <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
-                    </button>
-                  </Tooltip>
-                </Link>
+                    </span>
+                  </Link>
+                </Tooltip>
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link to={`/dashboard/activities/update/${activities.id}`}>
-                  <Tooltip content={`Edit city`}>
+                <Tooltip content={`Edit city`}>
+                  <Link to={`/dashboard/location/update/${trips.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
-                  </Tooltip>
-                </Link>
+                  </Link>
+                </Tooltip>
               </DropdownItem>
               <DropdownItem
                 key="edit"
-                onPress={() => {
-                  setDeleteId(activities.id);
-                  onOpen();
-                }}
+                // onPress={() => {
+                //   setDeleteId(location.id);
+                //   onOpen();
+                // }}
                 className="text-danger"
                 color="danger"
               >
-                <Tooltip color="danger" content="Delete city">
+                <Tooltip color="danger" content="Delete Location">
                   <DeleteIcon />
                 </Tooltip>
               </DropdownItem>
@@ -146,16 +156,16 @@ export default function Activities() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search activity name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/activities/add">
-          <Button color="success">+ Add activity</Button>
+        <Input label="Search Location name" size="md" className="w-[300px]" />
+        <Link to="/dashboard/location/addLocation">
+          <Button color="success">+ Add Tour</Button>
         </Link>
       </div>
 
       {isLoading ? (
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
-        <Table aria-label="Example table with custom cellsaaa">
+        <Table aria-label="Example table with custom cells111">
           <TableHeader columns={columns}>
             {(column) => (
               <TableColumn
@@ -166,7 +176,7 @@ export default function Activities() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={activities}>
+          <TableBody items={trips}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -177,12 +187,11 @@ export default function Activities() {
           </TableBody>
         </Table>
       )}
-      <ModelLocation
-        isLoading={isLoading}
+      {/* <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
-      />
+      /> */}
     </>
   );
 }

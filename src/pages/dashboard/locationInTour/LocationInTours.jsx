@@ -32,7 +32,9 @@ const statusColorMap = {
 
 export default function LocationInTours() {
   const dispatch = useDispatch();
-  const { pois, isLoading } = useSelector((store) => store.locationInTour);
+  const { locationInTours, isLoading } = useSelector(
+    (store) => store.locationInTour
+  );
 
   // get All city
   useEffect(() => {
@@ -46,23 +48,62 @@ export default function LocationInTours() {
   //     onClose();
   //   };
 
-  const renderCell = React.useCallback((pois, columnKey) => {
-    const cellValue = pois[columnKey];
+  const renderCell = React.useCallback((locationInTours, columnKey) => {
+    const cellValue = locationInTours[columnKey];
     switch (columnKey) {
-      case "categoryName":
+      case "tourId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {pois.categoryName}
+              {locationInTours.tourId}
             </p>
           </div>
         );
-
+      case "locationId":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {locationInTours.locationId}
+            </p>
+          </div>
+        );
+      case "duration":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {locationInTours.duration}
+            </p>
+          </div>
+        );
+      case "description":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {locationInTours.description}
+            </p>
+          </div>
+        );
+      case "startCity":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {locationInTours.startCity}
+            </p>
+          </div>
+        );
+      case "endCity":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {locationInTours.endCity}
+            </p>
+          </div>
+        );
       case "status":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[pois.status]}
+            color={statusColorMap[locationInTours.status]}
             size="sm"
             variant="flat"
           >
@@ -78,7 +119,7 @@ export default function LocationInTours() {
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/city/${pois.id}`}>
+                <Link to={`/dashboard/city/${locationInTours.id}`}>
                   <Tooltip content="Details">
                     <button className="cursor-pointer active:opacity-50">
                       <EyeIcon />
@@ -88,7 +129,7 @@ export default function LocationInTours() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link to={`/dashboard/city/update/${pois.id}`}>
+                <Link to={`/dashboard/city/update/${locationInTours.id}`}>
                   <Tooltip content={`Edit city`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
@@ -144,7 +185,7 @@ export default function LocationInTours() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={pois}>
+          <TableBody items={locationInTours}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

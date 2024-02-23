@@ -4,14 +4,14 @@ import { toast } from "react-toastify";
 
 const initialState = {
   isLoading: false,
-  pois: [],
+  locationInTours: [],
 };
 
 export const getAllLocationInTour = createAsyncThunk(
   "getLocationInTour",
   async (_, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/pois");
+      const resp = await customFetch.get("/locationInTours");
       console.log(resp.data);
       return resp.data;
     } catch (error) {
@@ -85,7 +85,7 @@ const allLocationInTourSlice = createSlice({
       })
       .addCase(getAllLocationInTour.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.pois = actions.payload.data;
+        state.locationInTours = actions.payload.data;
       })
       .addCase(getAllLocationInTour.rejected, (state) => {
         state.isLoading = false;

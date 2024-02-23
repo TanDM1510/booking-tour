@@ -7,12 +7,17 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { MdOutlineTour } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { BiTrip } from "react-icons/bi";
-import { MdPayment } from "react-icons/md";
-import { MdOutlinePayments } from "react-icons/md";
+
 import { TbNotebook } from "react-icons/tb";
 import { FaCarOn } from "react-icons/fa6";
 const links = [
   { id: 1, text: "stats", path: "/dashboard/stats", icon: <IoBarChartSharp /> },
+  {
+    id: 9,
+    text: "Booking",
+    path: "/dashboard/booking",
+    icon: <TbNotebook />,
+  },
   { id: 2, text: "city", path: "/dashboard/city", icon: <FaCity /> },
   {
     id: 3,
@@ -35,38 +40,26 @@ const links = [
   {
     id: 6,
     text: "Tour",
-    path: "/dashboard/tour",
+    path: "/dashboard/tours",
     icon: <MdOutlineTour />,
   },
   {
     id: 7,
     text: "Category Of Poi",
-    path: "/dashboard/categoryPOI",
+    path: "/dashboard/pois",
     icon: <BiCategory />,
   },
   {
     id: 8,
     text: "Trip",
-    path: "/dashboard/trip",
+    path: "/dashboard/trips",
     icon: <BiTrip />,
   },
-  { id: 9, text: "Payment", path: "/dashboard/payment", icon: <MdPayment /> },
+
   {
     id: 10,
-    text: "Payment Method",
-    path: "/dashboard/paymentMethod",
-    icon: <MdOutlinePayments />,
-  },
-  {
-    id: 11,
-    text: "Booking",
-    path: "/dashboard/booking",
-    icon: <TbNotebook />,
-  },
-  {
-    id: 12,
     text: "Vehicle",
-    path: "/dashboard/vehicle",
+    path: "/dashboard/vehicles",
     icon: <FaCarOn />,
   },
 ];
