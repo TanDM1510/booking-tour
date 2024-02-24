@@ -13,13 +13,17 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { updateActivity } from "../../../redux/features/activities/allActivities";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
 
 const UpdateActivity = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { location } = useSelector((store) => store.allLocation);
+  useEffect(() => dispatch(getAllLocation()), []);
+
   const { activities, isLoading } = useSelector((state) => state.allActivities);
   const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
-  console.log(updateData);
+
   useEffect(() => {
     if (id) {
       const findActivity = activities.find((us) => us.id == id);
@@ -60,14 +64,24 @@ const UpdateActivity = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.activityName}
             />
-            <Input
+            <select
               required
-              label="Location name"
               name="locationId"
-              type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.locationId}
-            />
+            >
+              <option value="">
+                {
+                  location.find((l) => l.id === updateData.locationId)
+                    ?.locationName
+                }
+              </option>
+              {location.map((locations) => (
+                <option key={locations.id} value={locations.id}>
+                  {locations.locationName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Activity duration"

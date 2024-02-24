@@ -11,9 +11,10 @@ import {
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createActivity } from "../../../redux/features/activities/allActivities";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
 
 const AddActivity = () => {
   const [activity, setActivity] = useState({
@@ -25,6 +26,8 @@ const AddActivity = () => {
   });
 
   const dispatch = useDispatch();
+  const { location } = useSelector((store) => store.allLocation);
+  useEffect(() => dispatch(getAllLocation()), []);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -76,16 +79,22 @@ const AddActivity = () => {
                 activity.activityName !== undefined ? activity.activityName : ""
               }
             />
-            <Input
+
+            <select
               required
-              label="Location name"
               name="locationId"
-              type="number"
               onChange={inputChangHandler}
               value={
                 activity.locationId !== undefined ? activity.locationId : ""
               }
-            />
+            >
+              <option value="">Select a location</option>
+              {location.map((locations) => (
+                <option key={locations.id} value={locations.id}>
+                  {locations.locationName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Activity duration"

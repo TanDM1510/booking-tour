@@ -39,9 +39,9 @@ export default function Location() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(getAllLocation());
-    dispatch(getAllCity());
+    Promise.all([dispatch(getAllLocation()), dispatch(getAllCity())]);
   }, []);
   const handleDelete = () => {
     if (deleteLocation) {
@@ -51,7 +51,7 @@ export default function Location() {
   };
 
   const { city } = useSelector((store) => store.allCity);
-  console.log(city.cityName);
+  console.log(city);
   const { location, isLoading } = useSelector((store) => store.allLocation);
   console.log(location);
   const renderCell = React.useCallback((location, columnKey) => {

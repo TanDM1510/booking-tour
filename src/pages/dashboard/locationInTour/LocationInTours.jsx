@@ -49,8 +49,8 @@ export default function LocationInTours() {
   // get All city
   useEffect(() => {
     dispatch(getAllLocationInTour());
-    dispatch(getAllTours());
     dispatch(getAllLocation());
+    dispatch(getAllTours());
   }, []);
 
   const handleDelete = () => {

@@ -11,9 +11,10 @@ import {
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createTrip } from "../../../redux/features/trips/trips";
+import { getAllTours } from "../../../redux/features/tours/tours";
 
 const AddTrip = () => {
   const [trip, setTrip] = useState({
@@ -64,6 +65,10 @@ const AddTrip = () => {
       status: "",
     });
   };
+  useEffect(() => {
+    dispatch(getAllTours());
+  }, []);
+  const { tours } = useSelector((store) => store.tours);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -80,14 +85,27 @@ const AddTrip = () => {
               onChange={inputChangHandler}
               value={trip.tourGuideId !== undefined ? trip.tourGuideId : ""}
             />
-            <Input
+            {/* <Input
               required
               label="Tour Name"
               name="tourId"
               type="number"
               onChange={inputChangHandler}
               value={trip.tourId !== undefined ? trip.tourId : ""}
-            />
+            /> */}
+            <select
+              required
+              name="tourId"
+              onChange={inputChangHandler}
+              value={trip.tourId !== undefined ? trip.tourId : ""}
+            >
+              <option value="">Select a tour</option>
+              {tours.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.tourName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Total Customer"

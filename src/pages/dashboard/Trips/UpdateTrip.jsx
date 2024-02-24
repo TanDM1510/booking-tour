@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { updateTrip } from "../../../redux/features/trips/trips";
+import { getAllTours } from "../../../redux/features/tours/tours";
 
 const UpdateTrip = () => {
   const { id } = useParams();
@@ -45,7 +46,10 @@ const UpdateTrip = () => {
     console.log(updateData);
     dispatch(updateTrip(updateData));
   };
-
+  useEffect(() => {
+    dispatch(getAllTours());
+  }, []);
+  const { tours } = useSelector((store) => store.tours);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -62,14 +66,27 @@ const UpdateTrip = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.tourGuideId}
             />
-            <Input
+            {/* <Input
               required
               label="Tour Name"
               name="tourId"
               type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.tourId}
-            />
+            /> */}
+            <select
+              required
+              name="tourId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.tourId}
+            >
+              <option value="">Select a tour</option>
+              {tours.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.tourName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Total Customer"

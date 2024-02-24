@@ -11,9 +11,11 @@ import {
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createLocationInTour } from "../../../redux/features/locationInTour/locationInTour";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
+import { getAllTours } from "../../../redux/features/tours/tours";
 
 const AddLocationInTour = () => {
   const [locationInTour, setLocationInTour] = useState({
@@ -65,6 +67,14 @@ const AddLocationInTour = () => {
       status: "",
     });
   };
+  useEffect(() => {
+    dispatch(getAllLocation());
+    dispatch(getAllTours());
+  }, []);
+
+  const { location } = useSelector((store) => store.allLocation);
+  const { tours } = useSelector((store) => store.tours);
+
   return (
     <>
       <Card className="grid place-items-center ">
@@ -73,19 +83,39 @@ const AddLocationInTour = () => {
             {"Add Location in tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <Input
+            <select
               required
-              label="Location Name"
               name="locationId"
-              type="number"
               onChange={inputChangHandler}
               value={
                 locationInTour.locationId !== undefined
                   ? locationInTour.locationId
                   : ""
               }
-            />
-            <Input
+            >
+              <option value="">Select a location</option>
+              {location.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.locationName}
+                </option>
+              ))}
+            </select>
+            <select
+              required
+              name="tourId"
+              onChange={inputChangHandler}
+              value={
+                locationInTour.tourId !== undefined ? locationInTour.tourId : ""
+              }
+            >
+              <option value="">Select a tour</option>
+              {tours.map((tour) => (
+                <option key={tour.id} value={tour.id}>
+                  {tour.tourName}
+                </option>
+              ))}
+            </select>
+            {/* <Input
               required
               label="Tour Name"
               name="tourId"
@@ -94,7 +124,7 @@ const AddLocationInTour = () => {
               value={
                 locationInTour.tourId !== undefined ? locationInTour.tourId : ""
               }
-            />
+            /> */}
             <Input
               required
               label="Duration"

@@ -44,8 +44,7 @@ export default function Activities() {
   const { location } = useSelector((store) => store.allLocation);
   const { activities, isLoading } = useSelector((store) => store.allActivities);
   useEffect(() => {
-    dispatch(getAllActivities());
-    dispatch(getAllLocation());
+    dispatch(getAllActivities(), getAllLocation());
   }, []);
   const handleDelete = () => {
     if (deleteActivity) {

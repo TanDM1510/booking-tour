@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { updateTour } from "../../../redux/features/tours/tours";
+import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
 
 const UpdateTour = () => {
   const { id } = useParams();
@@ -43,7 +44,10 @@ const UpdateTour = () => {
     console.log(updateData);
     dispatch(updateTour(updateData));
   };
-
+  useEffect(() => {
+    dispatch(getAllVehicles());
+  }, []);
+  const { vehicles } = useSelector((store) => store.vehicles);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -52,14 +56,27 @@ const UpdateTour = () => {
             {"Update tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <Input
+            {/* <Input
               required
               label="Vehicle Name"
               name="vehicleTypeId"
               type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.vehicleTypeId}
-            />
+            /> */}
+            <select
+              required
+              name="vehicleTypeId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.vehicleTypeId}
+            >
+              <option value="">Select a vehicle</option>
+              {vehicles.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.vehicleName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Tour Name"

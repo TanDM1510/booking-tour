@@ -37,8 +37,7 @@ export default function Tours() {
   const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllTours());
-    dispatch(getAllVehicles());
+    dispatch(getAllTours(), getAllVehicles());
   }, []);
   const { vehicles } = useSelector((store) => store.vehicles);
   const { tours, isLoading } = useSelector((store) => store.tours);

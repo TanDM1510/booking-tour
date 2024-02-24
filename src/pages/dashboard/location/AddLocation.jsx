@@ -13,10 +13,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createLocation } from "../../../redux/features/location/allLocation";
 
 import { toast } from "react-toastify";
+import { getAllCity } from "../../../redux/features/city/allCity";
 
 const AddLocation = () => {
   const [location, setLocation] = useState({
@@ -25,7 +26,11 @@ const AddLocation = () => {
     locationAddress: "",
     status: "",
   });
-
+  const { city } = useSelector((store) => store.allCity);
+  console.log(city);
+  useEffect(() => {
+    dispatch(getAllCity());
+  }, []);
   const dispatch = useDispatch();
   const inputChangHandler = (e) => {
     let value = e.target.value;
@@ -65,14 +70,19 @@ const AddLocation = () => {
             {"Add Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <Input
+            <select
               required
-              label="City Name"
               name="cityId"
-              type="number"
               onChange={inputChangHandler}
               value={location.cityId !== undefined ? location.cityId : ""}
-            />
+            >
+              <option value="">Select a city</option>
+              {city.map((cityItem) => (
+                <option key={cityItem.id} value={cityItem.id}>
+                  {cityItem.cityName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Location Name"

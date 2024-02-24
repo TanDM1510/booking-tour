@@ -13,9 +13,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createTour } from "../../../redux/features/tours/tours";
+import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
 
 const AddTour = () => {
   const [tour, setTour] = useState({
@@ -64,6 +65,10 @@ const AddTour = () => {
       status: "",
     });
   };
+  useEffect(() => {
+    dispatch(getAllVehicles());
+  }, []);
+  const { vehicles } = useSelector((store) => store.vehicles);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -72,14 +77,27 @@ const AddTour = () => {
             {"Add tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <Input
+            {/* <Input
               required
               label="Vehicle Name"
               name="vehicleTypeId"
               type="number"
               onChange={inputChangHandler}
               value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
-            />
+            /> */}
+            <select
+              required
+              name="vehicleTypeId"
+              onChange={inputChangHandler}
+              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
+            >
+              <option value="">Select a vehicle</option>
+              {vehicles.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.vehicleName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Tour Name"

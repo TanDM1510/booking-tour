@@ -13,6 +13,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { updateLocationInTour } from "../../../redux/features/locationInTour/locationInTour";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
+import { getAllTours } from "../../../redux/features/tours/tours";
 
 const UpdateLocationInTour = () => {
   const { id } = useParams();
@@ -45,7 +47,13 @@ const UpdateLocationInTour = () => {
     console.log(updateData);
     dispatch(updateLocationInTour(updateData));
   };
+  useEffect(() => {
+    dispatch(getAllLocation());
+    dispatch(getAllTours());
+  }, []);
 
+  const { location } = useSelector((store) => store.allLocation);
+  const { tours } = useSelector((store) => store.tours);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -54,7 +62,7 @@ const UpdateLocationInTour = () => {
             {"Update Location in tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <Input
+            {/* <Input
               required
               label="Location Name"
               name="locationId"
@@ -69,7 +77,40 @@ const UpdateLocationInTour = () => {
               type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.tourId}
-            />
+            /> */}
+            <select
+              required
+              name="locationId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.locationId}
+            >
+              <option value="">
+                {
+                  location.find((l) => l.id === updateData.locationId)
+                    ?.locationName
+                }
+              </option>
+              {location.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.locationName}
+                </option>
+              ))}
+            </select>
+            <select
+              required
+              name="tourId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.tourId}
+            >
+              <option value="">
+                {tours.find((t) => t.id === updateData.tourId)?.tourName}
+              </option>
+              {tours.map((tour) => (
+                <option key={tour.id} value={tour.id}>
+                  {tour.tourName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Duration"

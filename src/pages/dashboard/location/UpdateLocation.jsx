@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { updateLocation } from "../../../redux/features/location/allLocation";
+import { getAllCity } from "../../../redux/features/city/allCity";
 
 const UpdateLocation = () => {
   const { id } = useParams();
@@ -42,7 +43,11 @@ const UpdateLocation = () => {
     console.log(updateData);
     dispatch(updateLocation(updateData));
   };
-
+  const { city } = useSelector((store) => store.allCity);
+  console.log(city);
+  useEffect(() => {
+    dispatch(getAllCity());
+  }, []);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -51,14 +56,21 @@ const UpdateLocation = () => {
             {"Add Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <Input
+            <select
               required
-              label="City Name"
               name="cityId"
-              type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.cityId}
-            />
+            >
+              <option value="">
+                {city.find((c) => c.id === location.cityId)?.cityName}
+              </option>
+              {city.map((cityItem) => (
+                <option key={cityItem.id} value={cityItem.id}>
+                  {cityItem.cityName}
+                </option>
+              ))}
+            </select>
             <Input
               required
               label="Location Name"
