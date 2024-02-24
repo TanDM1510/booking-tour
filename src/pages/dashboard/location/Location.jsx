@@ -113,7 +113,7 @@ export default function Location() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Tooltip content={`Edit city`}>
+                <Tooltip content={`Edit `}>
                   <Link to={`/dashboard/location/update/${location.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
@@ -130,7 +130,7 @@ export default function Location() {
                 className="text-danger"
                 color="danger"
               >
-                <Tooltip color="danger" content="Delete Location">
+                <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
               </DropdownItem>

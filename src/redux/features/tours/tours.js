@@ -40,15 +40,12 @@ export const createTour = createAsyncThunk(
     }
   }
 );
-export const deleteLocation = createAsyncThunk(
-  "deleteLocation",
-  async (location, thunkAPI) => {
+export const deleteTour = createAsyncThunk(
+  "deleteTour",
+  async (tour, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(
-        `/locations/${location.id}`,
-        location
-      );
-      console.log(location);
+      const resp = await customFetch.delete(`/tours/${tour.id}`, tour);
+      console.log(tour);
       console.log(resp.data);
       thunkAPI.dispatch(getAllTours());
       return resp.data.message;
@@ -61,11 +58,11 @@ export const deleteLocation = createAsyncThunk(
     }
   }
 );
-export const updateLocation = createAsyncThunk(
-  "city/updateLocation",
+export const updateTour = createAsyncThunk(
+  "updateTour",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locations/${data.id}`, data);
+      const resp = await customFetch.patch(`/tour/${data.id}`, data);
 
       return resp.data;
     } catch (error) {
@@ -102,28 +99,28 @@ const allTourSlice = createSlice({
       })
       .addCase(createTour.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to create tour");
       })
-      .addCase(deleteLocation.pending, (state) => {
+      .addCase(deleteTour.pending, (state) => {
         state.isLoading = true;
         toast.warning("Please wait...");
       })
-      .addCase(deleteLocation.fulfilled, (state) => {
+      .addCase(deleteTour.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Deleted successful ");
       })
-      .addCase(deleteLocation.rejected, (state, { payload }) => {
+      .addCase(deleteTour.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       })
-      .addCase(updateLocation.pending, (state) => {
+      .addCase(updateTour.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateLocation.fulfilled, (state) => {
+      .addCase(updateTour.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Updated successful ");
       })
-      .addCase(updateLocation.rejected, (state) => {
+      .addCase(updateTour.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update");
       });

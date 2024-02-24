@@ -15,7 +15,7 @@ const ShareLayout = () => {
           <BigSideBar />
           <div className="  w-full lg:basis-5/6 h-full ">
             <NavbarDashBoard />
-            <div className=" mt-20 w-full px-6 py-4">
+            <div className=" mt-20 w-full px-6 py-4  ">
               <Outlet />
             </div>
           </div>

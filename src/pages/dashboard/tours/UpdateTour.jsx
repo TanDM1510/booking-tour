@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -9,25 +10,23 @@ import {
   RadioGroup,
   Spinner,
 } from "@nextui-org/react";
-
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { updateTour } from "../../../redux/features/tours/tours";
 
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { createTour } from "../../../redux/features/tours/tours";
-
-const AddTour = () => {
-  const [tour, setTour] = useState({
-    tourName: "",
-    price: "",
-    vehicleTypeId: "",
-    tourType: "",
-    image: "",
-    status: "",
-  });
-
+const UpdateTour = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const { tours, isLoading } = useSelector((state) => state.tours);
+  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  console.log(updateData);
+  useEffect(() => {
+    if (id) {
+      const findTour = tours.find((us) => us.id == id);
+      setUpdateData(findTour || {}); // Nếu không tìm thấy user, sử dụng object trống
+    }
+  }, [id]); // Thêm id vào mảng phụ thuộc
+
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -37,39 +36,20 @@ const AddTour = () => {
     } else if (e.target.name === "price") {
       value = parseInt(value);
     }
-    setTour({ ...tour, [e.target.name]: value });
+    setUpdateData({ ...updateData, [e.target.name]: value });
   };
-
-  const { isLoading } = useSelector((store) => store.tours);
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !tour.tourName ||
-      !tour.price ||
-      !tour.vehicleTypeId ||
-      !tour.tourType ||
-      !tour.image ||
-      !tour.status
-    ) {
-      toast.error("Please fill all the blank");
-      return;
-    }
-    dispatch(createTour(tour));
-    setTour({
-      tourName: "",
-      price: "",
-      vehicleTypeId: "",
-      tourType: "",
-      image: "",
-      status: "",
-    });
+    console.log(updateData);
+    dispatch(updateTour(updateData));
   };
+
   return (
     <>
       <Card className="grid place-items-center ">
         <form onSubmit={handleSubmit}>
           <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add tour"}
+            {"Update tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Input
@@ -78,7 +58,7 @@ const AddTour = () => {
               name="vehicleTypeId"
               type="number"
               onChange={inputChangHandler}
-              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
+              value={updateData && updateData.vehicleTypeId}
             />
             <Input
               required
@@ -86,7 +66,7 @@ const AddTour = () => {
               name="tourName"
               type="text"
               onChange={inputChangHandler}
-              value={tour.tourName !== undefined ? tour.tourName : ""}
+              value={updateData && updateData.tourName}
             />
             <Input
               required
@@ -94,7 +74,7 @@ const AddTour = () => {
               name="price"
               type="number"
               onChange={inputChangHandler}
-              value={tour.price !== undefined ? tour.price : ""}
+              value={updateData && updateData.price}
             />
             <Input
               required
@@ -102,7 +82,7 @@ const AddTour = () => {
               name="tourType"
               type="text"
               onChange={inputChangHandler}
-              value={tour.tourType !== undefined ? tour.tourType : ""}
+              value={updateData && updateData.tourType}
             />
             <Input
               required
@@ -110,7 +90,7 @@ const AddTour = () => {
               name="image"
               type="file"
               onChange={inputChangHandler}
-              value={tour.image !== undefined ? tour.image : ""}
+              value={updateData && updateData.image}
             />
             <RadioGroup
               isRequired
@@ -118,7 +98,7 @@ const AddTour = () => {
               name="status"
               label="Active or Disable"
               onChange={inputChangHandler}
-              value={tour.status !== undefined ? tour.status : ""}
+              value={updateData && updateData.status}
             >
               <Radio value={true}>Active</Radio>
               <Radio value={false}>Disable</Radio>
@@ -147,4 +127,5 @@ const AddTour = () => {
     </>
   );
 };
-export default AddTour;
+
+export default UpdateTour;

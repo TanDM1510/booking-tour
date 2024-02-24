@@ -23,11 +23,8 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { deleteLocation } from "../../../redux/features/location/allLocation";
-
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import { getAllTours } from "../../../redux/features/tours/tours";
-import { getAllPois } from "../../../redux/features/pois/pois";
+import { deletePois, getAllPois } from "../../../redux/features/pois/pois";
 
 const statusColorMap = {
   true: "success",
@@ -43,8 +40,8 @@ export default function Pois() {
   }, []);
   const { pois, isLoading } = useSelector((store) => store.pois);
   const handleDelete = () => {
-    if (deleteLocation) {
-      dispatch(deleteLocation({ id: deleteId }));
+    if (deletePois) {
+      dispatch(deletePois({ id: deleteId }));
     }
     onClose();
   };
@@ -83,7 +80,7 @@ export default function Pois() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${pois.id}`}>
+                  <Link to={`/dashboard/pois/view/${pois.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -92,8 +89,8 @@ export default function Pois() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Tooltip content={`Edit city`}>
-                  <Link to={`/dashboard/location/update/${pois.id}`}>
+                <Tooltip content={`Edit `}>
+                  <Link to={`/dashboard/pois/update/${pois.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -102,14 +99,14 @@ export default function Pois() {
               </DropdownItem>
               <DropdownItem
                 key="edit"
-                // onPress={() => {
-                //   setDeleteId(location.id);
-                //   onOpen();
-                // }}
+                onPress={() => {
+                  setDeleteId(pois.id);
+                  onOpen();
+                }}
                 className="text-danger"
                 color="danger"
               >
-                <Tooltip color="danger" content="Delete Location">
+                <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
               </DropdownItem>
@@ -124,9 +121,9 @@ export default function Pois() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search Location name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/location/addLocation">
-          <Button color="success">+ Add Tour</Button>
+        <Input label="Search pois name" size="md" className="w-[300px]" />
+        <Link to="/dashboard/pois/add">
+          <Button color="success">+ Add Pois</Button>
         </Link>
       </div>
 
@@ -155,11 +152,12 @@ export default function Pois() {
           </TableBody>
         </Table>
       )}
-      {/* <ModelLocation
+      <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
-      /> */}
+        isLoading={isLoading}
+      />
     </>
   );
 }

@@ -102,7 +102,7 @@ const allLocationSlice = createSlice({
       })
       .addCase(createLocation.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to create location");
       })
       .addCase(deleteLocation.pending, (state) => {
         state.isLoading = true;

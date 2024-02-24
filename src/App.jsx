@@ -26,6 +26,17 @@ import AddLocationInTour from "./pages/dashboard/locationInTour/AddLocationInTou
 import UpdateLocationInTour from "./pages/dashboard/locationInTour/UpdateLocationInTour";
 import ViewLocationInTour from "./pages/dashboard/locationInTour/LocationInTour";
 import AddTour from "./pages/dashboard/tours/AddTour";
+import AddVehicle from "./pages/dashboard/vehicles/AddVehicle";
+import UpdateVehicle from "./pages/dashboard/vehicles/UpdateVehicle";
+import ViewVehicle from "./pages/dashboard/vehicles/VehicleDetails";
+import UpdateTour from "./pages/dashboard/tours/UpdateTour";
+import ViewTour from "./pages/dashboard/tours/ViewTour";
+import AddPois from "./pages/dashboard/pois/AddPois";
+import UpdatePois from "./pages/dashboard/pois/UpdatePois";
+import ViewPois from "./pages/dashboard/pois/ViewPois";
+import AddTrip from "./pages/dashboard/Trips/AddTrip";
+import UpdateTrip from "./pages/dashboard/Trips/UpdateTrip";
+import ViewTrip from "./pages/dashboard/Trips/ViewTrip";
 
 export default function App() {
   return (
@@ -69,9 +80,29 @@ export default function App() {
           />
           <Route path="/dashboard/tours" element={<Tours />} />
           <Route path="/dashboard/tours/addTour" element={<AddTour />} />
+          <Route path="/dashboard/tours/update/:id" element={<UpdateTour />} />
+          <Route path="/dashboard/tours/view/:id" element={<ViewTour />} />
           <Route path="/dashboard/vehicles" element={<Vehicles />} />
+          <Route
+            path="/dashboard/vehicles/addVehicle"
+            element={<AddVehicle />}
+          />
+          <Route
+            path="/dashboard/vehicles/update/:id"
+            element={<UpdateVehicle />}
+          />
+          <Route
+            path="/dashboard/vehicles/view/:id"
+            element={<ViewVehicle />}
+          />
           <Route path="/dashboard/pois" element={<Pois />} />
+          <Route path="/dashboard/pois/add" element={<AddPois />} />
+          <Route path="/dashboard/pois/update/:id" element={<UpdatePois />} />
+          <Route path="/dashboard/pois/view/:id" element={<ViewPois />} />
           <Route path="/dashboard/trips" element={<Trips />} />
+          <Route path="/dashboard/trips/add" element={<AddTrip />} />
+          <Route path="/dashboard/trips/update/:id" element={<UpdateTrip />} />
+          <Route path="/dashboard/trips/view/:id" element={<ViewTrip />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="signUp" element={<SignUp />} />

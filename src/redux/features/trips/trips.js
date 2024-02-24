@@ -22,12 +22,12 @@ export const getAllTrips = createAsyncThunk(
   }
 );
 
-export const createLocation = createAsyncThunk(
-  "createLocation",
-  async (location, thunkAPI) => {
+export const createTrip = createAsyncThunk(
+  "createTrip",
+  async (trip, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locations", location);
-      console.log(location);
+      const resp = await customFetch.post("/trips", trip);
+      console.log(trip);
       console.log(resp.data);
 
       return resp.data;
@@ -40,15 +40,12 @@ export const createLocation = createAsyncThunk(
     }
   }
 );
-export const deleteLocation = createAsyncThunk(
-  "deleteLocation",
-  async (location, thunkAPI) => {
+export const deleteTrip = createAsyncThunk(
+  "deleteTrip",
+  async (trip, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(
-        `/locations/${location.id}`,
-        location
-      );
-      console.log(location);
+      const resp = await customFetch.delete(`/trips/${trip.id}`, trip);
+      console.log(trip);
       console.log(resp.data);
       thunkAPI.dispatch(getAllTrips());
       return resp.data.message;
@@ -61,11 +58,11 @@ export const deleteLocation = createAsyncThunk(
     }
   }
 );
-export const updateLocation = createAsyncThunk(
-  "city/updateLocation",
+export const updateTrip = createAsyncThunk(
+  "updateTrip",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locations/${data.id}`, data);
+      const resp = await customFetch.patch(`/trips/${data.id}`, data);
 
       return resp.data;
     } catch (error) {
@@ -91,39 +88,39 @@ const allTripSlice = createSlice({
       })
       .addCase(getAllTrips.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load trip");
       })
-      .addCase(createLocation.pending, (state) => {
+      .addCase(createTrip.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLocation.fulfilled, (state) => {
+      .addCase(createTrip.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create location successful !!!");
+        toast.success("Create trip successful !!!");
       })
-      .addCase(createLocation.rejected, (state) => {
+      .addCase(createTrip.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to create trip");
       })
-      .addCase(deleteLocation.pending, (state) => {
+      .addCase(deleteTrip.pending, (state) => {
         state.isLoading = true;
         toast.warning("Please wait...");
       })
-      .addCase(deleteLocation.fulfilled, (state) => {
+      .addCase(deleteTrip.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Deleted successful ");
       })
-      .addCase(deleteLocation.rejected, (state, { payload }) => {
+      .addCase(deleteTrip.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       })
-      .addCase(updateLocation.pending, (state) => {
+      .addCase(updateTrip.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateLocation.fulfilled, (state) => {
+      .addCase(updateTrip.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Updated successful ");
       })
-      .addCase(updateLocation.rejected, (state) => {
+      .addCase(updateTrip.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update");
       });

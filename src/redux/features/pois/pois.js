@@ -19,12 +19,12 @@ export const getAllPois = createAsyncThunk("getPois", async (_, thunkAPI) => {
   }
 });
 
-export const createLocation = createAsyncThunk(
-  "createLocation",
-  async (location, thunkAPI) => {
+export const createPois = createAsyncThunk(
+  "createPois",
+  async (pois, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locations", location);
-      console.log(location);
+      const resp = await customFetch.post("/pois", pois);
+      console.log(pois);
       console.log(resp.data);
 
       return resp.data;
@@ -37,15 +37,12 @@ export const createLocation = createAsyncThunk(
     }
   }
 );
-export const deleteLocation = createAsyncThunk(
-  "deleteLocation",
-  async (location, thunkAPI) => {
+export const deletePois = createAsyncThunk(
+  "deletePois",
+  async (poi, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(
-        `/locations/${location.id}`,
-        location
-      );
-      console.log(location);
+      const resp = await customFetch.delete(`/pois/${poi.id}`, poi);
+      console.log(poi);
       console.log(resp.data);
       thunkAPI.dispatch(getAllPois());
       return resp.data.message;
@@ -58,11 +55,11 @@ export const deleteLocation = createAsyncThunk(
     }
   }
 );
-export const updateLocation = createAsyncThunk(
-  "city/updateLocation",
+export const updatePois = createAsyncThunk(
+  "updatePois",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locations/${data.id}`, data);
+      const resp = await customFetch.patch(`/pois/${data.id}`, data);
 
       return resp.data;
     } catch (error) {
@@ -90,37 +87,37 @@ const allPoisSlice = createSlice({
         state.isLoading = false;
         toast.error("Failed to load location");
       })
-      .addCase(createLocation.pending, (state) => {
+      .addCase(createPois.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLocation.fulfilled, (state) => {
+      .addCase(createPois.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create location successful !!!");
+        toast.success("Create category of poi successful !!!");
       })
-      .addCase(createLocation.rejected, (state) => {
+      .addCase(createPois.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to create pois");
       })
-      .addCase(deleteLocation.pending, (state) => {
+      .addCase(deletePois.pending, (state) => {
         state.isLoading = true;
         toast.warning("Please wait...");
       })
-      .addCase(deleteLocation.fulfilled, (state) => {
+      .addCase(deletePois.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Deleted successful ");
       })
-      .addCase(deleteLocation.rejected, (state, { payload }) => {
+      .addCase(deletePois.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       })
-      .addCase(updateLocation.pending, (state) => {
+      .addCase(updatePois.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateLocation.fulfilled, (state) => {
+      .addCase(updatePois.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Updated successful ");
       })
-      .addCase(updateLocation.rejected, (state) => {
+      .addCase(updatePois.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update");
       });

@@ -15,15 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { createTour } from "../../../redux/features/tours/tours";
+import { createVehicle } from "../../../redux/features/vehicles/vehicles";
 
-const AddTour = () => {
-  const [tour, setTour] = useState({
-    tourName: "",
-    price: "",
-    vehicleTypeId: "",
-    tourType: "",
-    image: "",
+const AddVehicle = () => {
+  const [vehicle, setVehicle] = useState({
+    vehicleName: "",
+    capacity: "",
     status: "",
   });
 
@@ -32,35 +29,21 @@ const AddTour = () => {
     let value = e.target.value;
     if (e.target.name === "status") {
       value = value === "true";
-    } else if (e.target.name === "vehicleTypeId") {
-      value = parseInt(value);
-    } else if (e.target.name === "price") {
-      value = parseInt(value);
     }
-    setTour({ ...tour, [e.target.name]: value });
+    setVehicle({ ...vehicle, [e.target.name]: value });
   };
 
-  const { isLoading } = useSelector((store) => store.tours);
+  const { isLoading } = useSelector((store) => store.vehicles);
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !tour.tourName ||
-      !tour.price ||
-      !tour.vehicleTypeId ||
-      !tour.tourType ||
-      !tour.image ||
-      !tour.status
-    ) {
+    if (!vehicle.capacity || !vehicle.vehicleName || !vehicle.status) {
       toast.error("Please fill all the blank");
       return;
     }
-    dispatch(createTour(tour));
-    setTour({
-      tourName: "",
-      price: "",
-      vehicleTypeId: "",
-      tourType: "",
-      image: "",
+    dispatch(createVehicle(vehicle));
+    setVehicle({
+      vehicleName: "",
+      capacity: "",
       status: "",
     });
   };
@@ -69,63 +52,42 @@ const AddTour = () => {
       <Card className="grid place-items-center ">
         <form onSubmit={handleSubmit}>
           <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add tour"}
+            {"Add Vehicle"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Input
               required
-              label="Vehicle Name"
-              name="vehicleTypeId"
-              type="number"
-              onChange={inputChangHandler}
-              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
-            />
-            <Input
-              required
-              label="Tour Name"
-              name="tourName"
+              label="Vehicle name"
+              name="vehicleName"
               type="text"
               onChange={inputChangHandler}
-              value={tour.tourName !== undefined ? tour.tourName : ""}
+              value={
+                vehicle.vehicleName !== undefined ? vehicle.vehicleName : ""
+              }
             />
             <Input
               required
-              label="Price"
-              name="price"
+              label="Capacity"
+              name="capacity"
               type="number"
               onChange={inputChangHandler}
-              value={tour.price !== undefined ? tour.price : ""}
+              value={vehicle.capacity !== undefined ? vehicle.capacity : ""}
             />
-            <Input
-              required
-              label="Tour type"
-              name="tourType"
-              type="text"
-              onChange={inputChangHandler}
-              value={tour.tourType !== undefined ? tour.tourType : ""}
-            />
-            <Input
-              required
-              label="Image"
-              name="image"
-              type="file"
-              onChange={inputChangHandler}
-              value={tour.image !== undefined ? tour.image : ""}
-            />
+
             <RadioGroup
               isRequired
               className="mt-3"
               name="status"
               label="Active or Disable"
               onChange={inputChangHandler}
-              value={tour.status !== undefined ? tour.status : ""}
+              value={vehicle.status !== undefined ? vehicle.status : ""}
             >
               <Radio value={true}>Active</Radio>
               <Radio value={false}>Disable</Radio>
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/tours">
+            <Link to="/dashboard/vehicles">
               <Button color="danger" variant="light">
                 Close
               </Button>
@@ -147,4 +109,4 @@ const AddTour = () => {
     </>
   );
 };
-export default AddTour;
+export default AddVehicle;

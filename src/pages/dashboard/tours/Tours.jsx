@@ -23,10 +23,8 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { deleteLocation } from "../../../redux/features/location/allLocation";
-
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import { getAllTours } from "../../../redux/features/tours/tours";
+import { deleteTour, getAllTours } from "../../../redux/features/tours/tours";
 import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
 
 const statusColorMap = {
@@ -45,8 +43,8 @@ export default function Tours() {
   const { vehicles } = useSelector((store) => store.vehicles);
   const { tours, isLoading } = useSelector((store) => store.tours);
   const handleDelete = () => {
-    if (deleteLocation) {
-      dispatch(deleteLocation({ id: deleteId }));
+    if (deleteTour) {
+      dispatch(deleteTour({ id: deleteId }));
     }
     onClose();
   };
@@ -109,7 +107,7 @@ export default function Tours() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${tours.id}`}>
+                  <Link to={`/dashboard/tours/view/${tours.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -118,8 +116,8 @@ export default function Tours() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Tooltip content={`Edit city`}>
-                  <Link to={`/dashboard/location/update/${tours.id}`}>
+                <Tooltip content={`Edit `}>
+                  <Link to={`/dashboard/tours/update/${tours.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -128,14 +126,14 @@ export default function Tours() {
               </DropdownItem>
               <DropdownItem
                 key="edit"
-                // onPress={() => {
-                //   setDeleteId(location.id);
-                //   onOpen();
-                // }}
+                onPress={() => {
+                  setDeleteId(tours.id);
+                  onOpen();
+                }}
                 className="text-danger"
                 color="danger"
               >
-                <Tooltip color="danger" content="Delete Location">
+                <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
               </DropdownItem>
@@ -150,7 +148,7 @@ export default function Tours() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search Location name" size="md" className="w-[300px]" />
+        <Input label="Search tour name" size="md" className="w-[300px]" />
         <Link to="/dashboard/tours/addTour">
           <Button color="success">+ Add Tour</Button>
         </Link>
@@ -181,11 +179,12 @@ export default function Tours() {
           </TableBody>
         </Table>
       )}
-      {/* <ModelLocation
+      <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
-      /> */}
+        isLoading={isLoading}
+      />
     </>
   );
 }

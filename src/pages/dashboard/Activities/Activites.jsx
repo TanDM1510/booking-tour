@@ -115,7 +115,7 @@ export default function Activities() {
               <DropdownItem key="copy">
                 {" "}
                 <Link to={`/dashboard/activities/update/${activities.id}`}>
-                  <Tooltip content={`Edit city`}>
+                  <Tooltip content={`Edit `}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -131,7 +131,7 @@ export default function Activities() {
                 className="text-danger"
                 color="danger"
               >
-                <Tooltip color="danger" content="Delete city">
+                <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
               </DropdownItem>

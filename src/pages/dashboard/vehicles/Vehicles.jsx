@@ -23,11 +23,11 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { deleteLocation } from "../../../redux/features/location/allLocation";
-
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-
-import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
+import {
+  deleteVehicle,
+  getAllVehicles,
+} from "../../../redux/features/vehicles/vehicles";
 
 const statusColorMap = {
   true: "success",
@@ -44,8 +44,8 @@ export default function Vehicles() {
   const { vehicles, isLoading } = useSelector((store) => store.vehicles);
 
   const handleDelete = () => {
-    if (deleteLocation) {
-      dispatch(deleteLocation({ id: deleteId }));
+    if (deleteVehicle) {
+      dispatch(deleteVehicle({ id: deleteId }));
     }
     onClose();
   };
@@ -92,7 +92,7 @@ export default function Vehicles() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${vehicles.id}`}>
+                  <Link to={`/dashboard/vehicles/view/${vehicles.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -101,8 +101,8 @@ export default function Vehicles() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Tooltip content={`Edit city`}>
-                  <Link to={`/dashboard/location/update/${vehicles.id}`}>
+                <Tooltip content={`Edit Vehicle`}>
+                  <Link to={`/dashboard/vehicles/update/${vehicles.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -111,10 +111,10 @@ export default function Vehicles() {
               </DropdownItem>
               <DropdownItem
                 key="edit"
-                // onPress={() => {
-                //   setDeleteId(location.id);
-                //   onOpen();
-                // }}
+                onPress={() => {
+                  setDeleteId(vehicles.id);
+                  onOpen();
+                }}
                 className="text-danger"
                 color="danger"
               >
@@ -133,9 +133,9 @@ export default function Vehicles() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search Location name" size="md" className="w-[300px]" />
-        <Link to="/dashboard/location/addLocation">
-          <Button color="success">+ Add Tour</Button>
+        <Input label="Search vehicle name" size="md" className="w-[300px]" />
+        <Link to="/dashboard/vehicles/addVehicle">
+          <Button color="success">+ Add Vehicle</Button>
         </Link>
       </div>
 
@@ -164,11 +164,12 @@ export default function Vehicles() {
           </TableBody>
         </Table>
       )}
-      {/* <ModelLocation
+      <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
-      /> */}
+        isLoading={isLoading}
+      />
     </>
   );
 }

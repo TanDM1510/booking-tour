@@ -9,21 +9,19 @@ import {
   RadioGroup,
   Spinner,
 } from "@nextui-org/react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { createTour } from "../../../redux/features/tours/tours";
+import { createTrip } from "../../../redux/features/trips/trips";
 
-const AddTour = () => {
-  const [tour, setTour] = useState({
-    tourName: "",
-    price: "",
-    vehicleTypeId: "",
-    tourType: "",
-    image: "",
+const AddTrip = () => {
+  const [trip, setTrip] = useState({
+    tourId: "",
+    tourGuideId: "",
+    totalCustomer: "",
+    startDate: "",
+    endDate: "",
     status: "",
   });
 
@@ -32,35 +30,37 @@ const AddTour = () => {
     let value = e.target.value;
     if (e.target.name === "status") {
       value = value === "true";
-    } else if (e.target.name === "vehicleTypeId") {
+    } else if (e.target.name === "tourId") {
       value = parseInt(value);
-    } else if (e.target.name === "price") {
+    } else if (e.target.name === "totalCustomer") {
+      value = parseInt(value);
+    } else if (e.target.name === "tourGuideId") {
       value = parseInt(value);
     }
-    setTour({ ...tour, [e.target.name]: value });
+    setTrip({ ...trip, [e.target.name]: value });
   };
 
-  const { isLoading } = useSelector((store) => store.tours);
+  const { isLoading } = useSelector((store) => store.locationInTour);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      !tour.tourName ||
-      !tour.price ||
-      !tour.vehicleTypeId ||
-      !tour.tourType ||
-      !tour.image ||
-      !tour.status
+      !trip.endDate ||
+      !trip.startDate ||
+      !trip.status ||
+      !trip.totalCustomer ||
+      !trip.tourGuideId ||
+      !trip.tourId
     ) {
       toast.error("Please fill all the blank");
       return;
     }
-    dispatch(createTour(tour));
-    setTour({
-      tourName: "",
-      price: "",
-      vehicleTypeId: "",
-      tourType: "",
-      image: "",
+    dispatch(createTrip(trip));
+    setTrip({
+      tourId: "",
+      tourGuideId: "",
+      totalCustomer: "",
+      startDate: "",
+      endDate: "",
       status: "",
     });
   };
@@ -69,63 +69,64 @@ const AddTour = () => {
       <Card className="grid place-items-center ">
         <form onSubmit={handleSubmit}>
           <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add tour"}
+            {"Add Location in tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Input
               required
-              label="Vehicle Name"
-              name="vehicleTypeId"
+              label="Tour guide name"
+              name="tourGuideId"
               type="number"
               onChange={inputChangHandler}
-              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
+              value={trip.tourGuideId !== undefined ? trip.tourGuideId : ""}
             />
             <Input
               required
               label="Tour Name"
-              name="tourName"
-              type="text"
-              onChange={inputChangHandler}
-              value={tour.tourName !== undefined ? tour.tourName : ""}
-            />
-            <Input
-              required
-              label="Price"
-              name="price"
+              name="tourId"
               type="number"
               onChange={inputChangHandler}
-              value={tour.price !== undefined ? tour.price : ""}
+              value={trip.tourId !== undefined ? trip.tourId : ""}
             />
             <Input
               required
-              label="Tour type"
-              name="tourType"
+              label="Total Customer"
+              name="totalCustomer"
+              type="number"
+              onChange={inputChangHandler}
+              value={trip.totalCustomer !== undefined ? trip.totalCustomer : ""}
+            />
+            <Input
+              required
+              label="Start date"
+              name="startDate"
               type="text"
               onChange={inputChangHandler}
-              value={tour.tourType !== undefined ? tour.tourType : ""}
+              value={trip.startDate !== undefined ? trip.startDate : ""}
             />
             <Input
               required
-              label="Image"
-              name="image"
-              type="file"
+              label="End date"
+              name="endDate"
+              type="text"
               onChange={inputChangHandler}
-              value={tour.image !== undefined ? tour.image : ""}
+              value={trip.endDate !== undefined ? trip.endDate : ""}
             />
+
             <RadioGroup
               isRequired
               className="mt-3"
               name="status"
               label="Active or Disable"
               onChange={inputChangHandler}
-              value={tour.status !== undefined ? tour.status : ""}
+              value={trip.status !== undefined ? trip.status : ""}
             >
               <Radio value={true}>Active</Radio>
               <Radio value={false}>Disable</Radio>
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/tours">
+            <Link to="/dashboard/trips">
               <Button color="danger" variant="light">
                 Close
               </Button>
@@ -147,4 +148,4 @@ const AddTour = () => {
     </>
   );
 };
-export default AddTour;
+export default AddTrip;

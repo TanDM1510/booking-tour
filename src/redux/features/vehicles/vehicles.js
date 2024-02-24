@@ -22,12 +22,12 @@ export const getAllVehicles = createAsyncThunk(
   }
 );
 
-export const createLocation = createAsyncThunk(
-  "createLocation",
-  async (location, thunkAPI) => {
+export const createVehicle = createAsyncThunk(
+  "createVehicle",
+  async (vehicle, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locations", location);
-      console.log(location);
+      const resp = await customFetch.post("/vehicles", vehicle);
+      console.log(vehicle);
       console.log(resp.data);
 
       return resp.data;
@@ -40,15 +40,12 @@ export const createLocation = createAsyncThunk(
     }
   }
 );
-export const deleteLocation = createAsyncThunk(
-  "deleteLocation",
-  async (location, thunkAPI) => {
+export const deleteVehicle = createAsyncThunk(
+  "deleteVehicle",
+  async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(
-        `/locations/${location.id}`,
-        location
-      );
-      console.log(location);
+      const resp = await customFetch.delete(`/vehicles/${data.id}`, data);
+      console.log(data);
       console.log(resp.data);
       thunkAPI.dispatch(getAllVehicles());
       return resp.data.message;
@@ -61,11 +58,11 @@ export const deleteLocation = createAsyncThunk(
     }
   }
 );
-export const updateLocation = createAsyncThunk(
-  "city/updateLocation",
+export const updateVehicle = createAsyncThunk(
+  "updateVehicle",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locations/${data.id}`, data);
+      const resp = await customFetch.patch(`/vehicles/${data.id}`, data);
 
       return resp.data;
     } catch (error) {
@@ -78,7 +75,7 @@ export const updateLocation = createAsyncThunk(
   }
 );
 const allVehicleSlice = createSlice({
-  name: "tours",
+  name: "vehicles",
   initialState,
   extraReducers: (builder) => {
     builder
@@ -91,39 +88,39 @@ const allVehicleSlice = createSlice({
       })
       .addCase(getAllVehicles.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load Vehicle");
       })
-      .addCase(createLocation.pending, (state) => {
+      .addCase(createVehicle.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLocation.fulfilled, (state) => {
+      .addCase(createVehicle.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create location successful !!!");
+        toast.success("Create Vehicle successful !!!");
       })
-      .addCase(createLocation.rejected, (state) => {
+      .addCase(createVehicle.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to add vehicle");
       })
-      .addCase(deleteLocation.pending, (state) => {
+      .addCase(deleteVehicle.pending, (state) => {
         state.isLoading = true;
         toast.warning("Please wait...");
       })
-      .addCase(deleteLocation.fulfilled, (state) => {
+      .addCase(deleteVehicle.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Deleted successful ");
       })
-      .addCase(deleteLocation.rejected, (state, { payload }) => {
+      .addCase(deleteVehicle.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       })
-      .addCase(updateLocation.pending, (state) => {
+      .addCase(updateVehicle.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateLocation.fulfilled, (state) => {
+      .addCase(updateVehicle.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Updated successful ");
       })
-      .addCase(updateLocation.rejected, (state) => {
+      .addCase(updateVehicle.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update");
       });
