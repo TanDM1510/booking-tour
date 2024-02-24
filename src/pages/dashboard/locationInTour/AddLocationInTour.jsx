@@ -7,6 +7,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -83,7 +85,7 @@ const AddLocationInTour = () => {
             {"Add Location in tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <select
+            {/* <select
               required
               name="locationId"
               onChange={inputChangHandler}
@@ -99,8 +101,40 @@ const AddLocationInTour = () => {
                   {s.locationName}
                 </option>
               ))}
-            </select>
-            <select
+            </select> */}
+            <Select
+              placeholder="Select a location"
+              required
+              name="locationId"
+              onChange={inputChangHandler}
+              value={
+                locationInTour.locationId !== undefined
+                  ? locationInTour.locationId
+                  : ""
+              }
+            >
+              {location.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.locationName}
+                </SelectItem>
+              ))}
+            </Select>
+            <Select
+              placeholder="Select a tour"
+              required
+              name="tourId"
+              onChange={inputChangHandler}
+              value={
+                locationInTour.tourId !== undefined ? locationInTour.tourId : ""
+              }
+            >
+              {tours.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.tourName}
+                </SelectItem>
+              ))}
+            </Select>
+            {/* <select
               required
               name="tourId"
               onChange={inputChangHandler}
@@ -114,7 +148,7 @@ const AddLocationInTour = () => {
                   {tour.tourName}
                 </option>
               ))}
-            </select>
+            </select> */}
             {/* <Input
               required
               label="Tour Name"

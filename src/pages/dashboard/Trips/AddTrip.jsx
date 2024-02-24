@@ -7,6 +7,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -93,7 +95,7 @@ const AddTrip = () => {
               onChange={inputChangHandler}
               value={trip.tourId !== undefined ? trip.tourId : ""}
             /> */}
-            <select
+            {/* <select
               required
               name="tourId"
               onChange={inputChangHandler}
@@ -105,7 +107,20 @@ const AddTrip = () => {
                   {s.tourName}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              placeholder="Select a tour"
+              required
+              name="tourId"
+              onChange={inputChangHandler}
+              value={trip.tourId !== undefined ? trip.tourId : ""}
+            >
+              {tours.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.tourName}
+                </SelectItem>
+              ))}
+            </Select>
             <Input
               required
               label="Total Customer"

@@ -7,6 +7,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 
@@ -85,7 +87,7 @@ const AddTour = () => {
               onChange={inputChangHandler}
               value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
             /> */}
-            <select
+            {/* <select
               required
               name="vehicleTypeId"
               onChange={inputChangHandler}
@@ -97,7 +99,20 @@ const AddTour = () => {
                   {s.vehicleName}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              placeholder={"Select a vehicle"}
+              required
+              name="vehicleTypeId"
+              onChange={inputChangHandler}
+              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
+            >
+              {vehicles.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.vehicleName}
+                </SelectItem>
+              ))}
+            </Select>
             <Input
               required
               label="Tour Name"

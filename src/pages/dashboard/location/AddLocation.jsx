@@ -7,6 +7,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 
@@ -70,7 +72,7 @@ const AddLocation = () => {
             {"Add Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <select
+            {/* <select
               required
               name="cityId"
               onChange={inputChangHandler}
@@ -82,7 +84,20 @@ const AddLocation = () => {
                   {cityItem.cityName}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              placeholder="Select a city"
+              required
+              name="cityId"
+              onChange={inputChangHandler}
+              value={location.cityId !== undefined ? location.cityId : ""}
+            >
+              {city.map((cityItem) => (
+                <SelectItem key={cityItem.id} value={cityItem.id}>
+                  {cityItem.cityName}
+                </SelectItem>
+              ))}
+            </Select>
             <Input
               required
               label="Location Name"

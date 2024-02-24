@@ -8,6 +8,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -64,7 +66,7 @@ const UpdateActivity = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.activityName}
             />
-            <select
+            {/* <select
               required
               name="locationId"
               onChange={inputChangHandler}
@@ -81,12 +83,28 @@ const UpdateActivity = () => {
                   {locations.locationName}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              placeholder={
+                location.find((l) => l.id === updateData.locationId)
+                  ?.locationName || "Select a location"
+              }
+              required
+              name="locationId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.locationId}
+            >
+              {location.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.locationName}
+                </SelectItem>
+              ))}
+            </Select>
             <Input
               required
               label="Activity duration"
               name="activityDuration"
-              type="text"
+              type="time"
               onChange={inputChangHandler}
               value={updateData && updateData.activityDuration}
             />

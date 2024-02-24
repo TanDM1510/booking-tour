@@ -8,6 +8,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -64,7 +66,7 @@ const UpdateTour = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.vehicleTypeId}
             /> */}
-            <select
+            {/* <select
               required
               name="vehicleTypeId"
               onChange={inputChangHandler}
@@ -76,7 +78,23 @@ const UpdateTour = () => {
                   {s.vehicleName}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              placeholder={
+                vehicles.find((v) => v.id === updateData.vehicleTypeId)
+                  ?.vehicleName || "Select a vehicle"
+              }
+              required
+              name="vehicleTypeId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.vehicleTypeId}
+            >
+              {vehicles.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.vehicleName}
+                </SelectItem>
+              ))}
+            </Select>
             <Input
               required
               label="Tour Name"

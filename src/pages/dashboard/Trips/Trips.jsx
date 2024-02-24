@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import { deleteTrip, getAllTrips } from "../../../redux/features/trips/trips";
-
+import moment from "moment";
 const statusColorMap = {
   true: "success",
   false: "danger",
@@ -45,7 +45,7 @@ export default function Trips() {
     }
     onClose();
   };
-
+  const format = (id) => moment(id).format("MMMM Do YYYY");
   const renderCell = React.useCallback((trips, columnKey) => {
     const cellValue = trips[columnKey];
 
@@ -79,7 +79,7 @@ export default function Trips() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {trips.startDate}
+              {format(trips.startDate)}
             </p>
           </div>
         );
@@ -87,7 +87,7 @@ export default function Trips() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {trips.endDate}
+              {format(trips.endDate)}
             </p>
           </div>
         );

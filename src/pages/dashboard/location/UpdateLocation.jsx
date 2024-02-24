@@ -8,6 +8,8 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,21 +58,36 @@ const UpdateLocation = () => {
             {"Add Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            <select
+            {/* <select
               required
               name="cityId"
               onChange={inputChangHandler}
               value={updateData && updateData.cityId}
             >
-              <option value="">
-                {city.find((c) => c.id === location.cityId)?.cityName}
-              </option>
+              <option value="">Select a city</option>
               {city.map((cityItem) => (
                 <option key={cityItem.id} value={cityItem.id}>
                   {cityItem.cityName}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              placeholder={
+                city.find((c) => c.id === updateData.cityId)?.cityName ||
+                "Select a city"
+              }
+              required
+              name="cityId"
+              onChange={inputChangHandler}
+              value={updateData && updateData.cityId}
+            >
+              {city.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.cityName}
+                </SelectItem>
+              ))}
+            </Select>
+
             <Input
               required
               label="Location Name"
