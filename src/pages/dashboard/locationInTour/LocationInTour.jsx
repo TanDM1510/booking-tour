@@ -1,14 +1,30 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import {
+  Button,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
 
+const statusColorMap = {
+  true: "success",
+  false: "danger",
+};
+import { columns } from "./data";
 const ViewLocationInTour = () => {
   const { id } = useParams();
   const { locationInTours } = useSelector((store) => store.locationInTour);
   const [data, setData] = useState({});
+  const { location } = useSelector((store) => store.allLocation);
+  const { tours } = useSelector((store) => store.tours);
   console.log(data);
   useEffect(() => {
     if (id) {
@@ -17,24 +33,44 @@ const ViewLocationInTour = () => {
     }
   }, [id]);
   return (
-    <div>
-      <Card className="grid place-items-center ">
-        <CardHeader className="flex flex-col gap-3 lg:w-96 font-bold text-3xl">
-          {"City details"}
-        </CardHeader>
-        <CardBody className="flex flex-col gap-3 w-52 justify-center items-start">
-          <p className="font-semibold">Location Name : {data.locationId}</p>
-          <p className="font-semibold">Tour Name : {data.tourId}</p>
-          <p className="font-semibold">Duration : {data.duration}</p>
-          <p className="font-semibold">Description : {data.description}</p>
-          <p className="font-semibold">Start City : {data.startCity}</p>
-          <p className="font-semibold">End City : {data.endCity}</p>
-          <p className="font-semibold">
-            Status : {data.status ? "Active" : "Disable"}
-          </p>
-        </CardBody>
-        <CardFooter className="flex flex-row-reverse gap-2"></CardFooter>
-      </Card>
+    <div className="w-full flex flex-col items-center justify-center">
+      <p className="font-semibold text-lg mb-3 ">Location In Tour Details</p>
+      <Table aria-label="Example static collection table">
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.uid}>{column.name}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody>
+          <TableRow key="1">
+            <TableCell>
+              {tours.find((t) => t.id == data.tourId)?.tourName}
+            </TableCell>
+            <TableCell>
+              {location.find((t) => t.id == data.locationId)?.locationName}
+            </TableCell>
+            <TableCell>{data.duration}</TableCell>
+            <TableCell>{data.description}</TableCell>
+            <TableCell>{data.startCity}</TableCell>
+            <TableCell>{data.endCity}</TableCell>
+            <TableCell>
+              <Chip
+                className="capitalize"
+                color={statusColorMap[data.status]}
+                size="sm"
+                variant="flat"
+              >
+                {data.status ? "Active" : "Disable"}
+              </Chip>
+            </TableCell>
+            <TableCell>
+              <Link to={"/dashboard/locationTour"}>
+                <Button color="primary">Back</Button>
+              </Link>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 };

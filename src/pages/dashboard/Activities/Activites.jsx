@@ -20,7 +20,7 @@ import {
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
-import { columns } from "./data";
+import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
@@ -75,14 +75,22 @@ export default function Activities() {
             </p>
           </div>
         );
-      case "activityDuration":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {activities.activityDuration}
-            </p>
-          </div>
-        );
+      // case "activityDuration":
+      //   return (
+      //     <div className="flex flex-col">
+      //       <p className="text-bold text-sm capitalize text-default-400">
+      //         {activities.activityDuration}
+      //       </p>
+      //     </div>
+      //   );
+      // case "activityDescription":
+      //   return (
+      //     <div className="flex flex-col">
+      //       <p className="text-bold text-sm capitalize text-default-400">
+      //         {activities.activityDescription}
+      //       </p>
+      //     </div>
+      //   );
       case "status":
         return (
           <Chip
@@ -155,7 +163,7 @@ export default function Activities() {
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
         <Table aria-label="Example table with custom cellsaaa">
-          <TableHeader columns={columns}>
+          <TableHeader columns={columnses}>
             {(column) => (
               <TableColumn
                 key={column.uid}

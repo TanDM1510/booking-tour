@@ -5,4 +5,10 @@ const columns = [
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];
-export { columns };
+const columnses = [
+  { name: "Location Name", uid: "locationName" },
+  { name: "City Name", uid: "cityId" },
+  { name: "STATUS", uid: "status" },
+  { name: "ACTIONS", uid: "actions" },
+];
+export { columns, columnses };

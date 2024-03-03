@@ -20,7 +20,7 @@ import {
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
-import { columns } from "./data";
+import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
@@ -90,30 +90,30 @@ export default function LocationInTours() {
             </p>
           </div>
         );
-      case "description":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {locationInTours.description}
-            </p>
-          </div>
-        );
-      case "startCity":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {locationInTours.startCity}
-            </p>
-          </div>
-        );
-      case "endCity":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {locationInTours.endCity}
-            </p>
-          </div>
-        );
+      // case "description":
+      //   return (
+      //     <div className="flex flex-col">
+      //       <p className="text-bold text-sm capitalize text-default-400">
+      //         {locationInTours.description}
+      //       </p>
+      //     </div>
+      //   );
+      // case "startCity":
+      //   return (
+      //     <div className="flex flex-col">
+      //       <p className="text-bold text-sm capitalize text-default-400">
+      //         {locationInTours.startCity}
+      //       </p>
+      //     </div>
+      //   );
+      // case "endCity":
+      //   return (
+      //     <div className="flex flex-col">
+      //       <p className="text-bold text-sm capitalize text-default-400">
+      //         {locationInTours.endCity}
+      //       </p>
+      //     </div>
+      //   );
       case "status":
         return (
           <Chip
@@ -191,7 +191,7 @@ export default function LocationInTours() {
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
         <Table aria-label="Example table with custom cells">
-          <TableHeader columns={columns}>
+          <TableHeader columns={columnses}>
             {(column) => (
               <TableColumn
                 key={column.uid}

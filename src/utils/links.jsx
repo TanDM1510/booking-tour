@@ -11,32 +11,6 @@ import { BiTrip } from "react-icons/bi";
 import { TbNotebook } from "react-icons/tb";
 import { FaCarOn } from "react-icons/fa6";
 const links = [
-  { id: 1, text: "stats", path: "/dashboard/stats", icon: <IoBarChartSharp /> },
-  {
-    id: 9,
-    text: "Booking",
-    path: "/dashboard/booking",
-    icon: <TbNotebook />,
-  },
-  { id: 2, text: "city", path: "/dashboard/city", icon: <FaCity /> },
-  {
-    id: 3,
-    text: "location",
-    path: "/dashboard/location",
-    icon: <CiLocationOn />,
-  },
-  {
-    id: 4,
-    text: "location activities",
-    path: "/dashboard/activities",
-    icon: <MdOutlineLocalActivity />,
-  },
-  {
-    id: 5,
-    text: "Location in Tour",
-    path: "/dashboard/locationTour",
-    icon: <FaMapLocationDot />,
-  },
   {
     id: 6,
     text: "Tour",
@@ -44,16 +18,33 @@ const links = [
     icon: <MdOutlineTour />,
   },
   {
+    id: 3,
+    text: "location",
+    path: "/dashboard/location",
+    icon: <CiLocationOn />,
+  },
+  {
+    id: 5,
+    text: "Location in Tour",
+    path: "/dashboard/locationTour",
+    icon: <FaMapLocationDot />,
+  },
+  { id: 2, text: "city", path: "/dashboard/city", icon: <FaCity /> },
+];
+
+export default links;
+export const notImportanceLinks = [
+  {
+    id: 4,
+    text: "location activities",
+    path: "/dashboard/activities",
+    icon: <MdOutlineLocalActivity />,
+  },
+  {
     id: 7,
     text: "Category Of Poi",
     path: "/dashboard/pois",
     icon: <BiCategory />,
-  },
-  {
-    id: 8,
-    text: "Trip",
-    path: "/dashboard/trips",
-    icon: <BiTrip />,
   },
 
   {
@@ -63,8 +54,22 @@ const links = [
     icon: <FaCarOn />,
   },
 ];
+export const importanceLinks = [
+  { id: 1, text: "stats", path: "/dashboard/stats", icon: <IoBarChartSharp /> },
+  {
+    id: 9,
+    text: "Booking",
+    path: "/dashboard/booking",
+    icon: <TbNotebook />,
+  },
+  {
+    id: 8,
+    text: "Trip",
+    path: "/dashboard/trips",
+    icon: <BiTrip />,
+  },
+];
 
-export default links;
 export const getUserFromLocalStorage = () => {
   const result = localStorage.getItem("user");
   const user = result ? JSON.parse(result) : null;

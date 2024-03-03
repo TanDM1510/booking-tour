@@ -4,7 +4,7 @@ import Layout from "../components/common/Layout";
 const Home = () => {
   return (
     <Layout>
-      <Link to="/dashboard/city">cc</Link>
+      <Link to="/dashboard/">cc</Link>
     </Layout>
   );
 };
