@@ -13,8 +13,6 @@ export const getAllVehicles = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const resp = await customFetch.get("/vehicles");
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -27,9 +25,6 @@ export const createVehicle = createAsyncThunk(
   async (vehicle, thunkAPI) => {
     try {
       const resp = await customFetch.post("/vehicles", vehicle);
-      console.log(vehicle);
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -45,8 +40,6 @@ export const deleteVehicle = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.delete(`/vehicles/${data.id}`, data);
-      console.log(data);
-      console.log(resp.data);
       thunkAPI.dispatch(getAllVehicles());
       return resp.data.message;
     } catch (error) {
@@ -63,6 +56,23 @@ export const updateVehicle = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.patch(`/vehicles/${data.id}`, data);
+      return resp.data;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
+export const searchVehicle = createAsyncThunk(
+  "searchVehicle",
+  async (data, thunkAPI) => {
+    try {
+      const resp = await customFetch.patch(
+        `/vehicles?vehicleName=${data.name}`
+      );
 
       return resp.data;
     } catch (error) {
@@ -123,6 +133,17 @@ const allVehicleSlice = createSlice({
       .addCase(updateVehicle.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update");
+      })
+      .addCase(searchVehicle.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchVehicle.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.vehicles = actions.payload.data;
+      })
+      .addCase(searchVehicle.rejected, (state, actions) => {
+        state.isLoading = false;
+        toast.error(actions.payload.data.message);
       });
   },
 });

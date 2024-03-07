@@ -16,19 +16,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { updateTour } from "../../../redux/features/tours/tours";
 import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
+import { tourType } from "./data";
 
 const UpdateTour = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { tours, isLoading } = useSelector((state) => state.tours);
-  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [updateData, setUpdateData] = useState({});
   console.log(updateData);
   useEffect(() => {
     if (id) {
       const findTour = tours.find((us) => us.id == id);
-      setUpdateData(findTour || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setUpdateData(findTour || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
+  }, [id]);
 
   const inputChangHandler = (e) => {
     let value = e.target.value;
@@ -58,27 +59,6 @@ const UpdateTour = () => {
             {"Update tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            {/* <Input
-              required
-              label="Vehicle Name"
-              name="vehicleTypeId"
-              type="number"
-              onChange={inputChangHandler}
-              value={updateData && updateData.vehicleTypeId}
-            /> */}
-            {/* <select
-              required
-              name="vehicleTypeId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.vehicleTypeId}
-            >
-              <option value="">Select a vehicle</option>
-              {vehicles.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.vehicleName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder={
                 vehicles.find((v) => v.id === updateData.vehicleTypeId)
@@ -107,26 +87,24 @@ const UpdateTour = () => {
               required
               label="Price"
               name="price"
+              min={0}
               type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.price}
             />
-            <Input
+            <Select
+              placeholder={updateData.tourType || "Select a tour type"}
               required
-              label="Tour type"
               name="tourType"
-              type="text"
               onChange={inputChangHandler}
               value={updateData && updateData.tourType}
-            />
-            <Input
-              required
-              label="Image"
-              name="image"
-              type="file"
-              onChange={inputChangHandler}
-              value={updateData && updateData.image}
-            />
+            >
+              {tourType.map((s) => (
+                <SelectItem key={s.name} value={s.name}>
+                  {s.name}
+                </SelectItem>
+              ))}
+            </Select>
             <RadioGroup
               isRequired
               className="mt-3"

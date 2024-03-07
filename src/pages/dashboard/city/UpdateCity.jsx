@@ -19,15 +19,14 @@ const UpdateCity = () => {
   const dispatch = useDispatch();
   const { city } = useSelector((state) => state.allCity);
   const { isLoading } = useSelector((state) => state.city);
-  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [updateData, setUpdateData] = useState({});
   console.log(updateData);
   useEffect(() => {
     if (id) {
       const findCity = city.find((us) => us.id == id);
-      setUpdateData(findCity || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setUpdateData(findCity || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
-
+  }, [id]);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(updateData);

@@ -18,17 +18,15 @@ const statusColorMap = {
 };
 const ViewCity = () => {
   const { id } = useParams();
-
   const { city } = useSelector((state) => state.allCity);
-
-  const [data, setData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [data, setData] = useState({});
   console.log(data);
   useEffect(() => {
     if (id) {
       const findCity = city.find((us) => us.id == id);
-      setData(findCity || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setData(findCity || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
+  }, [id]);
 
   return (
     <div className="w-full flex flex-col items-center justify-center">

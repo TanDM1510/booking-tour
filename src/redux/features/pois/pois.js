@@ -10,9 +10,7 @@ const initialState = {
 
 export const getAllPois = createAsyncThunk("getPois", async (_, thunkAPI) => {
   try {
-    const resp = await customFetch.get("/pois");
-    console.log(resp.data);
-
+    const resp = await customFetch.get("/categories");
     return resp.data;
   } catch (error) {
     return thunkAPI.rejectWithValue("There was an error");
@@ -23,10 +21,7 @@ export const createPois = createAsyncThunk(
   "createPois",
   async (pois, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/pois", pois);
-      console.log(pois);
-      console.log(resp.data);
-
+      const resp = await customFetch.post("/categories", pois);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -41,9 +36,7 @@ export const deletePois = createAsyncThunk(
   "deletePois",
   async (poi, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(`/pois/${poi.id}`, poi);
-      console.log(poi);
-      console.log(resp.data);
+      const resp = await customFetch.delete(`/categories/${poi.id}`, poi);
       thunkAPI.dispatch(getAllPois());
       return resp.data.message;
     } catch (error) {
@@ -59,8 +52,7 @@ export const updatePois = createAsyncThunk(
   "updatePois",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/pois/${data.id}`, data);
-
+      const resp = await customFetch.patch(`/categories/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -85,7 +77,7 @@ const allPoisSlice = createSlice({
       })
       .addCase(getAllPois.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load category");
       })
       .addCase(createPois.pending, (state) => {
         state.isLoading = true;

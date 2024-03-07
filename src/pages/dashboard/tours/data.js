@@ -6,4 +6,26 @@ const columns = [
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];
-export { columns };
+const tourType = [
+  {
+    id: 1,
+    name: "Adventure",
+  },
+  {
+    id: 2,
+    name: "Historical",
+  },
+  {
+    id: 3,
+    name: "Cultural",
+  },
+  {
+    id: 4,
+    name: "Natural",
+  },
+  {
+    id: 5,
+    name: "Food",
+  },
+];
+export { columns, tourType };

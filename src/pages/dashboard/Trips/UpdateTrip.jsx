@@ -68,27 +68,6 @@ const UpdateTrip = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.tourGuideId}
             />
-            {/* <Input
-              required
-              label="Tour Name"
-              name="tourId"
-              type="number"
-              onChange={inputChangHandler}
-              value={updateData && updateData.tourId}
-            /> */}
-            {/* <select
-              required
-              name="tourId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.tourId}
-            >
-              <option value="">Select a tour</option>
-              {tours.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.tourName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder={
                 tours.find((t) => t.id === updateData.tourId)?.tourName ||
@@ -110,26 +89,26 @@ const UpdateTrip = () => {
               label="Total Customer"
               name="totalCustomer"
               type="number"
+              min={0}
               onChange={inputChangHandler}
               value={updateData && updateData.totalCustomer}
             />
             <Input
               required
-              label="Start date"
               name="startDate"
-              type="text"
+              placeholder={updateData.startDate || "Start date"}
+              type="date"
               onChange={inputChangHandler}
               value={updateData && updateData.startDate}
             />
             <Input
               required
-              label="End date"
               name="endDate"
-              type="text"
+              placeholder={updateData.endDate || "End date"}
+              type="date"
               onChange={inputChangHandler}
               value={updateData && updateData.endDate}
             />
-
             <RadioGroup
               isRequired
               className="mt-3"

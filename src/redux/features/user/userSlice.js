@@ -25,7 +25,6 @@ export const registerUser = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       const resp = await customFetch.post("/signUp", user);
-      console.log(resp);
       return resp.data;
     } catch (error) {
       console.log(error);
@@ -38,7 +37,6 @@ export const loginsUser = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       const resp = await customFetch.post("/signIn", user);
-      console.log(resp);
       return resp.data;
     } catch (error) {
       console.log(error);

@@ -37,10 +37,22 @@ export default function Tours() {
   const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllTours(), getAllVehicles());
+    dispatch(getAllTours());
+    dispatch(getAllVehicles());
   }, []);
+
   const { vehicles } = useSelector((store) => store.vehicles);
   const { tours, isLoading } = useSelector((store) => store.tours);
+  const mergedData = tours.map((tour) => {
+    const vehicleData = vehicles.find(
+      (vehicle) => vehicle.id === tour.vehicleTypeId
+    );
+    return {
+      ...tour,
+      vehicleData,
+    };
+  });
+  console.log(mergedData);
   const handleDelete = () => {
     if (deleteTour) {
       dispatch(deleteTour({ id: deleteId }));
@@ -48,15 +60,15 @@ export default function Tours() {
     onClose();
   };
 
-  const renderCell = React.useCallback((tours, columnKey) => {
-    const cellValue = tours[columnKey];
+  const renderCell = React.useCallback((mergedData, columnKey) => {
+    const cellValue = mergedData[columnKey];
 
     switch (columnKey) {
       case "tourName":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {tours.tourName}
+              {mergedData.tourName}
             </p>
           </div>
         );
@@ -64,7 +76,7 @@ export default function Tours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {tours.price}
+              {mergedData.price} $
             </p>
           </div>
         );
@@ -73,7 +85,7 @@ export default function Tours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {vehicles.find((v) => v.id === tours.vehicleTypeId)?.vehicleName}
+              {mergedData.vehicleData?.vehicleName}
             </p>
           </div>
         );
@@ -81,7 +93,7 @@ export default function Tours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {tours.tourType}
+              {mergedData.tourType}
             </p>
           </div>
         );
@@ -89,7 +101,7 @@ export default function Tours() {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[tours.status]}
+            color={statusColorMap[mergedData.status]}
             size="sm"
             variant="flat"
           >
@@ -106,7 +118,7 @@ export default function Tours() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/tours/view/${tours.id}`}>
+                  <Link to={`/dashboard/tours/view/${mergedData.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -116,7 +128,7 @@ export default function Tours() {
               <DropdownItem key="copy">
                 {" "}
                 <Tooltip content={`Edit `}>
-                  <Link to={`/dashboard/tours/update/${tours.id}`}>
+                  <Link to={`/dashboard/tours/update/${mergedData.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -126,7 +138,7 @@ export default function Tours() {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setDeleteId(tours.id);
+                  setDeleteId(mergedData.id);
                   onOpen();
                 }}
                 className="text-danger"
@@ -167,7 +179,7 @@ export default function Tours() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={tours}>
+          <TableBody items={mergedData}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

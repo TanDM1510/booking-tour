@@ -7,4 +7,11 @@ const columns = [
   { name: "Status", uid: "status" },
   { name: "Actions", uid: "actions" },
 ];
-export { columns };
+const columnses = [
+  { name: "Tour guide name", uid: "tourGuideId" },
+  { name: "Tour name", uid: "tourId" },
+  { name: "Total customers", uid: "totalCustomer" },
+  { name: "Status", uid: "status" },
+  { name: "Actions", uid: "actions" },
+];
+export { columns, columnses };

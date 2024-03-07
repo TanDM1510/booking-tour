@@ -20,12 +20,13 @@ import {
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
-import { columns } from "./data";
+import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import { deleteTrip, getAllTrips } from "../../../redux/features/trips/trips";
-import moment from "moment";
+// import moment from "moment";
+import { getAllTours } from "../../../redux/features/tours/tours";
 const statusColorMap = {
   true: "success",
   false: "danger",
@@ -37,24 +38,33 @@ export default function Trips() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllTrips());
+    dispatch(getAllTours());
   }, []);
+  const { tours } = useSelector((store) => store.tours);
   const { trips, isLoading } = useSelector((store) => store.trips);
+  const mergedData = trips.map((trip) => {
+    const tourData = tours.find((tour) => tour.id === trip.tourId);
+    return {
+      ...trip,
+      tourData,
+    };
+  });
   const handleDelete = () => {
     if (deleteTrip) {
       dispatch(deleteTrip({ id: deleteId }));
     }
     onClose();
   };
-  const format = (id) => moment(id).format("MMMM Do YYYY");
-  const renderCell = React.useCallback((trips, columnKey) => {
-    const cellValue = trips[columnKey];
+  // const format = (id) => moment(id).format("MMMM Do YYYY");
+  const renderCell = React.useCallback((mergedData, columnKey) => {
+    const cellValue = mergedData[columnKey];
 
     switch (columnKey) {
       case "tourGuideId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {trips.tourGuideId}
+              {mergedData.tourGuideId}
             </p>
           </div>
         );
@@ -62,7 +72,7 @@ export default function Trips() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {trips.tourId}
+              {mergedData.tourData?.tourName}
             </p>
           </div>
         );
@@ -71,23 +81,7 @@ export default function Trips() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {trips.totalCustomer}
-            </p>
-          </div>
-        );
-      case "startDate":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {format(trips.startDate)}
-            </p>
-          </div>
-        );
-      case "endDate":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {format(trips.endDate)}
+              {mergedData.totalCustomer}
             </p>
           </div>
         );
@@ -95,7 +89,7 @@ export default function Trips() {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[trips.status]}
+            color={statusColorMap[mergedData.status]}
             size="sm"
             variant="flat"
           >
@@ -112,7 +106,7 @@ export default function Trips() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/trips/view/${trips.id}`}>
+                  <Link to={`/dashboard/trips/view/${mergedData.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -122,7 +116,7 @@ export default function Trips() {
               <DropdownItem key="copy">
                 {" "}
                 <Tooltip content={`Edit `}>
-                  <Link to={`/dashboard/trips/update/${trips.id}`}>
+                  <Link to={`/dashboard/trips/update/${mergedData.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -132,7 +126,7 @@ export default function Trips() {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setDeleteId(trips.id);
+                  setDeleteId(mergedData.id);
                   onOpen();
                 }}
                 className="text-danger"
@@ -163,7 +157,7 @@ export default function Trips() {
         <Spinner className="flex justify-center items-center mt-10" />
       ) : (
         <Table aria-label="Example table with custom cells111">
-          <TableHeader columns={columns}>
+          <TableHeader columns={columnses}>
             {(column) => (
               <TableColumn
                 key={column.uid}
@@ -173,7 +167,7 @@ export default function Trips() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={trips}>
+          <TableBody items={mergedData}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

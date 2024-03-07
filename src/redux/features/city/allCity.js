@@ -11,8 +11,7 @@ export const getAllCity = createAsyncThunk(
   "allCity/getCities",
   async (_, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/city");
-      console.log(resp.data);
+      const resp = await customFetch.get("/cities");
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -30,7 +29,7 @@ const allCitySlice = createSlice({
       })
       .addCase(getAllCity.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.city = actions.payload;
+        state.city = actions.payload.data;
       })
       .addCase(getAllCity.rejected, (state) => {
         state.isLoading = false;

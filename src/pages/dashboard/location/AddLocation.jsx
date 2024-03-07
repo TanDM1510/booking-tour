@@ -5,28 +5,22 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Select,
   SelectItem,
   Spinner,
 } from "@nextui-org/react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createLocation } from "../../../redux/features/location/allLocation";
-
 import { toast } from "react-toastify";
 import { getAllCity } from "../../../redux/features/city/allCity";
-
 const AddLocation = () => {
   const [location, setLocation] = useState({
     cityId: "",
     locationName: "",
     locationAddress: "",
-    status: "",
+    status: true,
   });
   const { city } = useSelector((store) => store.allCity);
   console.log(city);
@@ -43,7 +37,6 @@ const AddLocation = () => {
     }
     setLocation({ ...location, [e.target.name]: value });
   };
-
   const { isLoading } = useSelector((store) => store.allLocation);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,7 +54,7 @@ const AddLocation = () => {
       cityId: "",
       locationName: "",
       locationAddress: "",
-      status: "",
+      status: true,
     });
   };
   return (
@@ -72,19 +65,6 @@ const AddLocation = () => {
             {"Add Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            {/* <select
-              required
-              name="cityId"
-              onChange={inputChangHandler}
-              value={location.cityId !== undefined ? location.cityId : ""}
-            >
-              <option value="">Select a city</option>
-              {city.map((cityItem) => (
-                <option key={cityItem.id} value={cityItem.id}>
-                  {cityItem.cityName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder="Select a city"
               required
@@ -120,17 +100,6 @@ const AddLocation = () => {
                   : ""
               }
             />
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={location.status !== undefined ? location.status : ""}
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/location">

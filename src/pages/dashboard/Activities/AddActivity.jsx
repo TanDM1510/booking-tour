@@ -5,8 +5,6 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Select,
   SelectItem,
   Spinner,
@@ -24,12 +22,12 @@ const AddActivity = () => {
     activityName: "",
     activityDuration: "",
     activityDescription: "",
-    status: "",
+    status: true,
   });
 
   const dispatch = useDispatch();
   const { location } = useSelector((store) => store.allLocation);
-  useEffect(() => dispatch(getAllLocation()), []);
+  useEffect(() => dispatch(getAllLocation()), [dispatch]);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -48,7 +46,6 @@ const AddActivity = () => {
       !activity.activityDescription ||
       !activity.activityDuration ||
       !activity.activityName ||
-      !activity.status ||
       !activity.locationId
     ) {
       toast.error("Please fill all the blank");
@@ -60,7 +57,7 @@ const AddActivity = () => {
       activityName: "",
       activityDuration: "",
       activityDescription: "",
-      status: "",
+      status: true,
     });
   };
   return (
@@ -81,24 +78,11 @@ const AddActivity = () => {
                 activity.activityName !== undefined ? activity.activityName : ""
               }
             />
-            {/* 
-            <select
-              required
-              name="locationId"
-              onChange={inputChangHandler}
-              value={
-                activity.locationId !== undefined ? activity.locationId : ""
-              }
-            >
-              <option value="">Select a location</option>
-              {location.map((locations) => (
-                <option key={locations.id} value={locations.id}>
-                  {locations.locationName}
-                </option>
-              ))}
-            </select> */}
             <Select
-              placeholder="Select a location"
+              placeholder={
+                location.find((l) => l.id === activity.locationId)
+                  ?.locationName || "Select a location"
+              }
               required
               name="locationId"
               onChange={inputChangHandler}
@@ -134,17 +118,6 @@ const AddActivity = () => {
                   : ""
               }
             />
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={activity.status !== undefined ? activity.status : ""}
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/activities">

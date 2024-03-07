@@ -5,15 +5,15 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
+  // Radio,
+  // RadioGroup,
   Select,
   SelectItem,
   Spinner,
 } from "@nextui-org/react";
 
 import { useDispatch, useSelector } from "react-redux";
-
+import { tourType } from "./data";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -27,9 +27,8 @@ const AddTour = () => {
     vehicleTypeId: "",
     tourType: "",
     image: "",
-    status: "",
+    status: true,
   });
-
   const dispatch = useDispatch();
   const inputChangHandler = (e) => {
     let value = e.target.value;
@@ -50,21 +49,24 @@ const AddTour = () => {
       !tour.tourName ||
       !tour.price ||
       !tour.vehicleTypeId ||
-      !tour.tourType ||
-      !tour.image ||
-      !tour.status
+      !tour.tourType
     ) {
       toast.error("Please fill all the blank");
       return;
     }
-    dispatch(createTour(tour));
+    dispatch(
+      createTour({
+        ...tour,
+        image: null,
+      })
+    );
     setTour({
       tourName: "",
       price: "",
       vehicleTypeId: "",
       tourType: "",
       image: "",
-      status: "",
+      status: true,
     });
   };
   useEffect(() => {
@@ -79,27 +81,6 @@ const AddTour = () => {
             {"Add tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            {/* <Input
-              required
-              label="Vehicle Name"
-              name="vehicleTypeId"
-              type="number"
-              onChange={inputChangHandler}
-              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
-            /> */}
-            {/* <select
-              required
-              name="vehicleTypeId"
-              onChange={inputChangHandler}
-              value={tour.vehicleTypeId !== undefined ? tour.vehicleTypeId : ""}
-            >
-              <option value="">Select a vehicle</option>
-              {vehicles.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.vehicleName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder={"Select a vehicle"}
               required
@@ -124,38 +105,25 @@ const AddTour = () => {
             <Input
               required
               label="Price"
+              min={0}
               name="price"
               type="number"
               onChange={inputChangHandler}
               value={tour.price !== undefined ? tour.price : ""}
             />
-            <Input
+            <Select
+              placeholder={"Select a tour type"}
               required
-              label="Tour type"
               name="tourType"
-              type="text"
               onChange={inputChangHandler}
               value={tour.tourType !== undefined ? tour.tourType : ""}
-            />
-            <Input
-              required
-              label="Image"
-              name="image"
-              type="file"
-              onChange={inputChangHandler}
-              value={tour.image !== undefined ? tour.image : ""}
-            />
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={tour.status !== undefined ? tour.status : ""}
             >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
+              {tourType.map((s) => (
+                <SelectItem key={s.name} value={s.name}>
+                  {s.name}
+                </SelectItem>
+              ))}
+            </Select>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/tours">

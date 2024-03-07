@@ -23,7 +23,6 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-
 import {
   deleteLocationInTour,
   getAllLocationInTour,
@@ -46,6 +45,18 @@ export default function LocationInTours() {
   );
   const { location } = useSelector((store) => store.allLocation);
   const { tours } = useSelector((store) => store.tours);
+  const combinedData = locationInTours.map((locationInTour) => {
+    const locationData = location.find(
+      (loc) => loc.id === locationInTour.locationId
+    );
+    const tourData = tours.find((tour) => tour.id === locationInTour.tourId);
+    return {
+      ...locationInTour,
+      locationData,
+      tourData,
+    };
+  });
+  console.log(combinedData);
   // get All city
   useEffect(() => {
     dispatch(getAllLocationInTour());
@@ -60,14 +71,14 @@ export default function LocationInTours() {
     onClose();
   };
 
-  const renderCell = React.useCallback((locationInTours, columnKey) => {
-    const cellValue = locationInTours[columnKey];
+  const renderCell = React.useCallback((combinedData, columnKey) => {
+    const cellValue = combinedData[columnKey];
     switch (columnKey) {
       case "tourId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {tours.find((t) => t.id == locationInTours.tourId)?.tourName}
+              {combinedData.tourData?.tourName}
             </p>
           </div>
         );
@@ -75,10 +86,7 @@ export default function LocationInTours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {
-                location.find((t) => t.id == locationInTours.locationId)
-                  ?.locationName
-              }
+              {combinedData.locationData?.locationName}
             </p>
           </div>
         );
@@ -86,7 +94,7 @@ export default function LocationInTours() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {locationInTours.duration}
+              {combinedData.duration}
             </p>
           </div>
         );
@@ -118,7 +126,7 @@ export default function LocationInTours() {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[locationInTours.status]}
+            color={statusColorMap[combinedData.status]}
             size="sm"
             variant="flat"
           >
@@ -134,7 +142,7 @@ export default function LocationInTours() {
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/locationTour/view/${locationInTours.id}`}>
+                <Link to={`/dashboard/locationTour/view/${combinedData.id}`}>
                   <Tooltip content="Details">
                     <button className="cursor-pointer active:opacity-50">
                       <EyeIcon />
@@ -144,9 +152,7 @@ export default function LocationInTours() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link
-                  to={`/dashboard/locationTour/update/${locationInTours.id}`}
-                >
+                <Link to={`/dashboard/locationTour/update/${combinedData.id}`}>
                   <Tooltip content={`Edit `}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
@@ -157,7 +163,7 @@ export default function LocationInTours() {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setDeleteId(locationInTours.id);
+                  setDeleteId(combinedData.id);
                   onOpen();
                 }}
                 className="text-danger"
@@ -201,7 +207,7 @@ export default function LocationInTours() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={locationInTours}>
+          <TableBody items={combinedData}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

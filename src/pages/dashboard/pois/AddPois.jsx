@@ -11,7 +11,6 @@ import {
 } from "@nextui-org/react";
 
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -31,7 +30,6 @@ const AddPois = () => {
     }
     setCategory({ ...category, [e.target.name]: value });
   };
-
   const { isLoading } = useSelector((store) => store.pois);
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -9,9 +9,7 @@ import {
   RadioGroup,
   Spinner,
 } from "@nextui-org/react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";

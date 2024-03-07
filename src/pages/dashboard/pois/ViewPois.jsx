@@ -39,7 +39,6 @@ const ViewPois = () => {
         <TableBody>
           <TableRow key="1">
             <TableCell>{data.categoryName}</TableCell>
-
             <TableCell>
               <Chip
                 className="capitalize"

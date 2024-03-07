@@ -20,14 +20,14 @@ const ViewActivity = () => {
   };
   const { activities } = useSelector((state) => state.allActivities);
   const { location } = useSelector((state) => state.allLocation);
-  const [data, setData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [data, setData] = useState({});
   console.log(data);
   useEffect(() => {
     if (id) {
       const findActivity = activities.find((us) => us.id == id);
-      setData(findActivity || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setData(findActivity || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
+  }, [id]);
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Activity Details</p>

@@ -9,7 +9,6 @@ import {
   Chip,
   Tooltip,
   Button,
-  Input,
   Spinner,
   Dropdown,
   DropdownTrigger,
@@ -26,9 +25,11 @@ import { Link } from "react-router-dom";
 import {
   deleteLocation,
   getAllLocation,
+  searchLocation,
 } from "../../../redux/features/location/allLocation";
 import { getAllCity } from "../../../redux/features/city/allCity";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
+import Search from "../../../components/common/Search";
 
 const statusColorMap = {
   true: "success",
@@ -37,32 +38,38 @@ const statusColorMap = {
 
 export default function Location() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
-
+  //Gọi dữ liệu
   useEffect(() => {
     Promise.all([dispatch(getAllLocation()), dispatch(getAllCity())]);
   }, []);
+  //Xóa dữ liệu
+  const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
     if (deleteLocation) {
       dispatch(deleteLocation({ id: deleteId }));
     }
     onClose();
   };
-
+  //Dữ liệu
   const { city } = useSelector((store) => store.allCity);
-  console.log(city);
   const { location, isLoading } = useSelector((store) => store.allLocation);
-  console.log(location);
-  const renderCell = React.useCallback((location, columnKey) => {
-    const cellValue = location[columnKey];
-
+  const mergedData = location.map((loc) => {
+    const cityData = city.find((cty) => cty.id === loc.cityId);
+    return {
+      ...loc,
+      cityData,
+    };
+  });
+  //Table
+  const renderCell = React.useCallback((mergedData, columnKey) => {
+    const cellValue = mergedData[columnKey];
     switch (columnKey) {
       case "locationName":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {location.locationName}
+              {mergedData.locationName}
             </p>
           </div>
         );
@@ -70,24 +77,15 @@ export default function Location() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {city.find((c) => c.id === location.cityId)?.cityName}
+              {mergedData.cityData?.cityName}
             </p>
           </div>
         );
-
-      // case "locationAddress":
-      //   return (
-      //     <div className="flex flex-col">
-      //       <p className="text-bold text-sm capitalize text-default-400">
-      //         {location.locationAddress}
-      //       </p>
-      //     </div>
-      //   );
       case "status":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[location.status]}
+            color={statusColorMap[mergedData.status]}
             size="sm"
             variant="flat"
           >
@@ -104,7 +102,7 @@ export default function Location() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${location.id}`}>
+                  <Link to={`/dashboard/location/${mergedData.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -114,7 +112,7 @@ export default function Location() {
               <DropdownItem key="copy">
                 {" "}
                 <Tooltip content={`Edit `}>
-                  <Link to={`/dashboard/location/update/${location.id}`}>
+                  <Link to={`/dashboard/location/update/${mergedData.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -124,7 +122,7 @@ export default function Location() {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setDeleteId(location.id);
+                  setDeleteId(mergedData.id);
                   onOpen();
                 }}
                 className="text-danger"
@@ -141,11 +139,11 @@ export default function Location() {
         return cellValue;
     }
   }, []);
-
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search Location name" size="md" className="w-[300px]" />
+        <Search search={searchLocation} label={"Search location by name"} />
+
         <Link to="/dashboard/location/addLocation">
           <Button color="success">+ Add Location</Button>
         </Link>
@@ -165,15 +163,19 @@ export default function Location() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={location}>
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
+          {mergedData.length === 0 ? (
+            <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+          ) : (
+            <TableBody items={mergedData}>
+              {(item) => (
+                <TableRow key={item.id}>
+                  {(columnKey) => (
+                    <TableCell>{renderCell(item, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          )}
         </Table>
       )}
       <ModelLocation

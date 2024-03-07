@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import { useParams } from "react-router-dom";
-
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 
 const ViewTrip = () => {

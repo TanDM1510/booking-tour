@@ -22,9 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
-
 import {
   deleteActivity,
   getAllActivities,
@@ -43,8 +41,16 @@ export default function Activities() {
   const [deleteId, setDeleteId] = useState(null);
   const { location } = useSelector((store) => store.allLocation);
   const { activities, isLoading } = useSelector((store) => store.allActivities);
+  const activitiesWithLocation = activities.map((activity) => {
+    const locationData = location.find((loc) => loc.id === activity.locationId);
+    return {
+      ...activity,
+      locationData,
+    };
+  });
   useEffect(() => {
-    dispatch(getAllActivities(), getAllLocation());
+    dispatch(getAllActivities());
+    dispatch(getAllLocation());
   }, []);
   const handleDelete = () => {
     if (deleteActivity) {
@@ -53,17 +59,14 @@ export default function Activities() {
     onClose();
   };
 
-  const renderCell = React.useCallback((activities, columnKey) => {
-    const cellValue = activities[columnKey];
+  const renderCell = React.useCallback((activitiesWithLocation, columnKey) => {
+    const cellValue = activitiesWithLocation[columnKey];
     switch (columnKey) {
       case "locationId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {
-                location.find((c) => c.id === activities.locationId)
-                  ?.locationName
-              }
+              {activitiesWithLocation.locationData?.locationName}
             </p>
           </div>
         );
@@ -71,31 +74,15 @@ export default function Activities() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {activities.activityName}
+              {activitiesWithLocation.activityName}
             </p>
           </div>
         );
-      // case "activityDuration":
-      //   return (
-      //     <div className="flex flex-col">
-      //       <p className="text-bold text-sm capitalize text-default-400">
-      //         {activities.activityDuration}
-      //       </p>
-      //     </div>
-      //   );
-      // case "activityDescription":
-      //   return (
-      //     <div className="flex flex-col">
-      //       <p className="text-bold text-sm capitalize text-default-400">
-      //         {activities.activityDescription}
-      //       </p>
-      //     </div>
-      //   );
       case "status":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[activities.status]}
+            color={statusColorMap[activitiesWithLocation.status]}
             size="sm"
             variant="flat"
           >
@@ -111,7 +98,7 @@ export default function Activities() {
             <DropdownMenu aria-label="Static Actions" className="w-10">
               <DropdownItem key="new">
                 {" "}
-                <Link to={`/dashboard/activities/${activities.id}`}>
+                <Link to={`/dashboard/activities/${activitiesWithLocation.id}`}>
                   <Tooltip content="Details">
                     <button className="cursor-pointer active:opacity-50">
                       <EyeIcon />
@@ -121,7 +108,9 @@ export default function Activities() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Link to={`/dashboard/activities/update/${activities.id}`}>
+                <Link
+                  to={`/dashboard/activities/update/${activitiesWithLocation.id}`}
+                >
                   <Tooltip content={`Edit `}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
@@ -132,7 +121,7 @@ export default function Activities() {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setDeleteId(activities.id);
+                  setDeleteId(activitiesWithLocation.id);
                   onOpen();
                 }}
                 className="text-danger"
@@ -173,7 +162,7 @@ export default function Activities() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={activities}>
+          <TableBody items={activitiesWithLocation}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

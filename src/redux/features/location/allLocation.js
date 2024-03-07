@@ -13,23 +13,17 @@ export const getAllLocation = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const resp = await customFetch.get("/locations");
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
     }
   }
 );
-
 export const createLocation = createAsyncThunk(
   "createLocation",
   async (location, thunkAPI) => {
     try {
       const resp = await customFetch.post("/locations", location);
-      console.log(location);
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -48,8 +42,6 @@ export const deleteLocation = createAsyncThunk(
         `/locations/${location.id}`,
         location
       );
-      console.log(location);
-      console.log(resp.data);
       thunkAPI.dispatch(getAllLocation());
       return resp.data.message;
     } catch (error) {
@@ -66,7 +58,23 @@ export const updateLocation = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.patch(`/locations/${data.id}`, data);
-
+      return resp.data;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
+export const searchLocation = createAsyncThunk(
+  "/searchLocation",
+  async (data, thunkAPI) => {
+    try {
+      const resp = await customFetch.get(
+        `/locations?locationName=${data.name}`
+      );
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -110,7 +118,7 @@ const allLocationSlice = createSlice({
       })
       .addCase(deleteLocation.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Deleted successful ");
+        toast.success("Deleted a location successful ");
       })
       .addCase(deleteLocation.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -121,11 +129,22 @@ const allLocationSlice = createSlice({
       })
       .addCase(updateLocation.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Updated successful ");
+        toast.success("Updated a location successful ");
       })
       .addCase(updateLocation.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update");
+        toast.error("Failed to update a location");
+      })
+      .addCase(searchLocation.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchLocation.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.location = actions.payload.data;
+      })
+      .addCase(searchLocation.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("Failed to update a location");
       });
   },
 });

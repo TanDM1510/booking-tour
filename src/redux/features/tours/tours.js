@@ -13,8 +13,6 @@ export const getAllTours = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const resp = await customFetch.get("/tours");
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -27,9 +25,6 @@ export const createTour = createAsyncThunk(
   async (tour, thunkAPI) => {
     try {
       const resp = await customFetch.post("/tours", tour);
-      console.log(tour);
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -45,8 +40,6 @@ export const deleteTour = createAsyncThunk(
   async (tour, thunkAPI) => {
     try {
       const resp = await customFetch.delete(`/tours/${tour.id}`, tour);
-      console.log(tour);
-      console.log(resp.data);
       thunkAPI.dispatch(getAllTours());
       return resp.data.message;
     } catch (error) {
@@ -62,8 +55,7 @@ export const updateTour = createAsyncThunk(
   "updateTour",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/tour/${data.id}`, data);
-
+      const resp = await customFetch.patch(`/tours/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -88,14 +80,14 @@ const allTourSlice = createSlice({
       })
       .addCase(getAllTours.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load tours");
       })
       .addCase(createTour.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(createTour.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create tour successful !!!");
+        toast.success("Create a tour successful !!!");
       })
       .addCase(createTour.rejected, (state) => {
         state.isLoading = false;
@@ -107,7 +99,7 @@ const allTourSlice = createSlice({
       })
       .addCase(deleteTour.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Deleted successful ");
+        toast.success("Deleted a tour successful ");
       })
       .addCase(deleteTour.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -118,11 +110,11 @@ const allTourSlice = createSlice({
       })
       .addCase(updateTour.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Updated successful ");
+        toast.success("Updated a tour successful ");
       })
       .addCase(updateTour.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update");
+        toast.error("Failed to update a tour");
       });
   },
 });

@@ -45,10 +45,8 @@ export default function Pois() {
     }
     onClose();
   };
-
   const renderCell = React.useCallback((pois, columnKey) => {
     const cellValue = pois[columnKey];
-
     switch (columnKey) {
       case "categoryName":
         return (
@@ -58,7 +56,6 @@ export default function Pois() {
             </p>
           </div>
         );
-
       case "status":
         return (
           <Chip

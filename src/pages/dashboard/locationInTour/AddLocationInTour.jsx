@@ -5,8 +5,6 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Select,
   SelectItem,
   Spinner,
@@ -27,7 +25,7 @@ const AddLocationInTour = () => {
     description: "",
     startCity: "",
     endCity: "",
-    status: "",
+    status: true,
   });
 
   const dispatch = useDispatch();
@@ -52,8 +50,7 @@ const AddLocationInTour = () => {
       !locationInTour.duration ||
       !locationInTour.description ||
       !locationInTour.endCity ||
-      !locationInTour.startCity ||
-      !locationInTour.status
+      !locationInTour.startCity
     ) {
       toast.error("Please fill all the blank");
       return;
@@ -66,7 +63,7 @@ const AddLocationInTour = () => {
       description: "",
       startCity: "",
       endCity: "",
-      status: "",
+      status: true,
     });
   };
   useEffect(() => {
@@ -85,23 +82,6 @@ const AddLocationInTour = () => {
             {"Add Location in tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            {/* <select
-              required
-              name="locationId"
-              onChange={inputChangHandler}
-              value={
-                locationInTour.locationId !== undefined
-                  ? locationInTour.locationId
-                  : ""
-              }
-            >
-              <option value="">Select a location</option>
-              {location.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.locationName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder="Select a location"
               required
@@ -134,31 +114,6 @@ const AddLocationInTour = () => {
                 </SelectItem>
               ))}
             </Select>
-            {/* <select
-              required
-              name="tourId"
-              onChange={inputChangHandler}
-              value={
-                locationInTour.tourId !== undefined ? locationInTour.tourId : ""
-              }
-            >
-              <option value="">Select a tour</option>
-              {tours.map((tour) => (
-                <option key={tour.id} value={tour.id}>
-                  {tour.tourName}
-                </option>
-              ))}
-            </select> */}
-            {/* <Input
-              required
-              label="Tour Name"
-              name="tourId"
-              type="number"
-              onChange={inputChangHandler}
-              value={
-                locationInTour.tourId !== undefined ? locationInTour.tourId : ""
-              }
-            /> */}
             <Input
               required
               label="Duration"
@@ -207,19 +162,6 @@ const AddLocationInTour = () => {
                   : ""
               }
             />
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={
-                locationInTour.status !== undefined ? locationInTour.status : ""
-              }
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/locationTour">

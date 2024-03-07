@@ -21,14 +21,14 @@ const UpdateLocation = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { location, isLoading } = useSelector((state) => state.allLocation);
-  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [updateData, setUpdateData] = useState({});
   console.log(updateData);
   useEffect(() => {
     if (id) {
       const findLocation = location.find((us) => us.id == id);
-      setUpdateData(findLocation || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setUpdateData(findLocation || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
+  }, [id]);
 
   const inputChangHandler = (e) => {
     let value = e.target.value;
@@ -58,19 +58,6 @@ const UpdateLocation = () => {
             {"Add Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            {/* <select
-              required
-              name="cityId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.cityId}
-            >
-              <option value="">Select a city</option>
-              {city.map((cityItem) => (
-                <option key={cityItem.id} value={cityItem.id}>
-                  {cityItem.cityName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder={
                 city.find((c) => c.id === updateData.cityId)?.cityName ||
@@ -122,7 +109,6 @@ const UpdateLocation = () => {
                 Close
               </Button>
             </Link>
-
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (
                 <div className="flex justify-center items-center">

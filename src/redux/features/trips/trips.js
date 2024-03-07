@@ -13,8 +13,6 @@ export const getAllTrips = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const resp = await customFetch.get("/trips");
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -27,9 +25,6 @@ export const createTrip = createAsyncThunk(
   async (trip, thunkAPI) => {
     try {
       const resp = await customFetch.post("/trips", trip);
-      console.log(trip);
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -45,8 +40,6 @@ export const deleteTrip = createAsyncThunk(
   async (trip, thunkAPI) => {
     try {
       const resp = await customFetch.delete(`/trips/${trip.id}`, trip);
-      console.log(trip);
-      console.log(resp.data);
       thunkAPI.dispatch(getAllTrips());
       return resp.data.message;
     } catch (error) {
@@ -63,7 +56,6 @@ export const updateTrip = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.patch(`/trips/${data.id}`, data);
-
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -95,11 +87,11 @@ const allTripSlice = createSlice({
       })
       .addCase(createTrip.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create trip successful !!!");
+        toast.success("Create a trip successful !!!");
       })
       .addCase(createTrip.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to create trip");
+        toast.error("Failed to a create trip");
       })
       .addCase(deleteTrip.pending, (state) => {
         state.isLoading = true;
@@ -107,7 +99,7 @@ const allTripSlice = createSlice({
       })
       .addCase(deleteTrip.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Deleted successful ");
+        toast.success("Deleted a trip successful ");
       })
       .addCase(deleteTrip.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -118,11 +110,11 @@ const allTripSlice = createSlice({
       })
       .addCase(updateTrip.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Updated successful ");
+        toast.success("Updated a trip successful ");
       })
       .addCase(updateTrip.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update");
+        toast.error("Failed to update a trip");
       });
   },
 });

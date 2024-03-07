@@ -18,15 +18,14 @@ const UpdatePois = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { pois, isLoading } = useSelector((state) => state.pois);
-  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [updateData, setUpdateData] = useState({});
   console.log(updateData);
   useEffect(() => {
     if (id) {
       const findPois = pois.find((us) => us.id == id);
-      setUpdateData(findPois || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setUpdateData(findPois || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
-
+  }, [id]);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -34,7 +33,6 @@ const UpdatePois = () => {
     }
     setUpdateData({ ...updateData, [e.target.name]: value });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(updateData);

@@ -12,8 +12,7 @@ export const getAllLocationInTour = createAsyncThunk(
   "getLocationInTour",
   async (_, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/locationInTours");
-      console.log(resp.data);
+      const resp = await customFetch.get("/tours/locations");
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -25,9 +24,10 @@ export const createLocationInTour = createAsyncThunk(
   "createLocationInTour",
   async (locationInTour, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locationInTours", locationInTour);
-      console.log(location);
-      console.log(resp.data);
+      const resp = await customFetch.post(
+        `/tours/${locationInTour.tourId}/locations/${locationInTour.locationId}`,
+        locationInTour
+      );
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -43,11 +43,9 @@ export const deleteLocationInTour = createAsyncThunk(
   async (location, thunkAPI) => {
     try {
       const resp = await customFetch.delete(
-        `/locationInTours/${location.id}`,
+        `/tours/locations/${location.id}`,
         location
       );
-      console.log(location);
-      console.log(resp.data);
       thunkAPI.dispatch(getAllLocationInTour());
       return resp.data.message;
     } catch (error) {
@@ -63,8 +61,7 @@ export const updateLocationInTour = createAsyncThunk(
   "updateLocationInTour",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locationInTours/${data.id}`, data);
-
+      const resp = await customFetch.patch(`/tours/locations/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {

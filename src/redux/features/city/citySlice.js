@@ -17,8 +17,7 @@ export const createCity = createAsyncThunk(
   "city/createCity",
   async (city, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/city/create", city);
-      console.log(resp.data);
+      const resp = await customFetch.post("/cities", city);
       thunkAPI.dispatch(clearValues());
       return resp.data;
     } catch (error) {
@@ -34,8 +33,7 @@ export const updateCity = createAsyncThunk(
   "city/updateCity",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/city/update/${data.id}`, data);
-
+      const resp = await customFetch.patch(`/cities/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -50,7 +48,7 @@ export const deleteCity = createAsyncThunk(
   "city/deleteCity",
   async (cityId, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(`/city/${cityId.id}`, {
+      const resp = await customFetch.delete(`/cities/${cityId.id}`, {
         data: cityId,
       });
       thunkAPI.dispatch(getAllCity());
@@ -68,8 +66,7 @@ export const getCity = createAsyncThunk(
   "allCity/getCity",
   async (city, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`/city/${city.id}`, city);
-      console.log(resp.data);
+      const resp = await customFetch.get(`/cities/${city.id}`, city);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -101,7 +98,7 @@ const citySlice = createSlice({
       })
       .addCase(createCity.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("create success");
+        toast.success("Create a city success");
       })
       .addCase(createCity.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -114,7 +111,7 @@ const citySlice = createSlice({
       })
       .addCase(deleteCity.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Deleted successful ");
+        toast.success("Deleted a city successful ");
       })
       .addCase(deleteCity.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -125,11 +122,11 @@ const citySlice = createSlice({
       })
       .addCase(updateCity.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Updated successful ");
+        toast.success("Updated a city successful ");
       })
       .addCase(updateCity.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update");
+        toast.error("Failed to update city");
       })
       .addCase(getCity.pending, (state) => {
         state.isLoading = true;

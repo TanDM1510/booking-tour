@@ -24,14 +24,14 @@ const UpdateLocationInTour = () => {
   const { locationInTours, isLoading } = useSelector(
     (store) => store.locationInTour
   );
-  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [updateData, setUpdateData] = useState({});
   console.log(updateData);
   useEffect(() => {
     if (id) {
       const findLocation = locationInTours.find((us) => us.id == id);
-      setUpdateData(findLocation || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setUpdateData(findLocation || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
+  }, [id]);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -64,55 +64,6 @@ const UpdateLocationInTour = () => {
             {"Update Location in tour"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
-            {/* <Input
-              required
-              label="Location Name"
-              name="locationId"
-              type="number"
-              onChange={inputChangHandler}
-              value={updateData && updateData.locationId}
-            />
-            <Input
-              required
-              label="Tour Name"
-              name="tourId"
-              type="number"
-              onChange={inputChangHandler}
-              value={updateData && updateData.tourId}
-            /> */}
-            {/* <select
-              required
-              name="locationId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.locationId}
-            >
-              <option value="">
-                {
-                  location.find((l) => l.id === updateData.locationId)
-                    ?.locationName
-                }
-              </option>
-              {location.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.locationName}
-                </option>
-              ))}
-            </select>
-            <select
-              required
-              name="tourId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.tourId}
-            >
-              <option value="">
-                {tours.find((t) => t.id === updateData.tourId)?.tourName}
-              </option>
-              {tours.map((tour) => (
-                <option key={tour.id} value={tour.id}>
-                  {tour.tourName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder={
                 location.find((t) => t.id === updateData.locationId)

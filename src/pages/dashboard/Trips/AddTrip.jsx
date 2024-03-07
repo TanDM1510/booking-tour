@@ -5,8 +5,6 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Select,
   SelectItem,
   Spinner,
@@ -25,7 +23,7 @@ const AddTrip = () => {
     totalCustomer: "",
     startDate: "",
     endDate: "",
-    status: "",
+    status: true,
   });
 
   const dispatch = useDispatch();
@@ -43,13 +41,12 @@ const AddTrip = () => {
     setTrip({ ...trip, [e.target.name]: value });
   };
 
-  const { isLoading } = useSelector((store) => store.locationInTour);
+  const { isLoading } = useSelector((store) => store.trips);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
       !trip.endDate ||
       !trip.startDate ||
-      !trip.status ||
       !trip.totalCustomer ||
       !trip.tourGuideId ||
       !trip.tourId
@@ -64,7 +61,7 @@ const AddTrip = () => {
       totalCustomer: "",
       startDate: "",
       endDate: "",
-      status: "",
+      status: true,
     });
   };
   useEffect(() => {
@@ -87,27 +84,6 @@ const AddTrip = () => {
               onChange={inputChangHandler}
               value={trip.tourGuideId !== undefined ? trip.tourGuideId : ""}
             />
-            {/* <Input
-              required
-              label="Tour Name"
-              name="tourId"
-              type="number"
-              onChange={inputChangHandler}
-              value={trip.tourId !== undefined ? trip.tourId : ""}
-            /> */}
-            {/* <select
-              required
-              name="tourId"
-              onChange={inputChangHandler}
-              value={trip.tourId !== undefined ? trip.tourId : ""}
-            >
-              <option value="">Select a tour</option>
-              {tours.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.tourName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder="Select a tour"
               required
@@ -126,14 +102,17 @@ const AddTrip = () => {
               label="Total Customer"
               name="totalCustomer"
               type="number"
+              min={1}
               onChange={inputChangHandler}
               value={trip.totalCustomer !== undefined ? trip.totalCustomer : ""}
             />
+
             <Input
               required
               label="Start date"
               name="startDate"
-              type="text"
+              placeholder="Start date"
+              type="date"
               onChange={inputChangHandler}
               value={trip.startDate !== undefined ? trip.startDate : ""}
             />
@@ -141,22 +120,11 @@ const AddTrip = () => {
               required
               label="End date"
               name="endDate"
-              type="text"
+              placeholder="End date"
+              type="date"
               onChange={inputChangHandler}
               value={trip.endDate !== undefined ? trip.endDate : ""}
             />
-
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={trip.status !== undefined ? trip.status : ""}
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/trips">

@@ -12,8 +12,7 @@ export const getAllActivities = createAsyncThunk(
   "allActivities/getActivities",
   async (_, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/location_activity");
-      console.log(resp.data);
+      const resp = await customFetch.get("/locations/activities");
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -24,11 +23,7 @@ export const createActivity = createAsyncThunk(
   "createActivity",
   async (activity, thunkAPI) => {
     try {
-      const resp = await customFetch.post(
-        "/location_activity/create",
-        activity
-      );
-      console.log(resp.data);
+      const resp = await customFetch.post("/locations/activities", activity);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -44,10 +39,9 @@ export const updateActivity = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.patch(
-        `/location_activity/update/${data.id}`,
+        `/locations/activities/${data.id}`,
         data
       );
-
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -63,11 +57,9 @@ export const deleteActivity = createAsyncThunk(
   async (activity, thunkAPI) => {
     try {
       const resp = await customFetch.delete(
-        `/location_activity/delete/${activity.id}`,
+        `/locations/activities/${activity.id}`,
         activity
       );
-      console.log(location);
-      console.log(resp.data);
       thunkAPI.dispatch(getAllActivities());
       return resp.data.message;
     } catch (error) {
@@ -89,7 +81,7 @@ const allActivitiesSlice = createSlice({
       })
       .addCase(getAllActivities.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.activities = actions.payload;
+        state.activities = actions.payload.data;
       })
       .addCase(getAllActivities.rejected, (state) => {
         state.isLoading = false;
@@ -115,7 +107,7 @@ const allActivitiesSlice = createSlice({
       })
       .addCase(updateActivity.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update");
+        toast.error("Failed to update activity");
       })
       .addCase(deleteActivity.pending, (state) => {
         state.isLoading = true;
@@ -123,7 +115,7 @@ const allActivitiesSlice = createSlice({
       })
       .addCase(deleteActivity.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Deleted successful ");
+        toast.success("Deleted activity successful ");
       })
       .addCase(deleteActivity.rejected, (state, { payload }) => {
         state.isLoading = false;

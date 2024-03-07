@@ -5,20 +5,15 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Spinner,
 } from "@nextui-org/react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { toast } from "react-toastify";
 import {
   createCity,
   handleChange,
 } from "../../../redux/features/city/citySlice";
 import { Link } from "react-router-dom";
-
 const AddCity = () => {
   const dispatch = useDispatch();
   const { isLoading, cityName, country, status } = useSelector(
@@ -30,7 +25,6 @@ const AddCity = () => {
       toast.error("Please fill all the blank");
       return;
     }
-
     dispatch(createCity({ cityName, country, status }));
   };
   const handleChanged = (e) => {
@@ -63,17 +57,6 @@ const AddCity = () => {
               onChange={handleChanged}
               value={country}
             />
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              value={status}
-              onChange={handleChanged}
-            >
-              <Radio value={false}>Disable</Radio>
-              <Radio value={true}>Active</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/city">

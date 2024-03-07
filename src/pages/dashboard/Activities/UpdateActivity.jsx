@@ -24,15 +24,14 @@ const UpdateActivity = () => {
   useEffect(() => dispatch(getAllLocation()), []);
 
   const { activities, isLoading } = useSelector((state) => state.allActivities);
-  const [updateData, setUpdateData] = useState({}); // Sử dụng giá trị mặc định là {}
+  const [updateData, setUpdateData] = useState({});
 
   useEffect(() => {
     if (id) {
       const findActivity = activities.find((us) => us.id == id);
-      setUpdateData(findActivity || {}); // Nếu không tìm thấy user, sử dụng object trống
+      setUpdateData(findActivity || {});
     }
-  }, [id]); // Thêm id vào mảng phụ thuộc
-
+  }, [id]);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -40,16 +39,13 @@ const UpdateActivity = () => {
     } else if (e.target.name === "locationId") {
       value = parseInt(value);
     }
-
     setUpdateData({ ...updateData, [e.target.name]: value });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(updateData);
     dispatch(updateActivity(updateData));
   };
-
   return (
     <>
       <Card className="grid place-items-center ">
@@ -66,24 +62,6 @@ const UpdateActivity = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.activityName}
             />
-            {/* <select
-              required
-              name="locationId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.locationId}
-            >
-              <option value="">
-                {
-                  location.find((l) => l.id === updateData.locationId)
-                    ?.locationName
-                }
-              </option>
-              {location.map((locations) => (
-                <option key={locations.id} value={locations.id}>
-                  {locations.locationName}
-                </option>
-              ))}
-            </select> */}
             <Select
               placeholder={
                 location.find((l) => l.id === updateData.locationId)

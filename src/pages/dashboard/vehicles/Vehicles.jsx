@@ -9,7 +9,6 @@ import {
   Chip,
   Tooltip,
   Button,
-  Input,
   Spinner,
   Dropdown,
   DropdownTrigger,
@@ -28,31 +27,28 @@ import {
   deleteVehicle,
   getAllVehicles,
 } from "../../../redux/features/vehicles/vehicles";
-
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
-
 export default function Vehicles() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [deleteId, setDeleteId] = useState(null);
+  //Gọi dữ liệu
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllVehicles());
   }, []);
   const { vehicles, isLoading } = useSelector((store) => store.vehicles);
-
+  //Xóa dữ liệu
+  const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
     if (deleteVehicle) {
       dispatch(deleteVehicle({ id: deleteId }));
     }
     onClose();
   };
-
   const renderCell = React.useCallback((vehicles, columnKey) => {
     const cellValue = vehicles[columnKey];
-
     switch (columnKey) {
       case "vehicleName":
         return (
@@ -70,7 +66,6 @@ export default function Vehicles() {
             </p>
           </div>
         );
-
       case "status":
         return (
           <Chip
@@ -129,11 +124,17 @@ export default function Vehicles() {
         return cellValue;
     }
   }, []);
-
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search vehicle name" size="md" className="w-[300px]" />
+        {/* <Input
+          onClick={handleSearch}
+          label="Search vehicle name"
+          size="md"
+          className="w-[300px]"
+          value={searchParam}
+          onChange={handleChange}
+        /> */}
         <Link to="/dashboard/vehicles/addVehicle">
           <Button color="success">+ Add Vehicle</Button>
         </Link>
