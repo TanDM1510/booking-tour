@@ -51,7 +51,7 @@ export const deleteCity = createAsyncThunk(
       const resp = await customFetch.delete(`/cities/${cityId.id}`, {
         data: cityId,
       });
-      thunkAPI.dispatch(getAllCity());
+      thunkAPI.dispatch(getAllCity({ page: cityId.page }));
       return resp.data.message;
     } catch (error) {
       if (error.response.status === 401) {
@@ -62,17 +62,7 @@ export const deleteCity = createAsyncThunk(
     }
   }
 );
-export const getCity = createAsyncThunk(
-  "allCity/getCity",
-  async (city, thunkAPI) => {
-    try {
-      const resp = await customFetch.get(`/cities/${city.id}`, city);
-      return resp.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("There was an error");
-    }
-  }
-);
+
 const citySlice = createSlice({
   name: "city",
   initialState,
@@ -127,17 +117,6 @@ const citySlice = createSlice({
       .addCase(updateCity.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update city");
-      })
-      .addCase(getCity.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getCity.fulfilled, (state, actions) => {
-        state.isLoading = false;
-        state.city = actions.payload;
-      })
-      .addCase(getCity.rejected, (state) => {
-        state.isLoading = false;
-        toast.error("There was an error");
       });
   },
 });

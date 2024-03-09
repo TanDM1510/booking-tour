@@ -70,9 +70,7 @@ export const searchVehicle = createAsyncThunk(
   "searchVehicle",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(
-        `/vehicles?vehicleName=${data.name}`
-      );
+      const resp = await customFetch.get(`/vehicles?vehicleName=${data.name}`);
 
       return resp.data;
     } catch (error) {
@@ -141,9 +139,9 @@ const allVehicleSlice = createSlice({
         state.isLoading = false;
         state.vehicles = actions.payload.data;
       })
-      .addCase(searchVehicle.rejected, (state, actions) => {
+      .addCase(searchVehicle.rejected, (state) => {
         state.isLoading = false;
-        toast.error(actions.payload.data.message);
+        state.vehicles = [];
       });
   },
 });

@@ -26,7 +26,9 @@ import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import {
   deleteVehicle,
   getAllVehicles,
+  searchVehicle,
 } from "../../../redux/features/vehicles/vehicles";
+import Search from "../../../components/common/Search";
 const statusColorMap = {
   true: "success",
   false: "danger",
@@ -127,44 +129,44 @@ export default function Vehicles() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        {/* <Input
-          onClick={handleSearch}
-          label="Search vehicle name"
-          size="md"
-          className="w-[300px]"
-          value={searchParam}
-          onChange={handleChange}
-        /> */}
+        <Search label={"Search vehicle by name"} search={searchVehicle} />
         <Link to="/dashboard/vehicles/addVehicle">
           <Button color="success">+ Add Vehicle</Button>
         </Link>
       </div>
-
-      {isLoading ? (
-        <Spinner className="flex justify-center items-center mt-10" />
-      ) : (
-        <Table aria-label="Example table with custom cells111">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={vehicles}>
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+      <div className="h-72">
+        {" "}
+        {isLoading ? (
+          <Spinner className="flex justify-center items-center mt-10" />
+        ) : (
+          <Table aria-label="Example table with custom cells111">
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn
+                  key={column.uid}
+                  align={column.uid === "actions" ? "center" : "start"}
+                >
+                  {column.name}
+                </TableColumn>
+              )}
+            </TableHeader>
+            {vehicles.length === 0 ? (
+              <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+            ) : (
+              <TableBody items={vehicles}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(item, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
                 )}
-              </TableRow>
+              </TableBody>
             )}
-          </TableBody>
-        </Table>
-      )}
+          </Table>
+        )}
+      </div>
+
       <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}

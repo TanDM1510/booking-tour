@@ -9,23 +9,24 @@ import {
   Chip,
   Tooltip,
   Button,
-  Input,
   Spinner,
   useDisclosure,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Pagination,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCity } from "../../../redux/features/city/allCity";
+import { getAllCity, getCity } from "../../../redux/features/city/allCity";
 import { Link, NavLink } from "react-router-dom";
 import { deleteCity } from "../../../redux/features/city/citySlice";
 import ModelCity from "../../../components/dashboard/City/ModelCity";
+import Search from "../../../components/common/Search";
 
 const statusColorMap = {
   true: "success",
@@ -36,7 +37,9 @@ export default function App() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [deleteId, setDeleteId] = useState(null);
-  const { city, isLoading } = useSelector((store) => store.allCity);
+  const { city, isLoading, totalItems, totalPages } = useSelector(
+    (store) => store.allCity
+  );
 
   // get All city
   useEffect(() => {
@@ -45,11 +48,18 @@ export default function App() {
   // handleDelete
   const handleDelete = () => {
     if (deleteCity) {
-      dispatch(deleteCity({ id: deleteId }));
+      dispatch(deleteCity({ id: deleteId, page: currentPage }));
     }
     onClose();
   };
-
+  //Pagination
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (getAllCity) {
+      dispatch(getAllCity({ page: page }));
+    }
+  };
   const renderCell = React.useCallback((city, columnKey) => {
     const cellValue = city[columnKey];
     switch (columnKey) {
@@ -131,37 +141,53 @@ export default function App() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Input label="Search city name" size="md" className="w-[300px]" />
+        <Search search={getCity} label={"Search city by Name"} />
         <NavLink to="/dashboard/addCity">
           <Button color="success">+ Add city</Button>
         </NavLink>
       </div>
-
-      {isLoading ? (
-        <Spinner className="flex justify-center items-center mt-10" />
-      ) : (
-        <Table aria-label="Example table with custom cells">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={city}>
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+      <div className="h-72">
+        {isLoading ? (
+          <Spinner className="flex justify-center items-center mt-10" />
+        ) : (
+          <Table aria-label="Example table with custom cells" className="mt-10">
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn
+                  key={column.uid}
+                  align={column.uid === "actions" ? "center" : "start"}
+                >
+                  {column.name}
+                </TableColumn>
+              )}
+            </TableHeader>
+            {city.length === 0 ? (
+              <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+            ) : (
+              <TableBody items={city}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(item, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
                 )}
-              </TableRow>
+              </TableBody>
             )}
-          </TableBody>
-        </Table>
-      )}
+          </Table>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <p className="text-small text-default-500">Total items: {totalItems}</p>
+        <Pagination
+          total={totalPages}
+          color="secondary"
+          page={currentPage}
+          onChange={(page) => handlePageChange(page)}
+          showControls
+        />
+      </div>
       <ModelCity
         isOpen={isOpen}
         onOpenChange={onOpenChange}

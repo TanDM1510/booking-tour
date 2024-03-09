@@ -6,17 +6,35 @@ import { logoutUser } from "../user/userSlice";
 const initialState = {
   isLoading: false,
   pois: [],
+  totalPages: 0,
+  page: 1,
+  totalItems: 0,
 };
 
-export const getAllPois = createAsyncThunk("getPois", async (_, thunkAPI) => {
-  try {
-    const resp = await customFetch.get("/categories");
-    return resp.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue("There was an error");
+export const getAllPois = createAsyncThunk(
+  "getPois",
+  async (data, thunkAPI) => {
+    try {
+      const resp = await customFetch.get(`/categories?page=${data?.page}`);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("There was an error");
+    }
   }
-});
-
+);
+export const searchPois = createAsyncThunk(
+  "searchPois",
+  async (data, thunkAPI) => {
+    try {
+      const resp = await customFetch.get(
+        `/categories?categoryName=${data?.name}`
+      );
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("There was an error");
+    }
+  }
+);
 export const createPois = createAsyncThunk(
   "createPois",
   async (pois, thunkAPI) => {
@@ -37,7 +55,7 @@ export const deletePois = createAsyncThunk(
   async (poi, thunkAPI) => {
     try {
       const resp = await customFetch.delete(`/categories/${poi.id}`, poi);
-      thunkAPI.dispatch(getAllPois());
+      thunkAPI.dispatch(getAllPois({ page: poi.page }));
       return resp.data.message;
     } catch (error) {
       if (error.response.status === 401) {
@@ -74,6 +92,9 @@ const allPoisSlice = createSlice({
       .addCase(getAllPois.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.pois = actions.payload.data;
+        state.totalPages = actions.payload.totalPages;
+        state.page = actions.payload.page;
+        state.totalItems = actions.payload.totalItems;
       })
       .addCase(getAllPois.rejected, (state) => {
         state.isLoading = false;
@@ -112,6 +133,17 @@ const allPoisSlice = createSlice({
       .addCase(updatePois.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update");
+      })
+      .addCase(searchPois.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchPois.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.pois = actions.payload.data;
+      })
+      .addCase(searchPois.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("Failed to search pois");
       });
   },
 });

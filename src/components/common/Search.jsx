@@ -2,7 +2,7 @@ import { Input } from "@nextui-org/react";
 import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
-const Search = ({ search, label, initialValue = "", onSearchError }) => {
+const Search = ({ search, label, initialValue = "", onSearchError, page }) => {
   const [searchParam, setSearchParam] = useState(initialValue);
   const dispatch = useDispatch();
 
@@ -19,7 +19,7 @@ const Search = ({ search, label, initialValue = "", onSearchError }) => {
       if (search) {
         try {
           // Perform additional validation or error handling here if needed
-          dispatch(search({ name: value }));
+          dispatch(search({ name: value, page: page }));
         } catch (error) {
           if (onSearchError) {
             onSearchError(error); // Call the provided error handler

@@ -15,6 +15,7 @@ import {
   DropdownMenu,
   DropdownItem,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
@@ -41,19 +42,25 @@ export default function Location() {
   const dispatch = useDispatch();
   //Gọi dữ liệu
   useEffect(() => {
-    Promise.all([dispatch(getAllLocation()), dispatch(getAllCity())]);
+    Promise.all([
+      dispatch(getAllLocation({ page: currentPage })),
+      dispatch(getAllCity()),
+    ]);
   }, []);
   //Xóa dữ liệu
   const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
     if (deleteLocation) {
-      dispatch(deleteLocation({ id: deleteId }));
+      dispatch(deleteLocation({ id: deleteId, page: currentPage }));
     }
     onClose();
   };
   //Dữ liệu
   const { city } = useSelector((store) => store.allCity);
-  const { location, isLoading } = useSelector((store) => store.allLocation);
+  const { location, isLoading, totalPages, totalItems } = useSelector(
+    (store) => store.allLocation
+  );
+
   const mergedData = location.map((loc) => {
     const cityData = city.find((cty) => cty.id === loc.cityId);
     return {
@@ -61,6 +68,15 @@ export default function Location() {
       cityData,
     };
   });
+  //Pagination
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (getAllLocation) {
+      dispatch(getAllLocation({ page: page }));
+    }
+  };
+
   //Table
   const renderCell = React.useCallback((mergedData, columnKey) => {
     const cellValue = mergedData[columnKey];
@@ -142,42 +158,62 @@ export default function Location() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search search={searchLocation} label={"Search location by name"} />
+        <Search
+          search={searchLocation}
+          page={currentPage}
+          label={"Search location by name"}
+        />
 
         <Link to="/dashboard/location/addLocation">
           <Button color="success">+ Add Location</Button>
         </Link>
       </div>
-
-      {isLoading ? (
-        <Spinner className="flex justify-center items-center mt-10" />
-      ) : (
-        <Table aria-label="Example table with custom cells111">
-          <TableHeader columns={columnses}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          {mergedData.length === 0 ? (
-            <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
-          ) : (
-            <TableBody items={mergedData}>
-              {(item) => (
-                <TableRow key={item.id}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
+      <div className="h-72">
+        {" "}
+        {isLoading ? (
+          <Spinner className="flex justify-center items-center mt-10" />
+        ) : (
+          <Table
+            aria-label="Example table with custom cells111"
+            className="mt-10"
+          >
+            <TableHeader columns={columnses}>
+              {(column) => (
+                <TableColumn
+                  key={column.uid}
+                  align={column.uid === "actions" ? "center" : "start"}
+                >
+                  {column.name}
+                </TableColumn>
               )}
-            </TableBody>
-          )}
-        </Table>
-      )}
+            </TableHeader>
+            {mergedData.length === 0 ? (
+              <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+            ) : (
+              <TableBody items={mergedData}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(item, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            )}
+          </Table>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <p className="text-small text-default-500">Total items: {totalItems}</p>
+        <Pagination
+          total={totalPages}
+          color="secondary"
+          page={currentPage}
+          onChange={(page) => handlePageChange(page)}
+          showControls
+        />
+      </div>
       <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}

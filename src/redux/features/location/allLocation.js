@@ -6,13 +6,17 @@ import { logoutUser } from "../user/userSlice";
 const initialState = {
   isLoading: false,
   location: [],
+  totalPages: 0,
+  page: 1,
+  totalItems: 0,
 };
 
 export const getAllLocation = createAsyncThunk(
   "allLocation/getLocation",
-  async (_, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/locations");
+      const resp = await customFetch.get(`locations?page=${data?.page}`);
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -42,7 +46,7 @@ export const deleteLocation = createAsyncThunk(
         `/locations/${location.id}`,
         location
       );
-      thunkAPI.dispatch(getAllLocation());
+      thunkAPI.dispatch(getAllLocation({ page: location.page }));
       return resp.data.message;
     } catch (error) {
       if (error.response.status === 401) {
@@ -96,6 +100,9 @@ const allLocationSlice = createSlice({
       .addCase(getAllLocation.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.location = actions.payload.data;
+        state.totalPages = actions.payload.totalPages;
+        state.page = actions.payload.page;
+        state.totalItems = actions.payload.totalItems;
       })
       .addCase(getAllLocation.rejected, (state) => {
         state.isLoading = false;

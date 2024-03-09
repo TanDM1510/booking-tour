@@ -6,13 +6,16 @@ import { logoutUser } from "../user/userSlice";
 const initialState = {
   isLoading: false,
   tours: [],
+  totalPages: 0,
+  page: 1,
+  totalItems: 0,
 };
 
 export const getAllTours = createAsyncThunk(
   "getAllTours",
-  async (_, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/tours");
+      const resp = await customFetch.get(`/tours?page=${data?.page}`);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -40,7 +43,7 @@ export const deleteTour = createAsyncThunk(
   async (tour, thunkAPI) => {
     try {
       const resp = await customFetch.delete(`/tours/${tour.id}`, tour);
-      thunkAPI.dispatch(getAllTours());
+      thunkAPI.dispatch(getAllTours({ page: tour.page }));
       return resp.data.message;
     } catch (error) {
       if (error.response.status === 401) {
@@ -66,6 +69,22 @@ export const updateTour = createAsyncThunk(
     }
   }
 );
+export const searchTour = createAsyncThunk(
+  "searchTour",
+  async (data, thunkAPI) => {
+    try {
+      const resp = await customFetch.get(`/tours?tourName=${data.name}`);
+      return resp.data;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const allTourSlice = createSlice({
   name: "tours",
   initialState,
@@ -77,6 +96,9 @@ const allTourSlice = createSlice({
       .addCase(getAllTours.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.tours = actions.payload.data;
+        state.totalPages = actions.payload.totalPages;
+        state.page = actions.payload.page;
+        state.totalItems = actions.payload.totalItems;
       })
       .addCase(getAllTours.rejected, (state) => {
         state.isLoading = false;
@@ -115,6 +137,17 @@ const allTourSlice = createSlice({
       .addCase(updateTour.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update a tour");
+      })
+      .addCase(searchTour.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchTour.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.tours = actions.payload.data;
+      })
+      .addCase(searchTour.rejected, (state) => {
+        state.isLoading = false;
+        toast.error("Failed to search a tour");
       });
   },
 });

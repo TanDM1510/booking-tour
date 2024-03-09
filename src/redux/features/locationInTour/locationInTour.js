@@ -6,13 +6,16 @@ import { logoutUser } from "../user/userSlice";
 const initialState = {
   isLoading: false,
   locationInTours: [],
+  totalPages: 0,
+  page: 1,
+  totalItems: 0,
 };
 
 export const getAllLocationInTour = createAsyncThunk(
   "getLocationInTour",
-  async (_, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/tours/locations");
+      const resp = await customFetch.get(`/tours/locations?page=${data?.page}`);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -72,6 +75,7 @@ export const updateLocationInTour = createAsyncThunk(
     }
   }
 );
+
 const allLocationInTourSlice = createSlice({
   name: "allLocationInTour",
   initialState,
@@ -83,6 +87,9 @@ const allLocationInTourSlice = createSlice({
       .addCase(getAllLocationInTour.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.locationInTours = actions.payload.data;
+        state.totalPages = actions.payload.totalPages;
+        state.page = actions.payload.page;
+        state.totalItems = actions.payload.totalItems;
       })
       .addCase(getAllLocationInTour.rejected, (state) => {
         state.isLoading = false;
