@@ -17,79 +17,82 @@ import {
 } from "@nextui-org/react";
 
 import { EyeIcon } from "../../../components/common/EyeIcon";
-import { columnses } from "./data";
+import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-
-import { getAllTrips } from "../../../redux/features/trips/trips";
-// import moment from "moment";
-import { getAllTours } from "../../../redux/features/tours/tours";
 import { Link } from "react-router-dom";
-import { getAllTourGuides } from "../../../redux/features/tourGuide/tourGuides";
+import { searchLocation } from "../../../redux/features/location/allLocation";
+
 import Search from "../../../components/common/Search";
+import { getAllBookings } from "../../../redux/features/bookings/bookings";
+import { getAllTrips } from "../../../redux/features/trips/trips";
+import { getAllUser } from "../../../redux/features/user/allUser";
+
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
 
-export default function Trips() {
+export default function Bookings() {
   const dispatch = useDispatch();
+  //Xóa dữ liệu
+  //Gọi dữ liệu
   useEffect(() => {
+    dispatch(getAllBookings({ page: currentPage }));
+    dispatch(getAllUser());
     dispatch(getAllTrips());
-    dispatch(getAllTours());
-    dispatch(getAllTourGuides());
   }, []);
-  const { tourGuides } = useSelector((store) => store.tourGuide);
-  const { tours } = useSelector((store) => store.tours);
-  const { trips, isLoading, totalItems, totalPages } = useSelector(
-    (store) => store.trips
+  //Dữ liệu
+  const { trips } = useSelector((store) => store.trips);
+  const { bookings, isLoading, totalPages, totalItems } = useSelector(
+    (store) => store.booking
   );
-  const mergedData = trips.map((trip) => {
-    const tourGuide = tourGuides.find(
-      (guide) => guide._id === trip.tourGuideId
-    );
-    const tour = tours.find((tour) => tour.id === trip.tourId);
+
+  const { users } = useSelector((store) => store.allUser);
+  const mergedData = bookings.map((booking) => {
+    const trip = trips.find((trip) => trip.id === booking.tripId);
+    const user = users.find((user) => user._id === booking.userId);
 
     return {
-      ...trip,
-      tourGuide,
-      tour,
+      ...booking,
+      trip,
+      user,
     };
   });
+  console.log(mergedData);
   //Pagination
   const [currentPage, setCurrentPage] = React.useState(1);
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    if (getAllTrips) {
-      dispatch(getAllTrips({ page: page }));
+    if (getAllBookings) {
+      dispatch(getAllBookings({ page: page }));
     }
   };
-  // const format = (id) => moment(id).format("MMMM Do YYYY");
+
+  //Table
   const renderCell = React.useCallback((mergedData, columnKey) => {
     const cellValue = mergedData[columnKey];
-
     switch (columnKey) {
-      case "tourGuideId":
+      case "userId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.tourGuide?.userId?.fullName}
+              {mergedData.user?.fullName}
             </p>
           </div>
         );
-      case "tourId":
+      case "tripId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.tour?.tourName}
+              {mergedData.tripId}
             </p>
           </div>
         );
-
-      case "totalCustomer":
+      case "bookingDate":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.totalCustomer}
+              {mergedData.bookingDate}
             </p>
           </div>
         );
@@ -114,7 +117,7 @@ export default function Trips() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/trips/view/${mergedData.id}`}>
+                  <Link to={`/dashboard/location/${mergedData.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -128,11 +131,14 @@ export default function Trips() {
         return cellValue;
     }
   }, []);
-
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search label={"Search trip by tour guide name"} />
+        <Search
+          search={searchLocation}
+          page={currentPage}
+          label={"Search bookings by user name"}
+        />
       </div>
       <div className="h-72">
         {" "}
@@ -143,7 +149,7 @@ export default function Trips() {
             aria-label="Example table with custom cells111"
             className="mt-10"
           >
-            <TableHeader columns={columnses}>
+            <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn
                   key={column.uid}
@@ -153,15 +159,19 @@ export default function Trips() {
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody items={mergedData}>
-              {(item) => (
-                <TableRow key={item.id}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
+            {mergedData.length === 0 ? (
+              <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+            ) : (
+              <TableBody items={mergedData}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(item, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            )}
           </Table>
         )}
       </div>

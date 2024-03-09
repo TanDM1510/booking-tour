@@ -6,13 +6,17 @@ import { logoutUser } from "../user/userSlice";
 const initialState = {
   isLoading: false,
   trips: [],
+  totalPages: 0,
+  page: 1,
+  totalItems: 0,
 };
 
 export const getAllTrips = createAsyncThunk(
   "getAllTrips",
-  async (_, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get("/trips");
+      const resp = await customFetch.get(`/trips?page=${data?.page}`);
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -77,6 +81,9 @@ const allTripSlice = createSlice({
       .addCase(getAllTrips.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.trips = actions.payload.data;
+        state.totalPages = actions.payload.totalPages;
+        state.page = actions.payload.page;
+        state.totalItems = actions.payload.totalItems;
       })
       .addCase(getAllTrips.rejected, (state) => {
         state.isLoading = false;

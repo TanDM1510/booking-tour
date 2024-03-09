@@ -1,10 +1,25 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
-
+import { Link, useParams } from "react-router-dom";
+import {
+  Button,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
+import { columns } from "./data";
+import moment from "moment";
+const statusColorMap = {
+  true: "success",
+  false: "danger",
+};
 const ViewTrip = () => {
   const { id } = useParams();
+  const format = (id) => moment(id).format("MMMM Do YYYY");
   const { trips } = useSelector((store) => store.trips);
   const [data, setData] = useState({});
   console.log(data);
@@ -14,24 +29,50 @@ const ViewTrip = () => {
       setData(findTrip || {});
     }
   }, [id]);
+  const { tourGuides } = useSelector((store) => store.tourGuide);
+  const { tours } = useSelector((store) => store.tours);
+
   return (
-    <div>
-      <Card className="grid place-items-center ">
-        <CardHeader className="flex flex-col gap-3 lg:w-96 font-bold text-3xl">
-          {"City details"}
-        </CardHeader>
-        <CardBody className="flex flex-col gap-3 w-52 justify-center items-start">
-          <p className="font-semibold">Location Name : {data.tourGuideId}</p>
-          <p className="font-semibold">Tour Name : {data.tourId}</p>
-          <p className="font-semibold">Duration : {data.totalCustomer}</p>
-          <p className="font-semibold">Description : {data.startDate}</p>
-          <p className="font-semibold">Start City : {data.endDate}</p>
-          <p className="font-semibold">
-            Status : {data.status ? "Active" : "Disable"}
-          </p>
-        </CardBody>
-        <CardFooter className="flex flex-row-reverse gap-2"></CardFooter>
-      </Card>
+    <div className="w-full flex flex-col items-center justify-center">
+      <p className="font-semibold text-lg mb-3 ">Location Details</p>
+      <Table aria-label="Example static collection table">
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.uid}>{column.name}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody>
+          <TableRow key="1">
+            <TableCell>
+              {
+                tourGuides.find((t) => t._id === data.tourGuideId)?.userId
+                  .fullName
+              }
+            </TableCell>
+            <TableCell>
+              {tours.find((c) => c.id === data.tourId)?.tourName}
+            </TableCell>
+            <TableCell>{data.totalCustomer}</TableCell>
+            <TableCell>{format(data.startDate)}</TableCell>
+            <TableCell>{format(data.endDate)}</TableCell>
+            <TableCell>
+              <Chip
+                className="capitalize"
+                color={statusColorMap[data.status]}
+                size="sm"
+                variant="flat"
+              >
+                {data.status ? "Active" : "Disable"}
+              </Chip>
+            </TableCell>
+            <TableCell>
+              <Link to={"/dashboard/trips"}>
+                <Button color="primary">Back</Button>
+              </Link>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 };

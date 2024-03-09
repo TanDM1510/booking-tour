@@ -37,6 +37,9 @@ import ViewPois from "./pages/dashboard/pois/ViewPois";
 import AddTrip from "./pages/dashboard/Trips/AddTrip";
 import UpdateTrip from "./pages/dashboard/Trips/UpdateTrip";
 import ViewTrip from "./pages/dashboard/Trips/ViewTrip";
+import Bookings from "./pages/dashboard/bookings/Bookings";
+import Users from "./pages/dashboard/Users/Users";
+import AddTourGuide from "./pages/dashboard/Users/AddTourGuide";
 
 export default function App() {
   return (
@@ -103,6 +106,12 @@ export default function App() {
           <Route path="/dashboard/trips/add" element={<AddTrip />} />
           <Route path="/dashboard/trips/update/:id" element={<UpdateTrip />} />
           <Route path="/dashboard/trips/view/:id" element={<ViewTrip />} />
+          <Route path="/dashboard/booking/" element={<Bookings />} />
+          <Route path="/dashboard/users/" element={<Users />} />
+          <Route
+            path="/dashboard/users/addTourGuide"
+            element={<AddTourGuide />}
+          />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="signUp" element={<SignUp />} />

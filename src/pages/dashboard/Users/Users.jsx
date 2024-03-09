@@ -15,56 +15,107 @@ import {
   DropdownMenu,
   DropdownItem,
   useDisclosure,
+  Pagination,
+  Avatar,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
-import { columns } from "./data";
+import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import {
-  deleteVehicle,
-  getAllVehicles,
-  searchVehicle,
-} from "../../../redux/features/vehicles/vehicles";
+  deleteLocation,
+  getAllLocation,
+  searchLocation,
+} from "../../../redux/features/location/allLocation";
+
+import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import Search from "../../../components/common/Search";
+import { getAllUser } from "../../../redux/features/user/AllUser";
+
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
-export default function Vehicles() {
+
+export default function Users() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  //Gọi dữ liệu
   const dispatch = useDispatch();
+  //Gọi dữ liệu
   useEffect(() => {
-    dispatch(getAllVehicles());
+    dispatch(getAllUser({ page: currentPage }));
   }, []);
-  const { vehicles, isLoading } = useSelector((store) => store.vehicles);
   //Xóa dữ liệu
   const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
-    if (deleteVehicle) {
-      dispatch(deleteVehicle({ id: deleteId }));
+    if (deleteLocation) {
+      dispatch(deleteLocation({ id: deleteId, page: currentPage }));
     }
     onClose();
   };
-  const renderCell = React.useCallback((vehicles, columnKey) => {
-    const cellValue = vehicles[columnKey];
+  //Dữ liệu
+
+  const { users, isLoading, totalPages, totalItems } = useSelector(
+    (store) => store.allUser
+  );
+  console.log(users);
+  //Pagination
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (getAllLocation) {
+      dispatch(getAllLocation({ page: page }));
+    }
+  };
+
+  //Table
+  const renderCell = React.useCallback((user, columnKey) => {
+    const cellValue = user[columnKey];
+    var role = "";
     switch (columnKey) {
-      case "vehicleName":
+      case "image":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {vehicles.vehicleName}
+              <Avatar src={user.image} />
             </p>
           </div>
         );
-      case "capacity":
+      case "fullName":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {vehicles.capacity}
+              {user.fullName}
+            </p>
+          </div>
+        );
+      case "email":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {user.email}
+            </p>
+          </div>
+        );
+      case "roleId":
+        switch (user.roleId) {
+          case 0:
+            role = "User";
+            break;
+          case 1:
+            role = "Tour Guide";
+            break;
+          case 2:
+            role = "Admin";
+            break;
+          default:
+            role = "Unknown";
+        }
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize text-default-400">
+              {role}
             </p>
           </div>
         );
@@ -72,7 +123,7 @@ export default function Vehicles() {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[vehicles.status]}
+            color={statusColorMap[user.status]}
             size="sm"
             variant="flat"
           >
@@ -89,7 +140,7 @@ export default function Vehicles() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/vehicles/view/${vehicles.id}`}>
+                  <Link to={`/dashboard/location/${user._id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -98,8 +149,8 @@ export default function Vehicles() {
               </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
-                <Tooltip content={`Edit Vehicle`}>
-                  <Link to={`/dashboard/vehicles/update/${vehicles.id}`}>
+                <Tooltip content={`Edit `}>
+                  <Link to={`/dashboard/location/update/${user._id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -109,13 +160,13 @@ export default function Vehicles() {
               <DropdownItem
                 key="edit"
                 onPress={() => {
-                  setDeleteId(vehicles.id);
+                  setDeleteId(user._id);
                   onOpen();
                 }}
                 className="text-danger"
                 color="danger"
               >
-                <Tooltip color="danger" content="Delete Location">
+                <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
               </DropdownItem>
@@ -129,9 +180,14 @@ export default function Vehicles() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search label={"Search vehicle by name"} search={searchVehicle} />
-        <Link to="/dashboard/vehicles/addVehicle">
-          <Button color="success">+ Add Vehicle</Button>
+        <Search
+          search={searchLocation}
+          page={currentPage}
+          label={"Search user by name"}
+        />
+
+        <Link to="/dashboard/users/addTourGuide">
+          <Button color="success">+ Add Tour Guide</Button>
         </Link>
       </div>
       <div className="h-72">
@@ -143,7 +199,7 @@ export default function Vehicles() {
             aria-label="Example table with custom cells111"
             className="mt-10"
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnses}>
               {(column) => (
                 <TableColumn
                   key={column.uid}
@@ -153,12 +209,12 @@ export default function Vehicles() {
                 </TableColumn>
               )}
             </TableHeader>
-            {vehicles.length === 0 ? (
+            {users.length === 0 ? (
               <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
             ) : (
-              <TableBody items={vehicles}>
+              <TableBody items={users}>
                 {(item) => (
-                  <TableRow key={item.id}>
+                  <TableRow key={item._id}>
                     {(columnKey) => (
                       <TableCell>{renderCell(item, columnKey)}</TableCell>
                     )}
@@ -170,6 +226,16 @@ export default function Vehicles() {
         )}
       </div>
 
+      {/* <div className="flex flex-col gap-5">
+        <p className="text-small text-default-500">Total items: {totalItems}</p>
+        <Pagination
+          total={totalPages}
+          color="secondary"
+          page={currentPage}
+          onChange={(page) => handlePageChange(page)}
+          showControls
+        />
+      </div> */}
       <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}

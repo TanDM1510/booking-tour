@@ -10,6 +10,10 @@ import toursReducer from "./features/tours/tours";
 import vehiclesReducer from "./features/vehicles/vehicles";
 import poisReducer from "./features/pois/pois";
 import tripsReducer from "./features/trips/trips";
+import tourGuidesReducer from "./features/tourGuide/tourGuides";
+import bookingsReducer from "./features/bookings/bookings";
+import allUserReducer from "./features/user/allUser";
+
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -22,5 +26,8 @@ export const store = configureStore({
     vehicles: vehiclesReducer,
     pois: poisReducer,
     trips: tripsReducer,
+    tourGuide: tourGuidesReducer,
+    booking: bookingsReducer,
+    allUser: allUserReducer,
   },
 });

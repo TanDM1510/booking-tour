@@ -7,7 +7,7 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { MdOutlineTour } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { BiTrip } from "react-icons/bi";
-
+import { FaHouseUser } from "react-icons/fa";
 import { TbNotebook } from "react-icons/tb";
 import { FaCarOn } from "react-icons/fa6";
 const links = [
@@ -56,6 +56,12 @@ export const notImportanceLinks = [
 ];
 export const importanceLinks = [
   { id: 1, text: "stats", path: "/dashboard/stats", icon: <IoBarChartSharp /> },
+  {
+    id: 100,
+    text: "Users",
+    path: "/dashboard/users",
+    icon: <FaHouseUser />,
+  },
   {
     id: 9,
     text: "Booking",
