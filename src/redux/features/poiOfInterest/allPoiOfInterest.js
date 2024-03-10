@@ -5,17 +5,17 @@ import { logoutUser } from "../user/userSlice";
 
 const initialState = {
   isLoading: false,
-  location: [],
+  pointOfInterest: [],
   totalPages: 0,
   page: 1,
   totalItems: 0,
 };
 
-export const getAllLocation = createAsyncThunk(
-  "allLocation/getLocation",
+export const getAllPoiOfInterest = createAsyncThunk(
+  "getAllPoiOfInterest",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`locations?page=${data?.page}`);
+      const resp = await customFetch.get(`pointOfInterest?page=${data?.page}`);
       console.log(resp.data);
       return resp.data;
     } catch (error) {
@@ -23,11 +23,11 @@ export const getAllLocation = createAsyncThunk(
     }
   }
 );
-export const createLocation = createAsyncThunk(
-  "createLocation",
+export const createPoint = createAsyncThunk(
+  "createPoint",
   async (location, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locations", location);
+      const resp = await customFetch.post("/pointOfInterest", location);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -38,15 +38,15 @@ export const createLocation = createAsyncThunk(
     }
   }
 );
-export const deleteLocation = createAsyncThunk(
-  "deleteLocation",
-  async (location, thunkAPI) => {
+export const deletePoint = createAsyncThunk(
+  "deletePoint",
+  async (point, thunkAPI) => {
     try {
       const resp = await customFetch.delete(
-        `/locations/${location.id}`,
-        location
+        `/pointOfInterest/${point.id}`,
+        point
       );
-      thunkAPI.dispatch(getAllLocation({ page: location.page }));
+      thunkAPI.dispatch(getAllPoiOfInterest({ page: point.page }));
       return resp.data.message;
     } catch (error) {
       if (error.response.status === 401) {
@@ -57,11 +57,11 @@ export const deleteLocation = createAsyncThunk(
     }
   }
 );
-export const updateLocation = createAsyncThunk(
-  "city/updateLocation",
+export const updatePoint = createAsyncThunk(
+  "updatePoint",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locations/${data.id}`, data);
+      const resp = await customFetch.patch(`/pointOfInterest/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -72,12 +72,12 @@ export const updateLocation = createAsyncThunk(
     }
   }
 );
-export const searchLocation = createAsyncThunk(
-  "/searchLocation",
+export const searchPoint = createAsyncThunk(
+  "/searchPoint",
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.get(
-        `/locations?locationName=${data.name}`
+        `/pointOfInterest?POIName=${data.name}`
       );
       return resp.data;
     } catch (error) {
@@ -89,71 +89,71 @@ export const searchLocation = createAsyncThunk(
     }
   }
 );
-const allLocationSlice = createSlice({
-  name: "allLocation",
+const allPointOfInterestSlice = createSlice({
+  name: "allPointOfInterest",
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(getAllLocation.pending, (state) => {
+      .addCase(getAllPoiOfInterest.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAllLocation.fulfilled, (state, actions) => {
+      .addCase(getAllPoiOfInterest.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.location = actions.payload.data;
+        state.pointOfInterest = actions.payload.data;
         state.totalPages = actions.payload.totalPages;
         state.page = actions.payload.page;
         state.totalItems = actions.payload.totalItems;
       })
-      .addCase(getAllLocation.rejected, (state) => {
+      .addCase(getAllPoiOfInterest.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load point of interest ");
       })
-      .addCase(createLocation.pending, (state) => {
+      .addCase(createPoint.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLocation.fulfilled, (state) => {
+      .addCase(createPoint.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create location successful !!!");
+        toast.success("Create point of interest successful !!!");
       })
-      .addCase(createLocation.rejected, (state) => {
+      .addCase(createPoint.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to create location");
+        toast.error("Failed to create point of interest ");
       })
-      .addCase(deleteLocation.pending, (state) => {
+      .addCase(deletePoint.pending, (state) => {
         state.isLoading = true;
         toast.warning("Please wait...");
       })
-      .addCase(deleteLocation.fulfilled, (state) => {
+      .addCase(deletePoint.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Deleted a location successful ");
+        toast.success("Deleted a point of interest successful ");
       })
-      .addCase(deleteLocation.rejected, (state, { payload }) => {
+      .addCase(deletePoint.rejected, (state) => {
         state.isLoading = false;
-        toast.error(payload);
+        toast.error("Failed to delete point of interest ");
       })
-      .addCase(updateLocation.pending, (state) => {
+      .addCase(updatePoint.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateLocation.fulfilled, (state) => {
+      .addCase(updatePoint.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Updated a location successful ");
+        toast.success("Updated a point of interest successful ");
       })
-      .addCase(updateLocation.rejected, (state) => {
+      .addCase(updatePoint.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update a location");
+        toast.error("Failed to update a point of interest");
       })
-      .addCase(searchLocation.pending, (state) => {
+      .addCase(searchPoint.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(searchLocation.fulfilled, (state, actions) => {
+      .addCase(searchPoint.fulfilled, (state, actions) => {
         state.isLoading = false;
         state.location = actions.payload.data;
       })
-      .addCase(searchLocation.rejected, (state) => {
+      .addCase(searchPoint.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update a location");
+        state.pointOfInterest = [];
       });
   },
 });
 
-export default allLocationSlice.reducer;
+export default allPointOfInterestSlice.reducer;

@@ -15,23 +15,16 @@ import {
   DropdownMenu,
   DropdownItem,
   useDisclosure,
-  Pagination,
   Avatar,
+  Pagination,
+  Input,
 } from "@nextui-org/react";
-import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
-import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  deleteLocation,
-  getAllLocation,
-  searchLocation,
-} from "../../../redux/features/location/allLocation";
-
+import { deleteLocation } from "../../../redux/features/location/allLocation";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import Search from "../../../components/common/Search";
 import { getAllUser } from "../../../redux/features/user/AllUser";
 
 const statusColorMap = {
@@ -44,30 +37,58 @@ export default function Users() {
   const dispatch = useDispatch();
   //Gọi dữ liệu
   useEffect(() => {
-    dispatch(getAllUser({ page: currentPage }));
+    dispatch(getAllUser());
   }, []);
   //Xóa dữ liệu
   const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
     if (deleteLocation) {
-      dispatch(deleteLocation({ id: deleteId, page: currentPage }));
+      dispatch(deleteLocation({ id: deleteId }));
     }
     onClose();
   };
   //Dữ liệu
 
-  const { users, isLoading, totalPages, totalItems } = useSelector(
-    (store) => store.allUser
-  );
+  const { users, isLoading } = useSelector((store) => store.allUser);
   console.log(users);
   //Pagination
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    if (getAllLocation) {
-      dispatch(getAllLocation({ page: page }));
+
+  const [filterValue, setFilterValue] = React.useState("");
+  const rowsPerPage = 5;
+  const [page, setPage] = React.useState(1);
+  const hasSearchFilter = Boolean(filterValue);
+
+  const filteredItems = React.useMemo(() => {
+    let filteredUsers = [...users];
+
+    if (hasSearchFilter) {
+      filteredUsers = filteredUsers.filter((user) =>
+        user.fullName.toLowerCase().includes(filterValue.toLowerCase())
+      );
     }
-  };
+
+    return filteredUsers;
+  }, [users, filterValue]);
+  const pages = Math.ceil(filteredItems.length / rowsPerPage);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return filteredItems.slice(start, end);
+  }, [page, filteredItems, rowsPerPage]);
+  const onSearchChange = React.useCallback((value) => {
+    if (value) {
+      setFilterValue(value);
+      setPage(1);
+    } else {
+      setFilterValue("");
+    }
+  }, []);
+  const onClear = React.useCallback(() => {
+    setFilterValue("");
+    setPage(1);
+  }, []);
 
   //Table
   const renderCell = React.useCallback((user, columnKey) => {
@@ -137,26 +158,6 @@ export default function Users() {
               <p>...</p>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" className="w-10">
-              <DropdownItem key="new">
-                {" "}
-                <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${user._id}`}>
-                    <span className="cursor-pointer active:opacity-50">
-                      <EyeIcon />
-                    </span>
-                  </Link>
-                </Tooltip>
-              </DropdownItem>
-              <DropdownItem key="copy">
-                {" "}
-                <Tooltip content={`Edit `}>
-                  <Link to={`/dashboard/location/update/${user._id}`}>
-                    <button className="cursor-pointer active:opacity-50">
-                      <EditIcon />
-                    </button>
-                  </Link>
-                </Tooltip>
-              </DropdownItem>
               <DropdownItem
                 key="edit"
                 onPress={() => {
@@ -180,17 +181,19 @@ export default function Users() {
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search
-          search={searchLocation}
-          page={currentPage}
-          label={"Search user by name"}
+        <Input
+          isClearable
+          className="w-full sm:max-w-[44%]"
+          placeholder="Search by name..."
+          value={filterValue}
+          onClear={() => onClear()}
+          onValueChange={onSearchChange}
         />
-
         <Link to="/dashboard/users/addTourGuide">
           <Button color="success">+ Add Tour Guide</Button>
         </Link>
       </div>
-      <div className="h-72">
+      <div className="h-64">
         {" "}
         {isLoading ? (
           <Spinner className="flex justify-center items-center mt-10" />
@@ -198,6 +201,22 @@ export default function Users() {
           <Table
             aria-label="Example table with custom cells111"
             className="mt-10"
+            bottomContent={
+              <div className="flex w-full justify-center">
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  color="secondary"
+                  page={page}
+                  total={pages}
+                  onChange={(page) => setPage(page)}
+                />
+              </div>
+            }
+            classNames={{
+              wrapper: "min-h-[222px]",
+            }}
           >
             <TableHeader columns={columnses}>
               {(column) => (
@@ -212,7 +231,7 @@ export default function Users() {
             {users.length === 0 ? (
               <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
             ) : (
-              <TableBody items={users}>
+              <TableBody items={items}>
                 {(item) => (
                   <TableRow key={item._id}>
                     {(columnKey) => (
@@ -225,17 +244,6 @@ export default function Users() {
           </Table>
         )}
       </div>
-
-      {/* <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
-      </div> */}
       <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}

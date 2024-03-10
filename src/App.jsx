@@ -40,6 +40,11 @@ import ViewTrip from "./pages/dashboard/Trips/ViewTrip";
 import Bookings from "./pages/dashboard/bookings/Bookings";
 import Users from "./pages/dashboard/Users/Users";
 import AddTourGuide from "./pages/dashboard/Users/AddTourGuide";
+import BookingDetails from "./pages/dashboard/bookings/BookingDetails";
+import PoiOfInterest from "./pages/dashboard/PoiOfInterest/PoiOfInterest";
+import AddPoint from "./pages/dashboard/PoiOfInterest/AddPoint";
+import UpdatePoint from "./pages/dashboard/PoiOfInterest/UpdatePois";
+import PointDetails from "./pages/dashboard/PoiOfInterest/PointDetail";
 
 export default function App() {
   return (
@@ -107,7 +112,18 @@ export default function App() {
           <Route path="/dashboard/trips/update/:id" element={<UpdateTrip />} />
           <Route path="/dashboard/trips/view/:id" element={<ViewTrip />} />
           <Route path="/dashboard/booking/" element={<Bookings />} />
+          <Route path="/dashboard/booking/:id" element={<BookingDetails />} />
           <Route path="/dashboard/users/" element={<Users />} />
+          <Route path="/dashboard/poiOfInterest/" element={<PoiOfInterest />} />
+          <Route path="/dashboard/poiOfInterest/add" element={<AddPoint />} />
+          <Route
+            path="/dashboard/poiOfInterest/update/:id"
+            element={<UpdatePoint />}
+          />
+          <Route
+            path="/dashboard/poiOfInterest/view/:id"
+            element={<PointDetails />}
+          />
           <Route
             path="/dashboard/users/addTourGuide"
             element={<AddTourGuide />}

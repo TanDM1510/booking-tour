@@ -20,97 +20,93 @@ import {
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
-import { columns } from "./data";
+import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getAllLocation } from "../../../redux/features/location/allLocation";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import {
-  deleteTour,
-  getAllTours,
-  searchTour,
-} from "../../../redux/features/tours/tours";
-import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
 import Search from "../../../components/common/Search";
+import { getAllPois } from "../../../redux/features/pois/pois";
+import {
+  deletePoint,
+  getAllPoiOfInterest,
+  searchPoint,
+} from "../../../redux/features/poiOfInterest/allPoiOfInterest";
 
 const statusColorMap = {
   true: "success",
   false: "danger",
 };
 
-export default function Tours() {
+export default function PoiOfInterest() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
   const dispatch = useDispatch();
-  //data
+  //Gọi dữ liệu
   useEffect(() => {
-    dispatch(getAllTours({ page: currentPage }));
-    dispatch(getAllVehicles());
+    dispatch(getAllPois());
+    dispatch(getAllPoiOfInterest());
+    dispatch(getAllLocation());
   }, []);
-  const { vehicles } = useSelector((store) => store.vehicles);
-  const { tours, isLoading, totalPages, totalItems } = useSelector(
-    (store) => store.tours
-  );
-  const mergedData = tours.map((tour) => {
-    const vehicleData = vehicles.find(
-      (vehicle) => vehicle.id === tour.vehicleTypeId
-    );
-    return {
-      ...tour,
-      vehicleData,
-    };
-  });
-  //page
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    if (getAllTours) {
-      dispatch(getAllTours({ page: page }));
-    }
-  };
-
-  //delete
+  //Xóa dữ liệu
   const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
-    if (deleteTour) {
-      dispatch(deleteTour({ id: deleteId, page: currentPage }));
+    if (deletePoint) {
+      dispatch(deletePoint({ id: deleteId, page: currentPage }));
     }
     onClose();
   };
+  //Dữ liệu
 
-  //table
+  const { pointOfInterest, isLoading, totalPages, totalItems } = useSelector(
+    (store) => store.allPoiOfInterest
+  );
+  const { location } = useSelector((store) => store.allLocation);
+  const { pois } = useSelector((store) => store.pois);
+  const mergedData = pointOfInterest.map((poi) => {
+    const poiLocation = location.find((loc) => loc.id === poi.locationId);
+    const poiPois = pois.find((p) => p.id === poi.categoryPOI_ID);
+
+    return {
+      ...poi,
+      location: poiLocation,
+      pois: poiPois,
+    };
+  });
+  console.log(mergedData);
+  //Pagination
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (getAllPoiOfInterest) {
+      dispatch(getAllPoiOfInterest({ page: page }));
+    }
+  };
+
+  //Table
   const renderCell = React.useCallback((mergedData, columnKey) => {
     const cellValue = mergedData[columnKey];
     switch (columnKey) {
-      case "tourName":
+      case "POIName":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.tourName}
+              {mergedData.POIName}
             </p>
           </div>
         );
-      case "price":
+      case "locationId":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.price} VND
+              {mergedData.location?.locationName}
             </p>
           </div>
         );
-
-      case "vehicleTypeId":
+      case "categoryPOI_ID":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.vehicleData?.vehicleName}
-            </p>
-          </div>
-        );
-      case "tourType":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.tourType}
+              {mergedData.pois?.categoryName}
             </p>
           </div>
         );
@@ -135,7 +131,7 @@ export default function Tours() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/tours/view/${mergedData.id}`}>
+                  <Link to={`/dashboard/poiOfInterest/view/${mergedData.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>
@@ -145,7 +141,7 @@ export default function Tours() {
               <DropdownItem key="copy">
                 {" "}
                 <Tooltip content={`Edit `}>
-                  <Link to={`/dashboard/tours/update/${mergedData.id}`}>
+                  <Link to={`/dashboard/poiOfInterest/update/${mergedData.id}`}>
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
@@ -172,16 +168,21 @@ export default function Tours() {
         return cellValue;
     }
   }, []);
-
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search search={searchTour} label={`Search tour by name`} />
-        <Link to="/dashboard/tours/addTour">
-          <Button color="success">+ Add Tour</Button>
+        <Search
+          search={searchPoint}
+          page={currentPage}
+          label={"Search point of interest by name"}
+        />
+
+        <Link to="/dashboard/poiOfInterest/add">
+          <Button color="success">+ Add Point of Interest</Button>
         </Link>
       </div>
       <div className="h-72">
+        {" "}
         {isLoading ? (
           <Spinner className="flex justify-center items-center mt-10" />
         ) : (
@@ -189,7 +190,7 @@ export default function Tours() {
             aria-label="Example table with custom cells111"
             className="mt-10"
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnses}>
               {(column) => (
                 <TableColumn
                   key={column.uid}

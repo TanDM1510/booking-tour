@@ -117,7 +117,7 @@ export default function Bookings() {
               <DropdownItem key="new">
                 {" "}
                 <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${mergedData.id}`}>
+                  <Link to={`/dashboard/booking/${mergedData.id}`}>
                     <span className="cursor-pointer active:opacity-50">
                       <EyeIcon />
                     </span>

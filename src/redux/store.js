@@ -13,6 +13,7 @@ import tripsReducer from "./features/trips/trips";
 import tourGuidesReducer from "./features/tourGuide/tourGuides";
 import bookingsReducer from "./features/bookings/bookings";
 import allUserReducer from "./features/user/allUser";
+import allPoiOfInterestReducer from "./features/poiOfInterest/allPoiOfInterest";
 
 export const store = configureStore({
   reducer: {
@@ -29,5 +30,6 @@ export const store = configureStore({
     tourGuide: tourGuidesReducer,
     booking: bookingsReducer,
     allUser: allUserReducer,
+    allPoiOfInterest: allPoiOfInterestReducer,
   },
 });

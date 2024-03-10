@@ -10,6 +10,7 @@ import { BiTrip } from "react-icons/bi";
 import { FaHouseUser } from "react-icons/fa";
 import { TbNotebook } from "react-icons/tb";
 import { FaCarOn } from "react-icons/fa6";
+import { LiaAccessibleIcon } from "react-icons/lia";
 const links = [
   {
     id: 6,
@@ -39,6 +40,12 @@ export const notImportanceLinks = [
     text: "location activities",
     path: "/dashboard/activities",
     icon: <MdOutlineLocalActivity />,
+  },
+  {
+    id: 99,
+    text: "Poi",
+    path: "/dashboard/poiOfInterest",
+    icon: <LiaAccessibleIcon />,
   },
   {
     id: 7,
