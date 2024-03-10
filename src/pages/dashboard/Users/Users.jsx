@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteLocation } from "../../../redux/features/location/allLocation";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import { getAllUser } from "../../../redux/features/user/AllUser";
+import { getAllUser } from "../../../redux/features/user/allUser";
 
 const statusColorMap = {
   true: "success",

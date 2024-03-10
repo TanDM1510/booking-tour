@@ -94,7 +94,7 @@ export const getAllUser = createAsyncThunk(
 //   }
 // );
 const allUserSlice = createSlice({
-  name: "allUserSlice",
+  name: "allUser",
   initialState,
   extraReducers: (builder) => {
     builder
