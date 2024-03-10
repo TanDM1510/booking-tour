@@ -24,7 +24,7 @@ const AddActivity = () => {
     activityDescription: "",
     status: true,
   });
-
+  console.log(activity);
   const dispatch = useDispatch();
   const { location } = useSelector((store) => store.allLocation);
   useEffect(() => dispatch(getAllLocation()), [dispatch]);
@@ -53,10 +53,10 @@ const AddActivity = () => {
     }
     dispatch(createActivity(activity));
     setActivity({
-      locationId: "",
       activityName: "",
       activityDuration: "",
       activityDescription: "",
+      locationId: activity.locationId,
       status: true,
     });
   };
@@ -83,6 +83,7 @@ const AddActivity = () => {
                 location.find((l) => l.id === activity.locationId)
                   ?.locationName || "Select a location"
               }
+              label="Location name"
               required
               name="locationId"
               onChange={inputChangHandler}

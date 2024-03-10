@@ -65,7 +65,7 @@ const allCitySlice = createSlice({
       })
       .addCase(getCity.rejected, (state) => {
         state.isLoading = false;
-        toast.error("There was an error");
+        state.city = [];
       });
   },
 });

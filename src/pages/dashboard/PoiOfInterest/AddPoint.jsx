@@ -62,8 +62,8 @@ const AddPoint = () => {
     setPoint({
       POIName: "",
       POIDescription: "",
-      locationId: "",
-      categoryPOI_ID: "",
+      locationId: point.locationId,
+      categoryPOI_ID: point.categoryPOI_ID,
       image: "",
       status: true,
     });

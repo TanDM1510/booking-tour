@@ -5,8 +5,7 @@ import { Divider } from "@nextui-org/react";
 const BigSideBar = () => {
   return (
     <div className=" hidden  lg:basis-1/6 h-full lg:block  bg-stone-100 ">
-      <div className="pt-8 flex flex-col  items-center  h-full">
-        <div className="mb-16 text-10"></div>
+      <div className=" flex flex-col  items-center  h-full">
         <div className="w-full overflow-y-auto">
           <div className="w-full">
             {importanceLinks.map((link) => {

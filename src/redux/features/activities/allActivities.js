@@ -103,7 +103,9 @@ const allActivitiesSlice = createSlice({
       })
       .addCase(getAllActivities.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.activities = actions.payload.data;
+        state.activities = actions.payload.data.sort(
+          (a, b) => new Date(b.createAt) - new Date(a.createAt)
+        );
         state.totalPages = actions.payload.totalPages;
         state.page = actions.payload.page;
         state.totalItems = actions.payload.totalItems;

@@ -13,7 +13,7 @@ import {
   NavbarMenuToggle,
 } from "@nextui-org/react";
 import { Link } from "react-router-dom";
-import { AcmeLogo } from "./AcmeLogo";
+
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/user/userSlice";
@@ -38,7 +38,7 @@ const NavbarDashBoard = () => {
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
-      className="bg-gradient-to-br bg-stone-100  h-24"
+      className="bg-gradient-to-br bg-stone-100  h-24 lg:h-full"
     >
       <NavbarContent>
         <NavbarMenuToggle
@@ -46,18 +46,15 @@ const NavbarDashBoard = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <span style={{ fontSize: "500px" }}>
-            {" "}
-            <AcmeLogo />
-          </span>
-
-          <p className="font-bold text-inherit">ACME</p>
+          <Link to={"/dashboard"} className="  font-mono text-xl font-bold">
+            Hella Booking
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <p className="text-3xl font-bold ">DASHBOARD</p>
+          <p className="text-3xl font-semibold font-mono">DASHBOARD</p>
         </NavbarItem>
       </NavbarContent>
 

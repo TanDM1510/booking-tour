@@ -63,9 +63,9 @@ const AddTour = () => {
     setTour({
       tourName: "",
       price: "",
-      vehicleTypeId: "",
-      tourType: "",
+      tourType: tour.tourType,
       image: "",
+      vehicleTypeId: tour.vehicleTypeId,
       status: true,
     });
   };

@@ -51,9 +51,9 @@ const AddLocation = () => {
     }
     dispatch(createLocation(location));
     setLocation({
-      cityId: "",
       locationName: "",
       locationAddress: "",
+      cityId: location.cityId,
       status: true,
     });
   };

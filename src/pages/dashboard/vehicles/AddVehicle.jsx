@@ -5,8 +5,6 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +17,7 @@ const AddVehicle = () => {
   const [vehicle, setVehicle] = useState({
     vehicleName: "",
     capacity: "",
-    status: "",
+    status: true,
   });
 
   const dispatch = useDispatch();
@@ -42,7 +40,7 @@ const AddVehicle = () => {
     setVehicle({
       vehicleName: "",
       capacity: "",
-      status: "",
+      status: true,
     });
   };
   return (
@@ -71,18 +69,6 @@ const AddVehicle = () => {
               onChange={inputChangHandler}
               value={vehicle.capacity !== undefined ? vehicle.capacity : ""}
             />
-
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={vehicle.status !== undefined ? vehicle.status : ""}
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/vehicles">

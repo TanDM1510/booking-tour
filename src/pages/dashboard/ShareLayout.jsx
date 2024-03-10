@@ -11,12 +11,17 @@ const ShareLayout = () => {
   return (
     <>
       {user?.accessToken && user?.role === 0 ? (
-        <main className="flex flex-row   h-screen ">
-          <BigSideBar />
-          <div className="  w-full lg:basis-5/6 h-full ">
+        <main className=" h-screen ">
+          <div className="h-1/6">
             <NavbarDashBoard />
-            <div className=" mt-2 w-full px-6 py-4  ">
-              <Outlet />
+          </div>
+
+          <div className="flex flex-row   h-5/6 ">
+            <BigSideBar />
+            <div className="  w-full lg:basis-5/6 h-full ">
+              <div className=" mt-2 w-full px-6 py-4  ">
+                <Outlet />
+              </div>
             </div>
           </div>
         </main>

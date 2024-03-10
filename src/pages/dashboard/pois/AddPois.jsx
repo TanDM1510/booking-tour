@@ -5,8 +5,6 @@ import {
   CardFooter,
   CardHeader,
   Input,
-  Radio,
-  RadioGroup,
   Spinner,
 } from "@nextui-org/react";
 
@@ -19,7 +17,7 @@ import { createPois } from "../../../redux/features/pois/pois";
 const AddPois = () => {
   const [category, setCategory] = useState({
     categoryName: "",
-    status: "",
+    status: true,
   });
 
   const dispatch = useDispatch();
@@ -40,7 +38,7 @@ const AddPois = () => {
     dispatch(createPois(category));
     setCategory({
       categoryName: "",
-      status: "",
+      status: true,
     });
   };
   return (
@@ -61,18 +59,6 @@ const AddPois = () => {
                 category.categoryName !== undefined ? category.categoryName : ""
               }
             />
-
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={category.status !== undefined ? category.status : ""}
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Link to="/dashboard/pois">

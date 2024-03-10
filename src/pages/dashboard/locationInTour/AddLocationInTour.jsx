@@ -57,10 +57,10 @@ const AddLocationInTour = () => {
     }
     dispatch(createLocationInTour(locationInTour));
     setLocationInTour({
-      locationId: "",
-      tourId: "",
       duration: "",
       description: "",
+      tourId: locationInTour.tourId,
+      locationId: locationInTour.locationId,
       startCity: "",
       endCity: "",
       status: true,

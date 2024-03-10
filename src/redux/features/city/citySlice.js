@@ -19,7 +19,11 @@ export const createCity = createAsyncThunk(
     try {
       const resp = await customFetch.post("/cities", city);
       thunkAPI.dispatch(clearValues());
-      return resp.data;
+      if (resp.data.statusCode === 201) {
+        return resp.data;
+      } else {
+        return thunkAPI.rejectWithValue(resp.data);
+      }
     } catch (error) {
       if (error.response.status === 401) {
         thunkAPI.dispatch(logoutUser());
@@ -34,6 +38,7 @@ export const updateCity = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.patch(`/cities/${data.id}`, data);
+
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -86,13 +91,13 @@ const citySlice = createSlice({
       .addCase(createCity.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createCity.fulfilled, (state) => {
+      .addCase(createCity.fulfilled, (state, actions) => {
         state.isLoading = false;
-        toast.success("Create a city success");
+        toast.success(actions.payload.status);
       })
-      .addCase(createCity.rejected, (state, { payload }) => {
+      .addCase(createCity.rejected, (state, actions) => {
         state.isLoading = false;
-        toast.error(payload);
+        toast.error(actions.payload.status);
       })
 
       .addCase(deleteCity.pending, (state) => {
