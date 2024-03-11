@@ -54,7 +54,7 @@ const FormLogin = () => {
   };
   useEffect(() => {
     if (user) {
-      setTimeout(() => navigate("/dashboard"), 1);
+      setTimeout(() => navigate("/"), 1);
     }
   }, [user]);
   const navigate = useNavigate();

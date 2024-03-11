@@ -14,7 +14,7 @@ const Error = () => {
         </p>
         <div className="mt-10">
           <Button color="primary">
-            <Link to="/dashboard" className="btn btn-secondary capitalize">
+            <Link to="/" className="btn btn-secondary capitalize">
               go back home
             </Link>
           </Button>
