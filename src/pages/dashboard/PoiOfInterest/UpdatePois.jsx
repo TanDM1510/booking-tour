@@ -13,7 +13,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updatePoint } from "../../../redux/features/poiOfInterest/allPoiOfInterest";
 import { getAllPois } from "../../../redux/features/pois/pois";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
@@ -55,6 +55,7 @@ const UpdatePoint = () => {
     dispatch(getAllPois());
     dispatch(getAllLocation());
   }, []);
+  const navigate = useNavigate();
   return (
     <>
       <Card className="grid place-items-center ">
@@ -132,11 +133,13 @@ const UpdatePoint = () => {
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/poiOfInterest">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/poiOfInterest")}
+            >
+              Close
+            </Button>
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (
                 <div className="flex justify-center items-center">

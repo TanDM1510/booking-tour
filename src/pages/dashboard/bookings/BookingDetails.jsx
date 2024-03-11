@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Button,
@@ -30,6 +30,10 @@ const BookingDetails = () => {
       setData(findBooking || {});
     }
   }, [id]);
+  const navigate = useNavigate(); // Use navigate for navigation
+  const handleClose = () => {
+    navigate("/dashboard/booking");
+  };
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Location Details</p>
@@ -59,9 +63,9 @@ const BookingDetails = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/location"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button color="primary" onClick={handleClose}>
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

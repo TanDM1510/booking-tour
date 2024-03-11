@@ -22,7 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import Search from "../../../components/common/Search";
@@ -81,7 +81,7 @@ export default function PoiOfInterest() {
       dispatch(getAllPoiOfInterest({ page: page }));
     }
   };
-
+  const navigate = useNavigate();
   //Table
   const renderCell = React.useCallback((mergedData, columnKey) => {
     const cellValue = mergedData[columnKey];
@@ -176,10 +176,12 @@ export default function PoiOfInterest() {
           page={currentPage}
           label={"Search point of interest by name"}
         />
-
-        <Link to="/dashboard/poiOfInterest/add">
-          <Button color="success">+ Add Point of Interest</Button>
-        </Link>
+        <Button
+          color="success"
+          onClick={() => navigate("/dashboard/poiOfInterest/add")}
+        >
+          + Add Point of Interest
+        </Button>
       </div>
       <div className="h-72">
         {" "}

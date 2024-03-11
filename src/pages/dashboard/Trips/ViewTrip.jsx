@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Chip,
@@ -31,7 +31,10 @@ const ViewTrip = () => {
   }, [id]);
   const { tourGuides } = useSelector((store) => store.tourGuide);
   const { tours } = useSelector((store) => store.tours);
-
+  const navigate = useNavigate(); // Use navigate for navigation
+  const handleClose = () => {
+    navigate("/dashboard/trips");
+  };
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Location Details</p>
@@ -66,9 +69,9 @@ const ViewTrip = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/trips"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button color="primary" onClick={handleClose}>
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

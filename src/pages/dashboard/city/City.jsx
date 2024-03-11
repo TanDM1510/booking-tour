@@ -23,7 +23,7 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCity, getCity } from "../../../redux/features/city/allCity";
-import { Link, NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteCity } from "../../../redux/features/city/citySlice";
 import ModelCity from "../../../components/dashboard/City/ModelCity";
 import Search from "../../../components/common/Search";
@@ -137,14 +137,14 @@ export default function App() {
         return cellValue;
     }
   }, []);
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search search={getCity} label={"Search city by Name"} />
-        <NavLink to="/dashboard/addCity">
-          <Button color="success">+ Add city</Button>
-        </NavLink>
+        <Button color="success" onClick={() => navigate("/dashboard/addCity")}>
+          + Add city
+        </Button>
       </div>
       <div className="h-72">
         {isLoading ? (

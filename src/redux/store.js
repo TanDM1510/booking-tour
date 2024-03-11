@@ -15,6 +15,7 @@ import bookingsReducer from "./features/bookings/bookings";
 
 import allPoiOfInterestReducer from "./features/poiOfInterest/allPoiOfInterest";
 import allUserReducer from "./features/user/allUser";
+import resetPasswordReducer from "./features/resetPassword/resetPassword";
 
 export const store = configureStore({
   reducer: {
@@ -32,5 +33,6 @@ export const store = configureStore({
     booking: bookingsReducer,
     allUser: allUserReducer,
     allPoiOfInterest: allPoiOfInterestReducer,
+    resetPassword: resetPasswordReducer,
   },
 });

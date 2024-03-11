@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Button,
@@ -32,6 +32,7 @@ const ViewLocationInTour = () => {
       setData(findLocation || {});
     }
   }, [id]);
+  const navigate = useNavigate();
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Location In Tour Details</p>
@@ -64,9 +65,12 @@ const ViewLocationInTour = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/locationTour"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button
+                color="primary"
+                onClick={() => navigate("/dashboard/locationTour")}
+              >
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

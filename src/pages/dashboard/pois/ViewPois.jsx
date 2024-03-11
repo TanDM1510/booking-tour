@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { columns } from "./data";
 import {
   Button,
@@ -27,6 +27,7 @@ const ViewPois = () => {
       setData(findPois || {});
     }
   }, [id]);
+  const navigate = useNavigate();
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Pois Details</p>
@@ -50,9 +51,12 @@ const ViewPois = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/pois"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button
+                color="primary"
+                onClick={() => navigate("/dashboard/pois")}
+              >
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

@@ -22,7 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import {
   deleteTour,
@@ -39,7 +39,7 @@ const statusColorMap = {
 
 export default function Tours() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   //data
   useEffect(() => {
@@ -177,9 +177,12 @@ export default function Tours() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search search={searchTour} label={`Search tour by name`} />
-        <Link to="/dashboard/tours/addTour">
-          <Button color="success">+ Add Tour</Button>
-        </Link>
+        <Button
+          color="success"
+          onClick={() => navigate("/dashboard/tours/addTour")}
+        >
+          + Add Tour
+        </Button>
       </div>
       <div className="h-72">
         {isLoading ? (

@@ -15,7 +15,7 @@ export const getAllPoiOfInterest = createAsyncThunk(
   "getAllPoiOfInterest",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`pointOfInterest?page=${data?.page}`);
+      const resp = await customFetch.get(`pois?page=${data?.page}`);
       console.log(resp.data);
       return resp.data;
     } catch (error) {
@@ -27,7 +27,7 @@ export const createPoint = createAsyncThunk(
   "createPoint",
   async (location, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/pointOfInterest", location);
+      const resp = await customFetch.post("/pois", location);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -42,10 +42,7 @@ export const deletePoint = createAsyncThunk(
   "deletePoint",
   async (point, thunkAPI) => {
     try {
-      const resp = await customFetch.delete(
-        `/pointOfInterest/${point.id}`,
-        point
-      );
+      const resp = await customFetch.delete(`/pois/${point.id}`, point);
       thunkAPI.dispatch(getAllPoiOfInterest({ page: point.page }));
       return resp.data.message;
     } catch (error) {
@@ -61,7 +58,7 @@ export const updatePoint = createAsyncThunk(
   "updatePoint",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/pointOfInterest/${data.id}`, data);
+      const resp = await customFetch.patch(`/pois/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -76,9 +73,7 @@ export const searchPoint = createAsyncThunk(
   "/searchPoint",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(
-        `/pointOfInterest?POIName=${data.name}`
-      );
+      const resp = await customFetch.get(`/pois?POIName=${data.name}`);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {

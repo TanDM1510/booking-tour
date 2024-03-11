@@ -80,14 +80,7 @@ export default function Bookings() {
             </p>
           </div>
         );
-      case "tripId":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.tripId}
-            </p>
-          </div>
-        );
+
       case "bookingDate":
         return (
           <div className="flex flex-col">

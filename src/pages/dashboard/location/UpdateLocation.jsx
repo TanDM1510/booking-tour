@@ -13,7 +13,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateLocation } from "../../../redux/features/location/allLocation";
 import { getAllCity } from "../../../redux/features/city/allCity";
 
@@ -50,6 +50,7 @@ const UpdateLocation = () => {
   useEffect(() => {
     dispatch(getAllCity());
   }, []);
+  const navigate = useNavigate();
   return (
     <>
       <Card className="grid place-items-center ">
@@ -104,11 +105,14 @@ const UpdateLocation = () => {
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/location">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/location")}
+            >
+              Close
+            </Button>
+
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (
                 <div className="flex justify-center items-center">

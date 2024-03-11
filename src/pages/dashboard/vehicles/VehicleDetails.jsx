@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
-import { Link, useParams } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Chip,
@@ -29,6 +27,10 @@ const ViewVehicle = () => {
       setData(findVehicel || {});
     }
   }, [id]);
+  const navigate = useNavigate(); // Use navigate for navigation
+  const handleClose = () => {
+    navigate("/dashboard/vehicles");
+  };
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Vehicle Details</p>
@@ -53,9 +55,9 @@ const ViewVehicle = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/vehicles"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button color="primary" onClick={handleClose}>
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

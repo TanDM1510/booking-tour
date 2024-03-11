@@ -7,8 +7,6 @@ import {
   TableRow,
   TableCell,
   Chip,
-  Tooltip,
-  Button,
   Spinner,
   Dropdown,
   DropdownTrigger,
@@ -86,38 +84,37 @@ export default function Vehicles() {
               <p>...</p>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" className="w-10">
-              <DropdownItem key="new">
-                {" "}
-                <Tooltip content="Details">
-                  <Link to={`/dashboard/vehicles/view/${vehicles.id}`}>
-                    <span className="cursor-pointer active:opacity-50">
-                      <EyeIcon />
-                    </span>
-                  </Link>
-                </Tooltip>
+              <DropdownItem key="new" value="View" aria-label="Static Actions">
+                <Link to={`/dashboard/vehicles/view/${vehicles.id}`}>
+                  <span className="cursor-pointer active:opacity-50">
+                    <EyeIcon />
+                  </span>
+                </Link>
               </DropdownItem>
-              <DropdownItem key="copy">
-                {" "}
-                <Tooltip content={`Edit Vehicle`}>
-                  <Link to={`/dashboard/vehicles/update/${vehicles.id}`}>
-                    <button className="cursor-pointer active:opacity-50">
-                      <EditIcon />
-                    </button>
-                  </Link>
-                </Tooltip>
+              <DropdownItem
+                key="copy"
+                value="Edit"
+                aria-label="Static Actions"
+                href=""
+              >
+                <Link to={`/dashboard/vehicles/update/${vehicles.id}`}>
+                  <button className="cursor-pointer active:opacity-50">
+                    <EditIcon />
+                  </button>
+                </Link>
               </DropdownItem>
               <DropdownItem
                 key="edit"
+                value="Delete"
                 onPress={() => {
                   setDeleteId(vehicles.id);
                   onOpen();
                 }}
                 className="text-danger"
                 color="danger"
+                aria-label="Static Actions"
               >
-                <Tooltip color="danger" content="Delete Location">
-                  <DeleteIcon />
-                </Tooltip>
+                <DeleteIcon />
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -130,9 +127,6 @@ export default function Vehicles() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search label={"Search vehicle by name"} search={searchVehicle} />
-        <Link to="/dashboard/vehicles/addVehicle">
-          <Button color="success">+ Add Vehicle</Button>
-        </Link>
       </div>
       <div className="h-72">
         {" "}

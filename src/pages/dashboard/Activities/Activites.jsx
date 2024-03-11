@@ -22,7 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   deleteActivity,
   getAllActivities,
@@ -52,6 +52,7 @@ export default function Activities() {
       locationData,
     };
   });
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllActivities());
     dispatch(getAllLocation());
@@ -154,9 +155,12 @@ export default function Activities() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search label={"Search activity by name"} search={searchActivity} />
-        <Link to="/dashboard/activities/add">
-          <Button color="success">+ Add activity</Button>
-        </Link>
+        <Button
+          color="success"
+          onClick={() => navigate("/dashboard/activities/add")}
+        >
+          + Add activity
+        </Button>
       </div>
       <div className="h-72">
         {isLoading ? (

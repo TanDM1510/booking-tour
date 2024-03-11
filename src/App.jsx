@@ -45,6 +45,9 @@ import PoiOfInterest from "./pages/dashboard/PoiOfInterest/PoiOfInterest";
 import AddPoint from "./pages/dashboard/PoiOfInterest/AddPoint";
 import UpdatePoint from "./pages/dashboard/PoiOfInterest/UpdatePois";
 import PointDetails from "./pages/dashboard/PoiOfInterest/PointDetail";
+import ForgotPassword from "./pages/ForgotPassword";
+import OTP from "./pages/OTP";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function App() {
   return (
@@ -130,9 +133,12 @@ export default function App() {
           />
         </Route>
         <Route path="/" element={<Home />} />
+        <Route path="forgotPassword" element={<ForgotPassword />} />
         <Route path="signUp" element={<SignUp />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Error />} />
+        <Route path="OTP" element={<OTP />} />
+        <Route path="reset/password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

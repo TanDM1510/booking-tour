@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateVehicle } from "../../../redux/features/vehicles/vehicles";
 
 const UpdateVehicle = () => {
@@ -40,7 +40,10 @@ const UpdateVehicle = () => {
     console.log(updateData);
     dispatch(updateVehicle(updateData));
   };
-
+  const navigate = useNavigate(); // Use navigate for navigation
+  const handleClose = () => {
+    navigate("/dashboard/vehicles");
+  };
   return (
     <>
       <Card className="grid place-items-center ">
@@ -79,11 +82,9 @@ const UpdateVehicle = () => {
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/vehicles">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button color="danger" variant="light" onClick={handleClose}>
+              Close
+            </Button>
 
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (

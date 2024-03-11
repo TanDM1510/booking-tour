@@ -13,7 +13,7 @@ import {
   createCity,
   handleChange,
 } from "../../../redux/features/city/citySlice";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const AddCity = () => {
   const dispatch = useDispatch();
   const { isLoading, cityName, country, status } = useSelector(
@@ -33,6 +33,7 @@ const AddCity = () => {
     const parsedValue = name === "status" ? value === "true" : value;
     dispatch(handleChange({ name, value: parsedValue }));
   };
+  const navigate = useNavigate();
   return (
     <>
       <Card className="grid place-items-center ">
@@ -59,11 +60,13 @@ const AddCity = () => {
             />
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/city">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/city")}
+            >
+              Close
+            </Button>
 
             <Button
               color="primary"

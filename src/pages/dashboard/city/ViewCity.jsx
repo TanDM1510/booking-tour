@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { columns } from "./data";
 import {
   Button,
@@ -27,7 +27,7 @@ const ViewCity = () => {
       setData(findCity || {});
     }
   }, [id]);
-
+  const navigate = useNavigate();
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">City Details</p>
@@ -52,9 +52,12 @@ const ViewCity = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/city"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button
+                color="primary"
+                onClick={() => navigate("/dashboard/city")}
+              >
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

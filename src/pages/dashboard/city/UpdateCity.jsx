@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateCity } from "../../../redux/features/city/citySlice";
 
 const UpdateCity = () => {
@@ -38,7 +38,7 @@ const UpdateCity = () => {
       e.target.name === "status" ? e.target.value === "true" : e.target.value;
     setUpdateData({ ...updateData, [e.target.name]: value });
   };
-
+  const navigate = useNavigate();
   return (
     <>
       <Card className="grid place-items-center ">
@@ -76,11 +76,14 @@ const UpdateCity = () => {
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/city">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/city")}
+            >
+              Close
+            </Button>
+
             <Button
               color="primary"
               type="submit"

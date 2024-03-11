@@ -10,7 +10,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
 import { toast } from "react-toastify";
@@ -68,6 +68,7 @@ const AddPoint = () => {
       status: true,
     });
   };
+  const navigate = useNavigate();
   return (
     <>
       <Card className="grid place-items-center ">
@@ -132,11 +133,13 @@ const AddPoint = () => {
             />
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/poiOfInterest">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/poiOfInterest")}
+            >
+              Close
+            </Button>
 
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (

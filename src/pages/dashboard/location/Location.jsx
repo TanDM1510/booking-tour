@@ -22,7 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   deleteLocation,
   getAllLocation,
@@ -76,7 +76,7 @@ export default function Location() {
       dispatch(getAllLocation({ page: page }));
     }
   };
-
+  const navigate = useNavigate();
   //Table
   const renderCell = React.useCallback((mergedData, columnKey) => {
     const cellValue = mergedData[columnKey];
@@ -164,9 +164,12 @@ export default function Location() {
           label={"Search location by name"}
         />
 
-        <Link to="/dashboard/location/addLocation">
-          <Button color="success">+ Add Location</Button>
-        </Link>
+        <Button
+          color="success"
+          onClick={() => navigate("/dashboard/location/addLocation")}
+        >
+          + Add Location
+        </Button>
       </div>
       <div className="h-72">
         {" "}

@@ -19,7 +19,7 @@ const FormLogin = () => {
   const toggleVisibility = () => setIsVisible(!isVisible);
   const { user, isLoading } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   //{VALIDATE FRONTEND CHECK....}
 
   const validateEmail = (value) =>
@@ -57,7 +57,7 @@ const FormLogin = () => {
       setTimeout(() => navigate("/dashboard"), 1);
     }
   }, [user]);
-
+  const navigate = useNavigate();
   return (
     <form className="px-2" onSubmit={onSubmit}>
       <Input
@@ -103,7 +103,10 @@ const FormLogin = () => {
         size="md"
       />
 
-      <p className="mt-5 text-blue-500 cursor-pointer hover:text-primary-200">
+      <p
+        className="mt-5 text-blue-500 cursor-pointer hover:text-primary-200"
+        onClick={() => navigate("/forgotPassword")}
+      >
         Forgot your password ?
       </p>
       <MyButton

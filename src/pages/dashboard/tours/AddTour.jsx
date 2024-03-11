@@ -14,7 +14,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { tourType } from "./data";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createTour } from "../../../redux/features/tours/tours";
@@ -73,6 +73,10 @@ const AddTour = () => {
     dispatch(getAllVehicles());
   }, []);
   const { vehicles } = useSelector((store) => store.vehicles);
+  const navigate = useNavigate(); // Use navigate for navigation
+  const handleClose = () => {
+    navigate("/dashboard/tours");
+  };
   return (
     <>
       <Card className="grid place-items-center ">
@@ -126,12 +130,9 @@ const AddTour = () => {
             </Select>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/tours">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
-
+            <Button color="danger" variant="light" onClick={handleClose}>
+              Close
+            </Button>
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (
                 <div className="flex justify-center items-center">

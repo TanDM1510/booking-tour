@@ -13,7 +13,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateActivity } from "../../../redux/features/activities/allActivities";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
 
@@ -25,7 +25,7 @@ const UpdateActivity = () => {
 
   const { activities, isLoading } = useSelector((state) => state.allActivities);
   const [updateData, setUpdateData] = useState({});
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (id) {
       const findActivity = activities.find((us) => us.id == id);
@@ -107,12 +107,13 @@ const UpdateActivity = () => {
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/activities">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
-
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/activities")}
+            >
+              Close
+            </Button>
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (
                 <div className="flex justify-center items-center">

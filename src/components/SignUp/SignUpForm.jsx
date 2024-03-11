@@ -6,7 +6,7 @@ import SignUpFooter from "./SignUpFooter";
 const SignUpForm = () => {
   return (
     <div className="lg:basis-1/2  h-full grid place-items-center  ">
-      <section className="lg:h-[700px]  lg:w-96  h-[800px] w-80  relative">
+      <section className="lg:h-full lg:w-96  h-[800px] w-80  relative">
         <p className="text-4xl font-bold text-left mb-10">Get start now!</p>
         <FormSignUp />
         <Divider className="my-4 mb-5" />

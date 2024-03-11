@@ -1,6 +1,5 @@
 const columns = [
   { name: "User name", uid: "userId" },
-  { name: "Trip", uid: "tripId" },
   { name: "Booking date", uid: "bookingDate" },
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },

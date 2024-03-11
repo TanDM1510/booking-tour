@@ -10,7 +10,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createLocationInTour } from "../../../redux/features/locationInTour/locationInTour";
@@ -73,7 +73,7 @@ const AddLocationInTour = () => {
 
   const { location } = useSelector((store) => store.allLocation);
   const { tours } = useSelector((store) => store.tours);
-
+  const navigate = useNavigate();
   return (
     <>
       <Card className="grid place-items-center ">
@@ -164,11 +164,13 @@ const AddLocationInTour = () => {
             />
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/locationTour">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/locationTour")}
+            >
+              Close
+            </Button>
 
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (

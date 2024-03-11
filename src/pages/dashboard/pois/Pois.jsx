@@ -22,7 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import {
   deletePois,
@@ -52,6 +52,7 @@ export default function Pois() {
     }
     onClose();
   };
+  const navigate = useNavigate();
   //Pagination
   const [currentPage, setCurrentPage] = React.useState(1);
   const handlePageChange = (page) => {
@@ -134,9 +135,9 @@ export default function Pois() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search label={"Search pois by name"} search={searchPois} />
-        <Link to="/dashboard/pois/add">
-          <Button color="success">+ Add Pois</Button>
-        </Link>
+        <Button color="success" onClick={() => navigate("/dashboard/pois/add")}>
+          + Add Pois
+        </Button>
       </div>
       <div className="h-72">
         {" "}

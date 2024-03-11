@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { createPois } from "../../../redux/features/pois/pois";
@@ -41,6 +41,10 @@ const AddPois = () => {
       status: true,
     });
   };
+  const navigate = useNavigate(); // Use navigate for navigation
+  const handleClose = () => {
+    navigate("/dashboard/pois");
+  };
   return (
     <>
       <Card className="grid place-items-center ">
@@ -61,11 +65,9 @@ const AddPois = () => {
             />
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/pois">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button color="danger" variant="light" onClick={handleClose}>
+              Close
+            </Button>
 
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (

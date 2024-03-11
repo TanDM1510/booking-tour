@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Avatar,
@@ -32,6 +32,7 @@ const PointDetails = () => {
       setData(findPoint || {});
     }
   }, [id]);
+  const navigate = useNavigate();
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Point of interest details</p>
@@ -65,9 +66,12 @@ const PointDetails = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/poiOfInterest"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button
+                color="primary"
+                onClick={() => navigate("/dashboard/poiOfInterest")}
+              >
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

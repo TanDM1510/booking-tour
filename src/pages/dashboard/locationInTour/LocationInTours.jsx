@@ -22,7 +22,7 @@ import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   deleteLocationInTour,
   getAllLocationInTour,
@@ -188,14 +188,18 @@ export default function LocationInTours() {
         return cellValue;
     }
   }, []);
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search label={"Search location in tour by name"} />
-        <NavLink to="/dashboard/locationTour/add">
-          <Button color="success">+ Add location in tour</Button>
-        </NavLink>
+
+        <Button
+          color="success"
+          onClick={() => navigate("/dashboard/locationTour/add")}
+        >
+          + Add location in tour
+        </Button>
       </div>
       <div className="h-72">
         {" "}

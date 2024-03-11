@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Button,
   Chip,
@@ -28,6 +28,7 @@ const ViewActivity = () => {
       setData(findActivity || {});
     }
   }, [id]);
+  const navigate = useNavigate();
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Activity Details</p>
@@ -56,9 +57,12 @@ const ViewActivity = () => {
               </Chip>
             </TableCell>
             <TableCell>
-              <Link to={"/dashboard/activities"}>
-                <Button color="primary">Back</Button>
-              </Link>
+              <Button
+                color="primary"
+                onClick={() => navigate("/dashboard/activities")}
+              >
+                Back
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>

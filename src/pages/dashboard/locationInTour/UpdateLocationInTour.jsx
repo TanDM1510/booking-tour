@@ -13,7 +13,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateLocationInTour } from "../../../redux/features/locationInTour/locationInTour";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
 import { getAllTours } from "../../../redux/features/tours/tours";
@@ -53,7 +53,7 @@ const UpdateLocationInTour = () => {
     dispatch(getAllLocation());
     dispatch(getAllTours());
   }, []);
-
+  const navigate = useNavigate();
   const { location } = useSelector((store) => store.allLocation);
   const { tours } = useSelector((store) => store.tours);
   return (
@@ -141,11 +141,13 @@ const UpdateLocationInTour = () => {
             </RadioGroup>
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
-            <Link to="/dashboard/locationTour">
-              <Button color="danger" variant="light">
-                Close
-              </Button>
-            </Link>
+            <Button
+              color="danger"
+              variant="light"
+              onClick={() => navigate("/dashboard/locationTour")}
+            >
+              Close
+            </Button>
 
             <Button color="primary" type="submit" disabled={isLoading}>
               {isLoading ? (
