@@ -61,6 +61,10 @@ export const searchActivity = createAsyncThunk(
   "searchActivity",
   async (data, thunkAPI) => {
     try {
+      if (!data.name) {
+        const resp = await customFetch.get(`/locations/activities?page=1`);
+        return resp.data;
+      }
       const resp = await customFetch.get(
         `/locations/activities?activityName=${data?.name}`
       );

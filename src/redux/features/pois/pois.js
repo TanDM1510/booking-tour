@@ -26,6 +26,10 @@ export const searchPois = createAsyncThunk(
   "searchPois",
   async (data, thunkAPI) => {
     try {
+      if (!data.name) {
+        const resp = await customFetch.get(`/categories?page=1`);
+        return resp.data;
+      }
       const resp = await customFetch.get(
         `/categories?categoryName=${data?.name}`
       );

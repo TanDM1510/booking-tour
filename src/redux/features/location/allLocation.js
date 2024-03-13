@@ -76,6 +76,10 @@ export const searchLocation = createAsyncThunk(
   "/searchLocation",
   async (data, thunkAPI) => {
     try {
+      if (!data.name) {
+        const resp = await customFetch.get(`/locations?page=1`);
+        return resp.data;
+      }
       const resp = await customFetch.get(
         `/locations?locationName=${data.name}`
       );

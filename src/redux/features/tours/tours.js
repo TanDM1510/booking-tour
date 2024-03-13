@@ -73,6 +73,10 @@ export const searchTour = createAsyncThunk(
   "searchTour",
   async (data, thunkAPI) => {
     try {
+      if (!data.name) {
+        const resp = await customFetch.get(`/tours?page=1`);
+        return resp.data;
+      }
       const resp = await customFetch.get(`/tours?tourName=${data.name}`);
       return resp.data;
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -12,17 +12,17 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  useDisclosure,
+  // useDisclosure,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
-import { DeleteIcon } from "../../../components/common/DeleteIcon";
+// import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import ModelLocation from "../../../components/dashboard/City/ModelLocation";
+// import ModelLocation from "../../../components/dashboard/City/ModelLocation";
 import {
-  deleteVehicle,
+  // deleteVehicle,
   getAllVehicles,
   searchVehicle,
 } from "../../../redux/features/vehicles/vehicles";
@@ -32,7 +32,7 @@ const statusColorMap = {
   false: "danger",
 };
 export default function Vehicles() {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   //Gọi dữ liệu
   const dispatch = useDispatch();
   useEffect(() => {
@@ -40,13 +40,13 @@ export default function Vehicles() {
   }, []);
   const { vehicles, isLoading } = useSelector((store) => store.vehicles);
   //Xóa dữ liệu
-  const [deleteId, setDeleteId] = useState(null);
-  const handleDelete = () => {
-    if (deleteVehicle) {
-      dispatch(deleteVehicle({ id: deleteId }));
-    }
-    onClose();
-  };
+  // const [deleteId, setDeleteId] = useState(null);
+  // const handleDelete = () => {
+  //   if (deleteVehicle) {
+  //     dispatch(deleteVehicle({ id: deleteId }));
+  //   }
+  //   onClose();
+  // };
   const renderCell = React.useCallback((vehicles, columnKey) => {
     const cellValue = vehicles[columnKey];
     switch (columnKey) {
@@ -103,19 +103,6 @@ export default function Vehicles() {
                   </button>
                 </Link>
               </DropdownItem>
-              <DropdownItem
-                key="edit"
-                value="Delete"
-                onPress={() => {
-                  setDeleteId(vehicles.id);
-                  onOpen();
-                }}
-                className="text-danger"
-                color="danger"
-                aria-label="Static Actions"
-              >
-                <DeleteIcon />
-              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         );
@@ -164,12 +151,12 @@ export default function Vehicles() {
         )}
       </div>
 
-      <ModelLocation
+      {/* <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
         isLoading={isLoading}
-      />
+      /> */}
     </>
   );
 }

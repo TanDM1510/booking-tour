@@ -25,10 +25,13 @@ export const getCity = createAsyncThunk(
   "allCity/getCity",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`/cities?cityName=${data?.name}`);
-      if (data.name === "") {
-        thunkAPI.dispatch(getAllCity());
+      if (!data.name) {
+        const resp = await customFetch.get(`/cities?page=1`);
+
+        return resp.data;
       }
+      const resp = await customFetch.get(`/cities?cityName=${data?.name}`);
+
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");

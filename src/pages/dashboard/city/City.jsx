@@ -8,7 +8,6 @@ import {
   TableCell,
   Chip,
   Tooltip,
-  Button,
   Spinner,
   useDisclosure,
   DropdownTrigger,
@@ -23,7 +22,7 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCity, getCity } from "../../../redux/features/city/allCity";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { deleteCity } from "../../../redux/features/city/citySlice";
 import ModelCity from "../../../components/dashboard/City/ModelCity";
 import Search from "../../../components/common/Search";
@@ -137,7 +136,7 @@ export default function App() {
         return cellValue;
     }
   }, []);
-  const navigate = useNavigate();
+
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">

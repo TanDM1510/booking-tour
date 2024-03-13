@@ -23,7 +23,7 @@ const AddLocation = () => {
     status: true,
   });
   const { city } = useSelector((store) => store.allCity);
-  console.log(city);
+  const activeCity = city.filter((c) => c.status === true);
   useEffect(() => {
     dispatch(getAllCity());
   }, []);
@@ -67,13 +67,13 @@ const AddLocation = () => {
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Select
-              placeholder="Select a city"
+              label="City Name"
               required
               name="cityId"
               onChange={inputChangHandler}
               value={location.cityId !== undefined ? location.cityId : ""}
             >
-              {city.map((cityItem) => (
+              {activeCity.map((cityItem) => (
                 <SelectItem key={cityItem.id} value={cityItem.id}>
                   {cityItem.cityName}
                 </SelectItem>

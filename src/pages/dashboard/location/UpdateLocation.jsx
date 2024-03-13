@@ -46,6 +46,8 @@ const UpdateLocation = () => {
     dispatch(updateLocation(updateData));
   };
   const { city } = useSelector((store) => store.allCity);
+  const activeCity = city.filter((c) => c.status === true);
+  console.log(activeCity);
   console.log(city);
   useEffect(() => {
     dispatch(getAllCity());
@@ -56,12 +58,13 @@ const UpdateLocation = () => {
       <Card className="grid place-items-center ">
         <form onSubmit={handleSubmit}>
           <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add Location"}
+            {"Update Location"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Select
+              label="City"
               placeholder={
-                city.find((c) => c.id === updateData.cityId)?.cityName ||
+                activeCity.find((c) => c.id === updateData.cityId)?.cityName ||
                 "Select a city"
               }
               required
@@ -69,7 +72,7 @@ const UpdateLocation = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.cityId}
             >
-              {city.map((s) => (
+              {activeCity.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.cityName}
                 </SelectItem>
