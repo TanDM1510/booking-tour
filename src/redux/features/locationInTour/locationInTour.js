@@ -75,7 +75,33 @@ export const updateLocationInTour = createAsyncThunk(
     }
   }
 );
+export const searchLocationInTour = createAsyncThunk(
+  "searchLocationInTour",
+  async (data, thunkAPI) => {
+    try {
+      const id = data.id;
+      console.log(id);
 
+      if (!id) {
+        const resp = await customFetch.get(
+          `/tours/locations?page=${data?.page}`
+        );
+        return resp.data;
+      } else {
+        const resp = await customFetch.get(
+          `/tours/${`${data?.id}/`}locations?page=${data?.page}`
+        );
+        return resp.data;
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
 const allLocationInTourSlice = createSlice({
   name: "allLocationInTour",
   initialState,
@@ -128,6 +154,17 @@ const allLocationInTourSlice = createSlice({
       .addCase(deleteLocationInTour.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(searchLocationInTour.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchLocationInTour.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.locationInTours = actions.payload.data;
+      })
+      .addCase(searchLocationInTour.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.locationInTours = payload.data;
       });
   },
 });

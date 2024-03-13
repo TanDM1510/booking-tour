@@ -29,6 +29,7 @@ const AddTour = () => {
     image: "",
     status: true,
   });
+  console.log(tour.image);
   const dispatch = useDispatch();
   const inputChangHandler = (e) => {
     let value = e.target.value;
@@ -77,6 +78,7 @@ const AddTour = () => {
   const handleClose = () => {
     navigate("/dashboard/tours");
   };
+
   return (
     <>
       <Card className="grid place-items-center ">
@@ -114,6 +116,13 @@ const AddTour = () => {
               type="number"
               onChange={inputChangHandler}
               value={tour.price !== undefined ? tour.price : ""}
+            />
+            <Input
+              label="Image"
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={inputChangHandler}
             />
             <Select
               placeholder={"Select a tour type"}

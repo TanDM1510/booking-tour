@@ -44,7 +44,7 @@ export default function PoiOfInterest() {
   //Gọi dữ liệu
   useEffect(() => {
     dispatch(getAllPois());
-    dispatch(getAllPoiOfInterest());
+    dispatch(getAllPoiOfInterest({ page: currentPage }));
     dispatch(getAllLocation());
   }, []);
   //Xóa dữ liệu

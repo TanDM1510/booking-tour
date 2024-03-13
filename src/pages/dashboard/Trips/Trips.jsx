@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -14,13 +14,15 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 
 import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getAllTrips } from "../../../redux/features/trips/trips";
+import { getAllTrips, searchTrips } from "../../../redux/features/trips/trips";
 // import moment from "moment";
 import { getAllTours } from "../../../redux/features/tours/tours";
 import { Link } from "react-router-dom";
@@ -34,7 +36,7 @@ const statusColorMap = {
 export default function Trips() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllTrips());
+    dispatch(getAllTrips({ page: currentPage }));
     dispatch(getAllTours());
     dispatch(getAllTourGuides());
   }, []);
@@ -128,11 +130,57 @@ export default function Trips() {
         return cellValue;
     }
   }, []);
+  /////////////
+
+  const [searchParam, setSearchParam] = useState("");
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    setSearchParam(inputValue);
+    debouncedHandleChange(inputValue);
+  };
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const debouncedHandleChange = useCallback(
+    debounce((value) => {
+      if (searchTrips) {
+        try {
+          // Perform additional validation or error handling here if needed
+          dispatch(searchTrips({ id: value, page: currentPage }));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }, 500), // Set debounce delay to 500ms
+    [dispatch, searchTrips] // Include dependencies for proper memoization
+  );
 
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search label={"Search trip by tour guide name"} />
+        <Select
+          // label={`${label}`}
+          placeholder="Enter search term"
+          required
+          name="locationId"
+          onChange={handleChange}
+          value={searchParam}
+          className="w-[300px]"
+          defaultSelectedKeys={""}
+        >
+          {tourGuides.map((s) => (
+            <SelectItem key={s._id} value={s._id}>
+              {s.userId.fullName}
+            </SelectItem>
+          ))}
+        </Select>
       </div>
       <div className="h-72">
         {" "}
@@ -142,6 +190,20 @@ export default function Trips() {
           <Table
             aria-label="Example table with custom cells111"
             className="mt-10"
+            bottomContent={
+              <div className="flex flex-col gap-5">
+                <p className="text-small text-default-500">
+                  Total items: {totalItems}
+                </p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={(page) => handlePageChange(page)}
+                  showControls
+                />
+              </div>
+            }
           >
             <TableHeader columns={columnses}>
               {(column) => (
@@ -153,28 +215,21 @@ export default function Trips() {
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody items={mergedData}>
-              {(item) => (
-                <TableRow key={item.id}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
+            {mergedData.length === 0 ? (
+              <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+            ) : (
+              <TableBody items={mergedData}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(item, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            )}
           </Table>
         )}
-      </div>
-
-      <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
       </div>
     </>
   );

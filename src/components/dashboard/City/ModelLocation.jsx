@@ -13,6 +13,7 @@ export default function ModelLocation({
   onOpenChange,
   handleDelete,
   isLoading,
+  label,
 }) {
   return (
     <>
@@ -24,7 +25,7 @@ export default function ModelLocation({
                 Confirm{" "}
               </ModalHeader>
               <ModalBody>
-                <p>Are you sure want to delete ?</p>
+                <p>{label || "Are you sure want to delete ?"}</p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>

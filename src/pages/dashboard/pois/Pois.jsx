@@ -41,7 +41,7 @@ export default function Pois() {
   const [deleteId, setDeleteId] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllPois());
+    dispatch(getAllPois({ page: currentPage }));
   }, []);
   const { pois, isLoading, totalPages, totalItems } = useSelector(
     (store) => store.pois

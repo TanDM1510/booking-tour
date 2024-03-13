@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -16,6 +16,8 @@ import {
   DropdownItem,
   useDisclosure,
   Pagination,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { EditIcon } from "../../../components/common/EditIcon";
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
@@ -26,11 +28,12 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   deleteLocationInTour,
   getAllLocationInTour,
+  searchLocationInTour,
 } from "../../../redux/features/locationInTour/locationInTour";
 import { getAllTours } from "../../../redux/features/tours/tours";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import Search from "../../../components/common/Search";
+import SearchById from "../../../components/common/SearchById";
 
 const statusColorMap = {
   true: "success",
@@ -60,7 +63,7 @@ export default function LocationInTours() {
   console.log(combinedData);
   // get All city
   useEffect(() => {
-    dispatch(getAllLocationInTour());
+    dispatch(getAllLocationInTour({ page: currentPage }));
     dispatch(getAllLocation());
     dispatch(getAllTours());
   }, []);
@@ -189,11 +192,17 @@ export default function LocationInTours() {
     }
   }, []);
   const navigate = useNavigate();
+  ////////////////////////////
+
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search label={"Search location in tour by name"} />
-
+        <SearchById
+          label="Search location in tour by tour name"
+          search={searchLocationInTour}
+          array={tours}
+          page={currentPage}
+        />
         <Button
           color="success"
           onClick={() => navigate("/dashboard/locationTour/add")}
@@ -217,15 +226,19 @@ export default function LocationInTours() {
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody items={combinedData}>
-              {(item) => (
-                <TableRow key={item.id}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
+            {combinedData.length === 0 ? (
+              <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
+            ) : (
+              <TableBody items={combinedData}>
+                {(item) => (
+                  <TableRow key={item.id}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(item, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            )}
           </Table>
         )}
       </div>

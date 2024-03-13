@@ -54,7 +54,7 @@ export default function Activities() {
   });
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(getAllActivities());
+    dispatch(getAllActivities({ page: currentPage }));
     dispatch(getAllLocation());
   }, []);
   const handleDelete = () => {

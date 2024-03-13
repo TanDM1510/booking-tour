@@ -24,13 +24,15 @@ export const getAllBookings = createAsyncThunk(
   }
 );
 
-export const searchLocation = createAsyncThunk(
-  "/searchLocation",
+export const searchBooking = createAsyncThunk(
+  "/searchBooking",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(
-        `/locations?locationName=${data.name}`
-      );
+      if (!data.id) {
+        const resp = await customFetch.get(`/bookings?page=1`);
+        return resp.data;
+      }
+      const resp = await customFetch.get(`/bookings?userId=${data.id}`);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -60,16 +62,16 @@ const bookingSlice = createSlice({
         state.isLoading = false;
         toast.error("Failed to load location");
       })
-      .addCase(searchLocation.pending, (state) => {
+      .addCase(searchBooking.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(searchLocation.fulfilled, (state, actions) => {
+      .addCase(searchBooking.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.location = actions.payload.data;
+        state.bookings = actions.payload.data;
       })
-      .addCase(searchLocation.rejected, (state) => {
+      .addCase(searchBooking.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to update a location");
+        state.bookings = [];
       });
   },
 });

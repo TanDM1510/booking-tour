@@ -9,7 +9,12 @@ import {
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
 
-export default function ModelCity({ isOpen, onOpenChange, handleDelete }) {
+export default function ModelCity({
+  isOpen,
+  onOpenChange,
+  handleDelete,
+  label,
+}) {
   const { isLoading } = useSelector((state) => state.city);
 
   return (
@@ -22,7 +27,7 @@ export default function ModelCity({ isOpen, onOpenChange, handleDelete }) {
                 Confirm{" "}
               </ModalHeader>
               <ModalBody>
-                <p>Are you sure want to delete ?</p>
+                <p>{label || "Are you sure want to delete ?"}</p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>

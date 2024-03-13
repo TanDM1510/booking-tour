@@ -48,6 +48,8 @@ import PointDetails from "./pages/dashboard/PoiOfInterest/PointDetail";
 import ForgotPassword from "./pages/ForgotPassword";
 import OTP from "./pages/OTP";
 import ResetPassword from "./pages/ResetPassword";
+import UploadFile from "./pages/UploadFile";
+import UpdateUserRole from "./pages/dashboard/Users/UpdateUser";
 
 export default function App() {
   return (
@@ -131,14 +133,18 @@ export default function App() {
             path="/dashboard/users/addTourGuide"
             element={<AddTourGuide />}
           />
+          <Route
+            path="/dashboard/users/update/:id"
+            element={<UpdateUserRole />}
+          />
         </Route>
-
         <Route path="forgotPassword" element={<ForgotPassword />} />
         <Route path="signUp" element={<SignUp />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Error />} />
         <Route path="OTP" element={<OTP />} />
-        <Route path="reset/password" element={<ResetPassword />} />
+        <Route path="reset/password" element={<ResetPassword />} />\
+        <Route path="upLoad" element={<UploadFile />} />
       </Routes>
     </BrowserRouter>
   );

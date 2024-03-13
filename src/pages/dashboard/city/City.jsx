@@ -43,7 +43,7 @@ export default function App() {
 
   // get All city
   useEffect(() => {
-    dispatch(getAllCity());
+    dispatch(getAllCity({ page: currentPage }));
   }, []);
   // handleDelete
   const handleDelete = () => {
@@ -142,9 +142,9 @@ export default function App() {
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
         <Search search={getCity} label={"Search city by Name"} />
-        <Button color="success" onClick={() => navigate("/dashboard/addCity")}>
+        {/* <Button color="success" onClick={() => navigate("/dashboard/addCity")}>
           + Add city
-        </Button>
+        </Button> */}
       </div>
       <div className="h-72">
         {isLoading ? (

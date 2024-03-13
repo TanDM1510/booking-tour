@@ -23,11 +23,11 @@ export const getAllTourGuides = createAsyncThunk(
     }
   }
 );
-export const createLocation = createAsyncThunk(
-  "createLocation",
-  async (location, thunkAPI) => {
+export const createTourGuide = createAsyncThunk(
+  "createTourGuide",
+  async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/locations", location);
+      const resp = await customFetch.post("/tourGuides", data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -74,16 +74,16 @@ const tourGuides = createSlice({
         state.isLoading = false;
         toast.error("Failed to load location");
       })
-      .addCase(createLocation.pending, (state) => {
+      .addCase(createTourGuide.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLocation.fulfilled, (state) => {
+      .addCase(createTourGuide.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success("Create location successful !!!");
+        toast.success("Create a  tour guide  successful !!!");
       })
-      .addCase(createLocation.rejected, (state) => {
+      .addCase(createTourGuide.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to create location");
+        toast.error("Failed to create a  tour guide ");
       })
       .addCase(searchLocation.pending, (state) => {
         state.isLoading = true;

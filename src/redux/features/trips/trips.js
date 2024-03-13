@@ -70,6 +70,28 @@ export const updateTrip = createAsyncThunk(
     }
   }
 );
+export const searchTrips = createAsyncThunk(
+  "searchTrips",
+  async (data, thunkAPI) => {
+    try {
+      if (!data.id) {
+        const resp = await customFetch.get(`/trips?page=1`, data);
+        return resp.data;
+      }
+      const resp = await customFetch.get(
+        `/trips?tourGuideId=${data?.id}`,
+        data
+      );
+      return resp.data;
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized");
+      }
+      return thunkAPI.rejectWithValue(error.response.message);
+    }
+  }
+);
 const allTripSlice = createSlice({
   name: "trips",
   initialState,
@@ -122,6 +144,17 @@ const allTripSlice = createSlice({
       .addCase(updateTrip.rejected, (state) => {
         state.isLoading = false;
         toast.error("Failed to update a trip");
+      })
+      .addCase(searchTrips.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchTrips.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.trips = actions.payload.data;
+      })
+      .addCase(searchTrips.rejected, (state) => {
+        state.isLoading = false;
+        state.trips = [];
       });
   },
 });

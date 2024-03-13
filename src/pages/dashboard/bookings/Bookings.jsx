@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -14,6 +14,8 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 
 import { EyeIcon } from "../../../components/common/EyeIcon";
@@ -23,7 +25,10 @@ import { Link } from "react-router-dom";
 import { searchLocation } from "../../../redux/features/location/allLocation";
 
 import Search from "../../../components/common/Search";
-import { getAllBookings } from "../../../redux/features/bookings/bookings";
+import {
+  getAllBookings,
+  searchBooking,
+} from "../../../redux/features/bookings/bookings";
 import { getAllTrips } from "../../../redux/features/trips/trips";
 import { getAllUser } from "../../../redux/features/user/allUser";
 
@@ -124,14 +129,54 @@ export default function Bookings() {
         return cellValue;
     }
   }, []);
+  const [searchParam, setSearchParam] = useState("");
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    setSearchParam(inputValue);
+    debouncedHandleChange(inputValue);
+  };
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const debouncedHandleChange = useCallback(
+    debounce((value) => {
+      if (searchBooking) {
+        try {
+          // Perform additional validation or error handling here if needed
+          dispatch(searchBooking({ id: value, page: currentPage }));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }, 500), // Set debounce delay to 500ms
+    [dispatch, searchBooking] // Include dependencies for proper memoization
+  );
   return (
     <>
       <div className="flex justify-between items-center gap-2 mb-3">
-        <Search
-          search={searchLocation}
-          page={currentPage}
-          label={"Search bookings by user name"}
-        />
+        <Select
+          // label={`${label}`}
+          placeholder="Enter search term"
+          required
+          name="locationId"
+          onChange={handleChange}
+          value={searchParam}
+          className="w-[300px]"
+          defaultSelectedKeys={""}
+        >
+          {users.map((s) => (
+            <SelectItem key={s._id} value={s._id}>
+              {s.fullName}
+            </SelectItem>
+          ))}
+        </Select>
       </div>
       <div className="h-72">
         {" "}

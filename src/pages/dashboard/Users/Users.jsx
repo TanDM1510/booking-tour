@@ -22,10 +22,11 @@ import {
 import { DeleteIcon } from "../../../components/common/DeleteIcon";
 import { columnses } from "./data";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { deleteLocation } from "../../../redux/features/location/allLocation";
+import { useNavigate } from "react-router-dom";
+
 import ModelLocation from "../../../components/dashboard/City/ModelLocation";
-import { getAllUser } from "../../../redux/features/user/allUser";
+import { deleteUser, getAllUser } from "../../../redux/features/user/allUser";
+import { EditIcon } from "../../../components/common/EditIcon";
 
 const statusColorMap = {
   true: "success",
@@ -42,8 +43,8 @@ export default function Users() {
   //Xóa dữ liệu
   const [deleteId, setDeleteId] = useState(null);
   const handleDelete = () => {
-    if (deleteLocation) {
-      dispatch(deleteLocation({ id: deleteId }));
+    if (deleteUser) {
+      dispatch(deleteUser({ id: deleteId }));
     }
     onClose();
   };
@@ -89,7 +90,7 @@ export default function Users() {
     setFilterValue("");
     setPage(1);
   }, []);
-
+  const navigate = useNavigate();
   //Table
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
@@ -158,7 +159,20 @@ export default function Users() {
               <p>...</p>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" className="w-10">
-              <DropdownItem
+              <DropdownItem key="copy">
+                {" "}
+                <Tooltip content={`Edit `}>
+                  <button
+                    onClick={() =>
+                      navigate(`/dashboard/users/update/${user._id}`)
+                    }
+                    className="cursor-pointer active:opacity-50"
+                  >
+                    <EditIcon />
+                  </button>
+                </Tooltip>
+              </DropdownItem>
+              {/* <DropdownItem
                 key="edit"
                 onPress={() => {
                   setDeleteId(user._id);
@@ -170,7 +184,7 @@ export default function Users() {
                 <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
-              </DropdownItem>
+              </DropdownItem> */}
             </DropdownMenu>
           </Dropdown>
         );
@@ -183,15 +197,18 @@ export default function Users() {
       <div className="flex justify-between items-center gap-2 mb-3">
         <Input
           isClearable
-          className="w-full sm:max-w-[44%]"
+          className="w-full sm:max-w-[300px]"
           placeholder="Search by name..."
           value={filterValue}
           onClear={() => onClear()}
           onValueChange={onSearchChange}
         />
-        <Link to="/dashboard/users/addTourGuide">
-          <Button color="success">+ Add Tour Guide</Button>
-        </Link>
+        <Button
+          color="success"
+          onClick={() => navigate("/dashboard/users/addTourGuide")}
+        >
+          + Add Tour Guide
+        </Button>
       </div>
       <div className="h-64">
         {" "}
@@ -249,6 +266,7 @@ export default function Users() {
         onOpenChange={onOpenChange}
         handleDelete={handleDelete}
         isLoading={isLoading}
+        label={"Do you actually want to ban this user?"}
       />
     </>
   );

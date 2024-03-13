@@ -13,4 +13,8 @@ const columnses = [
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];
-export { columns, columnses };
+const roles = [
+  { name: "Tour guide", id: 1 },
+  { name: "User", id: 0 },
+];
+export { columns, columnses, roles };

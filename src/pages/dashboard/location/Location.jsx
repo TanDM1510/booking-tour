@@ -115,16 +115,6 @@ export default function Location() {
               <p>...</p>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" className="w-10">
-              <DropdownItem key="new">
-                {" "}
-                <Tooltip content="Details">
-                  <Link to={`/dashboard/location/${mergedData.id}`}>
-                    <span className="cursor-pointer active:opacity-50">
-                      <EyeIcon />
-                    </span>
-                  </Link>
-                </Tooltip>
-              </DropdownItem>
               <DropdownItem key="copy">
                 {" "}
                 <Tooltip content={`Edit `}>
@@ -132,6 +122,16 @@ export default function Location() {
                     <button className="cursor-pointer active:opacity-50">
                       <EditIcon />
                     </button>
+                  </Link>
+                </Tooltip>
+              </DropdownItem>
+              <DropdownItem key="new">
+                {" "}
+                <Tooltip content="Details">
+                  <Link to={`/dashboard/location/${mergedData.id}`}>
+                    <span className="cursor-pointer active:opacity-50">
+                      <EyeIcon />
+                    </span>
                   </Link>
                 </Tooltip>
               </DropdownItem>
