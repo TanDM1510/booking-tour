@@ -46,7 +46,7 @@ const NavbarDashBoard = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Link to={"/dashboard"} className="  font-mono text-xl font-bold">
+          <Link to={"/"} className="  font-mono text-xl font-bold">
             Hella Booking
           </Link>
         </NavbarBrand>

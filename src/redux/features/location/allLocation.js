@@ -59,9 +59,9 @@ export const deleteLocation = createAsyncThunk(
 );
 export const updateLocation = createAsyncThunk(
   "city/updateLocation",
-  async (data, thunkAPI) => {
+  async ({ formData, id }, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/locations/${data.id}`, data);
+      const resp = await customFetch.patch(`/locations/${id}`, formData);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {

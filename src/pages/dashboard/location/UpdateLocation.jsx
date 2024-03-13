@@ -22,114 +22,134 @@ const UpdateLocation = () => {
   const dispatch = useDispatch();
   const { location, isLoading } = useSelector((state) => state.allLocation);
   const [updateData, setUpdateData] = useState({});
-  console.log(updateData);
+  const [imageFile, setImageFile] = useState(null);
+
   useEffect(() => {
-    if (id) {
-      const findLocation = location.find((us) => us.id == id);
+    if (id && location) {
+      const findLocation = location.find((loc) => loc.id === parseInt(id));
       setUpdateData(findLocation || {});
     }
-  }, [id]);
+  }, [id, location]);
 
-  const inputChangHandler = (e) => {
-    let value = e.target.value;
-    if (e.target.name === "status") {
-      value = value === "true";
-    } else if (e.target.name === "cityId") {
-      value = parseInt(value);
-    }
-    setUpdateData({ ...updateData, [e.target.name]: value });
+  const inputChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setUpdateData((prevData) => ({
+      ...prevData,
+      [name]: name === "status" ? value === "true" : value,
+    }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    setImageFile(file);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(updateData);
-    dispatch(updateLocation(updateData));
+    const formData = new FormData();
+
+    // Gom tất cả dữ liệu cập nhật vào currentData
+    // currentData sẽ chứa tất cả các khóa và giá trị từ updateData
+    // Ví dụ: currentData: { key1: value1, key2: value2, ... }
+    formData.append("files", imageFile);
+    formData.append("currentData", JSON.stringify(updateData));
+    // Kiểm tra nếu có file hình ảnh được chọn, thêm nó vào formData
+
+    dispatch(updateLocation({ formData, id: updateData.id }));
   };
-  const { city } = useSelector((store) => store.allCity);
-  const activeCity = city.filter((c) => c.status === true);
-  console.log(activeCity);
-  console.log(city);
+
   useEffect(() => {
     dispatch(getAllCity());
-  }, []);
+  }, [dispatch]);
+
   const navigate = useNavigate();
+
+  const { city } = useSelector((state) => state.allCity);
+  const activeCity = city.filter((c) => c.status === true);
+
   return (
-    <>
-      <Card className="grid place-items-center ">
-        <form onSubmit={handleSubmit}>
-          <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Update Location"}
-          </CardHeader>
-          <CardBody className="flex flex-col gap-3 w-full">
-            <Select
-              label="City"
-              placeholder={
-                activeCity.find((c) => c.id === updateData.cityId)?.cityName ||
-                "Select a city"
-              }
-              required
-              name="cityId"
-              onChange={inputChangHandler}
-              value={updateData && updateData.cityId}
-            >
-              {activeCity.map((s) => (
-                <SelectItem key={s.id} value={s.id}>
-                  {s.cityName}
-                </SelectItem>
-              ))}
-            </Select>
+    <Card className="grid place-items-center">
+      <form onSubmit={handleSubmit}>
+        <CardHeader className="flex flex-col gap-3 lg:w-96 font-bold text-3xl">
+          Update Location
+        </CardHeader>
+        <CardBody className="flex flex-col gap-3 w-full">
+          <Select
+            label="City"
+            placeholder={
+              updateData.cityId
+                ? activeCity.find((c) => c.id === updateData.cityId)?.cityName
+                : "Select a city"
+            }
+            required
+            name="cityId"
+            onChange={inputChangeHandler}
+            value={updateData.cityId || ""}
+          >
+            {activeCity.map((s) => (
+              <SelectItem key={s.id} value={s.id}>
+                {s.cityName}
+              </SelectItem>
+            ))}
+          </Select>
 
-            <Input
-              required
-              label="Location Name"
-              name="locationName"
-              type="text"
-              onChange={inputChangHandler}
-              value={updateData && updateData.locationName}
-            />
-            <Input
-              required
-              label="Location address"
-              name="locationAddress"
-              type="text"
-              onChange={inputChangHandler}
-              value={updateData && updateData.locationAddress}
-            />
-            <RadioGroup
-              isRequired
-              className="mt-3"
-              name="status"
-              label="Active or Disable"
-              onChange={inputChangHandler}
-              value={updateData && updateData.status}
-            >
-              <Radio value={true}>Active</Radio>
-              <Radio value={false}>Disable</Radio>
-            </RadioGroup>
-          </CardBody>
-          <CardFooter className="flex flex-row-reverse gap-2">
-            <Button
-              color="danger"
-              variant="light"
-              onClick={() => navigate("/dashboard/location")}
-            >
-              Close
-            </Button>
+          <Input
+            required
+            label="Location Name"
+            name="locationName"
+            type="text"
+            onChange={inputChangeHandler}
+            value={updateData.locationName || ""}
+          />
+          <Input
+            required
+            label="Location address"
+            name="locationAddress"
+            type="text"
+            onChange={inputChangeHandler}
+            value={updateData.locationAddress || ""}
+          />
+          <input
+            label="Image"
+            name="files"
+            type="file"
+            onChange={handleImageChange}
+          />
 
-            <Button color="primary" type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <div className="flex justify-center items-center">
-                  <Spinner className="mr-5" size="sm" color="white" />
-                  sending...
-                </div>
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
-    </>
+          <RadioGroup
+            isRequired
+            className="mt-3"
+            name="status"
+            label="Active or Disable"
+            onChange={inputChangeHandler}
+            value={updateData.status || ""}
+          >
+            <Radio value={true}>Active</Radio>
+            <Radio value={false}>Disable</Radio>
+          </RadioGroup>
+        </CardBody>
+        <CardFooter className="flex flex-row-reverse gap-2">
+          <Button
+            color="danger"
+            variant="light"
+            onClick={() => navigate("/dashboard/location")}
+          >
+            Close
+          </Button>
+
+          <Button color="primary" type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <div className="flex justify-center items-center">
+                <Spinner className="mr-5" size="sm" color="white" />
+                sending...
+              </div>
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
   );
 };
 

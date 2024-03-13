@@ -15,7 +15,7 @@ export const getAllBookings = createAsyncThunk(
   "getAllBookings",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`bookings?page=${data?.page}`);
+      const resp = await customFetch.get(`bookings`);
       console.log(resp.data);
       return resp.data;
     } catch (error) {
@@ -53,7 +53,10 @@ const bookingSlice = createSlice({
       })
       .addCase(getAllBookings.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.bookings = actions.payload.data;
+        state.bookings = actions.payload.data.sort((a, b) => {
+          // Sắp xếp theo createdAt, sử dụng momentjs hoặc so sánh trực tiếp
+          return new Date(b.createAt) - new Date(a.createAt);
+        });
         state.totalPages = actions.payload.totalPages;
         state.page = actions.payload.page;
         state.totalItems = actions.payload.totalItems;

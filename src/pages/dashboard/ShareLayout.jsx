@@ -16,10 +16,10 @@ const ShareLayout = () => {
             <NavbarDashBoard />
           </div>
 
-          <div className="flex flex-row   h-5/6 ">
+          <div className="flex flex-row items-center justify-center   h-5/6 ">
             <BigSideBar />
-            <div className="  w-full lg:basis-5/6 h-full ">
-              <div className=" mt-2 w-full px-6 py-4  ">
+            <div className="  w-full lg:basis-5/6 h-full  ">
+              <div className=" mt-2 w-full px-6 py-4   ">
                 <Outlet />
               </div>
             </div>

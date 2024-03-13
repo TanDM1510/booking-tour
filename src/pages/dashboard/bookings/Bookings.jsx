@@ -22,9 +22,6 @@ import { EyeIcon } from "../../../components/common/EyeIcon";
 import { columns } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { searchLocation } from "../../../redux/features/location/allLocation";
-
-import Search from "../../../components/common/Search";
 import {
   getAllBookings,
   searchBooking,
@@ -186,6 +183,20 @@ export default function Bookings() {
           <Table
             aria-label="Example table with custom cells111"
             className="mt-10"
+            bottomContent={
+              <div className="flex flex-col gap-5">
+                <p className="text-small text-default-500">
+                  Total items: {totalItems}
+                </p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={(page) => handlePageChange(page)}
+                  showControls
+                />
+              </div>
+            }
           >
             <TableHeader columns={columns}>
               {(column) => (
@@ -212,17 +223,6 @@ export default function Bookings() {
             )}
           </Table>
         )}
-      </div>
-
-      <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
       </div>
     </>
   );
