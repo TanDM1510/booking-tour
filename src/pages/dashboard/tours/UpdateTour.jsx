@@ -21,7 +21,8 @@ import { tourType } from "./data";
 const UpdateTour = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { tours, isLoading } = useSelector((state) => state.tours);
+  const { tours, isLoading, redirect } = useSelector((state) => state.tours);
+  console.log(redirect);
   const [updateData, setUpdateData] = useState({});
   console.log(updateData);
   useEffect(() => {
@@ -44,8 +45,17 @@ const UpdateTour = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(updateData);
-    dispatch(updateTour(updateData));
+    const formData = new FormData();
+
+    // Gom tất cả dữ liệu cập nhật vào currentData
+    // currentData sẽ chứa tất cả các khóa và giá trị từ updateData
+    // Ví dụ: currentData: { key1: value1, key2: value2, ... }
+    formData.append("files", imageFile);
+    formData.append("currentData", JSON.stringify(updateData));
+    // Kiểm tra nếu có file hình ảnh được chọn, thêm nó vào formData
+
+    dispatch(updateTour({ formData, id: updateData.id }));
+    if (redirect == 1) navigate("/dashboard/tours");
   };
   useEffect(() => {
     dispatch(getAllVehicles());
@@ -54,6 +64,11 @@ const UpdateTour = () => {
   const navigate = useNavigate(); // Use navigate for navigation
   const handleClose = () => {
     navigate("/dashboard/tours");
+  };
+  const [imageFile, setImageFile] = useState(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
   };
   return (
     <>
@@ -95,6 +110,14 @@ const UpdateTour = () => {
               type="number"
               onChange={inputChangHandler}
               value={updateData && updateData.price}
+            />
+            <img src={updateData.image} height={70} width={100} />
+
+            <input
+              name="files"
+              type="file"
+              placeholder="Update Image"
+              onChange={handleImageChange}
             />
             <Select
               placeholder={updateData.tourType || "Select a tour type"}

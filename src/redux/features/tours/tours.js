@@ -9,6 +9,7 @@ const initialState = {
   totalPages: 0,
   page: 1,
   totalItems: 0,
+  redirect: 0,
 };
 
 export const getAllTours = createAsyncThunk(
@@ -56,9 +57,9 @@ export const deleteTour = createAsyncThunk(
 );
 export const updateTour = createAsyncThunk(
   "updateTour",
-  async (data, thunkAPI) => {
+  async ({ formData, id }, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/tours/${data.id}`, data);
+      const resp = await customFetch.patch(`/tours/${id}`, formData);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -92,6 +93,11 @@ export const searchTour = createAsyncThunk(
 const allTourSlice = createSlice({
   name: "tours",
   initialState,
+  reducers: {
+    clearRedirect: (state) => {
+      state.redirect = 0;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllTours.pending, (state) => {
@@ -136,6 +142,7 @@ const allTourSlice = createSlice({
       })
       .addCase(updateTour.fulfilled, (state) => {
         state.isLoading = false;
+        state.redirect = 1;
         toast.success("Updated a tour successful ");
       })
       .addCase(updateTour.rejected, (state) => {
@@ -155,5 +162,5 @@ const allTourSlice = createSlice({
       });
   },
 });
-
+export const { clearRedirect } = allTourSlice.actions;
 export default allTourSlice.reducer;

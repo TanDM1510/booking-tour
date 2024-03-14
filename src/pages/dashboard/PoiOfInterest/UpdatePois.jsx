@@ -31,7 +31,7 @@ const UpdatePoint = () => {
       const findPoint = pointOfInterest.find((us) => us.id == id);
       setUpdateData(findPoint || {});
     }
-  }, [id]);
+  }, [id, updateData]);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
@@ -46,8 +46,16 @@ const UpdatePoint = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(updateData);
-    dispatch(updatePoint(updateData));
+    const formData = new FormData();
+
+    // Gom tất cả dữ liệu cập nhật vào currentData
+    // currentData sẽ chứa tất cả các khóa và giá trị từ updateData
+    // Ví dụ: currentData: { key1: value1, key2: value2, ... }
+    formData.append("files", imageFile);
+    formData.append("currentData", JSON.stringify(updateData));
+    // Kiểm tra nếu có file hình ảnh được chọn, thêm nó vào formData
+
+    dispatch(updatePoint({ formData, id: updateData.id }));
   };
   const { location } = useSelector((store) => store.allLocation);
   const { pois } = useSelector((store) => store.pois);
@@ -55,13 +63,19 @@ const UpdatePoint = () => {
     dispatch(getAllPois());
     dispatch(getAllLocation());
   }, []);
+  const [imageFile, setImageFile] = useState(null);
   const navigate = useNavigate();
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    setImageFile(file);
+  };
   return (
     <>
       <Card className="grid place-items-center ">
         <form onSubmit={handleSubmit}>
           <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add Location"}
+            {"Update Poi of interest"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Input
@@ -112,13 +126,13 @@ const UpdatePoint = () => {
                 </SelectItem>
               ))}
             </Select>
-            <Input
-              required
-              label="Image"
-              name="image"
+            <img src={updateData.image} height={70} width={100} />
+
+            <input
+              name="files"
               type="file"
-              onChange={inputChangHandler}
-              value={updateData && updateData.image}
+              placeholder="Update Image"
+              onChange={handleImageChange}
             />
             <RadioGroup
               isRequired

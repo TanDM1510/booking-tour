@@ -62,7 +62,7 @@ export const updateUser = createAsyncThunk(
   "/updateUser",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/users/${data._id}`, data);
+      const resp = await customFetch.patch(`/users/${data.id}`, data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {

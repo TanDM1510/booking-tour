@@ -20,13 +20,13 @@ const AddLocation = () => {
     cityId: "",
     locationName: "",
     locationAddress: "",
-    image: File,
+    image: "",
     status: true,
   });
-  console.log(location.image);
-  console.log(location);
+
   const { city } = useSelector((store) => store.allCity);
   const activeCity = city.filter((c) => c.status === true);
+
   useEffect(() => {
     dispatch(getAllCity());
   }, []);
@@ -37,12 +37,11 @@ const AddLocation = () => {
       value = value === "true";
     } else if (e.target.name === "cityId") {
       value = parseInt(value);
-    } else if (e.target.name === "image") {
-      value = e.target.files[0]; // Lấy hình ảnh từ sự kiện thay đổi của input file
     }
     setLocation({ ...location, [e.target.name]: value });
   };
   const { isLoading } = useSelector((store) => store.allLocation);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
@@ -54,19 +53,13 @@ const AddLocation = () => {
       toast.error("Please fill all the blank");
       return;
     }
-    const formData = new FormData();
-    formData.append("cityId", location.cityId);
-    formData.append("locationName", location.locationName);
-    formData.append("locationAddress", location.locationAddress);
-    formData.append("image", location.image);
-    formData.append("status", location.status);
 
     dispatch(createLocation(location));
     setLocation({
       locationName: "",
       locationAddress: "",
       cityId: location.cityId,
-      image: location.image,
+      image: "",
       status: true,
     });
   };
@@ -113,13 +106,6 @@ const AddLocation = () => {
                   ? location.locationAddress
                   : ""
               }
-            />
-            <input
-              required
-              name="image"
-              type="file"
-              onChange={inputChangHandler}
-              // Không cần giữ giá trị của hình ảnh ở đây
             />
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">

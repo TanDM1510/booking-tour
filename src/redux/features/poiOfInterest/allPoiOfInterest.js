@@ -56,9 +56,9 @@ export const deletePoint = createAsyncThunk(
 );
 export const updatePoint = createAsyncThunk(
   "updatePoint",
-  async (data, thunkAPI) => {
+  async ({ formData, id }, thunkAPI) => {
     try {
-      const resp = await customFetch.patch(`/pois/${data.id}`, data);
+      const resp = await customFetch.patch(`/pois/${id}`, formData);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {

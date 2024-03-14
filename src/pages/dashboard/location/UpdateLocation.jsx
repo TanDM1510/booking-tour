@@ -109,12 +109,21 @@ const UpdateLocation = () => {
             onChange={inputChangeHandler}
             value={updateData.locationAddress || ""}
           />
+          <img src={updateData.image} height={70} width={100} />
+
+          <input
+            name="files"
+            type="file"
+            placeholder="Update Image"
+            onChange={handleImageChange}
+          />
+          {/* <label htmlFor="files">Update Image</label>
           <input
             label="Image"
             name="files"
             type="file"
             onChange={handleImageChange}
-          />
+          /> */}
 
           <RadioGroup
             isRequired

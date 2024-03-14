@@ -46,7 +46,7 @@ export default function Trips() {
     (store) => store.trips
   );
   const mergedData = trips.map((trip) => {
-    const tourGuide = tourGuides.find(
+    const tourGuide = tourGuides?.find(
       (guide) => guide._id === trip.tourGuideId
     );
     const tour = tours.find((tour) => tour.id === trip.tourId);
@@ -74,7 +74,7 @@ export default function Trips() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.tourGuide?.userId?.fullName}
+              {mergedData?.tourGuide?.userId?.fullName}
             </p>
           </div>
         );
@@ -175,9 +175,9 @@ export default function Trips() {
           className="w-[300px]"
           defaultSelectedKeys={""}
         >
-          {tourGuides.map((s) => (
+          {tourGuides?.map((s) => (
             <SelectItem key={s._id} value={s._id}>
-              {s.userId.fullName}
+              {s.userId?.fullName}
             </SelectItem>
           ))}
         </Select>

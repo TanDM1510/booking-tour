@@ -54,7 +54,7 @@ const UpdateUserRole = () => {
       <Card className="grid place-items-center ">
         <form onSubmit={handleSubmit}>
           <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
-            {"Add Location"}
+            {"Update role"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
             <Select

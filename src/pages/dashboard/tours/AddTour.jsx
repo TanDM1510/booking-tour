@@ -117,13 +117,7 @@ const AddTour = () => {
               onChange={inputChangHandler}
               value={tour.price !== undefined ? tour.price : ""}
             />
-            <Input
-              label="Image"
-              name="image"
-              type="file"
-              accept="image/*"
-              onChange={inputChangHandler}
-            />
+
             <Select
               placeholder={"Select a tour type"}
               required
