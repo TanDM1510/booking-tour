@@ -4,6 +4,7 @@ import { getAllBookings } from "../../redux/features/bookings/bookings";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUser } from "../../redux/features/user/allUser";
 import { getAllTrips } from "../../redux/features/trips/trips";
+import { getAllTourGuides } from "../../redux/features/tourGuide/tourGuides";
 
 export default function DashboardStatsGrid() {
   const { bookings } = useSelector((store) => store.booking);
@@ -17,8 +18,20 @@ export default function DashboardStatsGrid() {
   }
   const { users } = useSelector((store) => store.allUser);
   const { trips } = useSelector((store) => store.trips);
+  const { tourGuides } = useSelector((store) => store.tourGuide);
+  console.log(tourGuides);
+  const tripsWithTourGuides = trips.map((trip) => {
+    // Tìm tour guide tương ứng với tourGuideId của trip
+    const tourGuide = tourGuides.find(
+      (guide) => guide?._id === trip.tourGuideId
+    );
+
+    // Nếu tìm thấy tour guide, trả về một bản sao của trip mở rộng với thông tin của tour guide
+    // Nếu không, trả về trip ban đầu
+    return tourGuide ? { ...trip, tourGuide } : trip;
+  });
+  console.log(tripsWithTourGuides);
   const [tourguide, setTourGuide] = useState("");
-  console.log(trips);
 
   useEffect(() => {
     if (trips && trips.length > 0) {
@@ -60,6 +73,7 @@ export default function DashboardStatsGrid() {
     dispatch(getAllTrips());
     dispatch(getAllBookings());
     dispatch(getAllUser());
+    dispatch(getAllTourGuides());
   }, []);
   return (
     <div className="flex gap-4">
@@ -86,7 +100,10 @@ export default function DashboardStatsGrid() {
           </span>
           <div className="flex items-center">
             <strong className="text-xl text-gray-700 font-semibold">
-              {tourguide}
+              {
+                tripsWithTourGuides.find((l) => l?.tourGuide?._id === tourguide)
+                  ?.tourGuide?.userId?.fullName
+              }
             </strong>
           </div>
         </div>

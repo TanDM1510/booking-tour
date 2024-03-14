@@ -15,7 +15,7 @@ export const getAllBookings = createAsyncThunk(
   "getAllBookings",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`bookings?page=${data.page}`);
+      const resp = await customFetch.get(`bookings?page=${data?.page}`);
 
       console.log(resp.data);
       return resp.data;
@@ -54,17 +54,14 @@ const bookingSlice = createSlice({
       })
       .addCase(getAllBookings.fulfilled, (state, actions) => {
         state.isLoading = false;
-        state.bookings = actions.payload.data.sort((a, b) => {
-          // Sắp xếp theo createdAt, sử dụng momentjs hoặc so sánh trực tiếp
-          return new Date(b.createAt) - new Date(a.createAt);
-        });
+        state.bookings = actions.payload.data;
         state.totalPages = actions.payload.totalPages;
         state.page = actions.payload.page;
         state.totalItems = actions.payload.totalItems;
       })
       .addCase(getAllBookings.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load bookings");
       })
       .addCase(searchBooking.pending, (state) => {
         state.isLoading = true;

@@ -72,7 +72,7 @@ const tourGuides = createSlice({
       })
       .addCase(getAllTourGuides.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to load location");
+        toast.error("Failed to load tour guide");
       })
       .addCase(createTourGuide.pending, (state) => {
         state.isLoading = true;
