@@ -62,6 +62,9 @@ export default function Users() {
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...users];
 
+    // Loại bỏ user có id là 2
+    filteredUsers = filteredUsers.filter((user) => user.roleId !== 2);
+
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
         user.fullName.toLowerCase().includes(filterValue.toLowerCase())
@@ -159,7 +162,7 @@ export default function Users() {
               <p>...</p>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" className="w-10">
-              <DropdownItem key="copy">
+              {/* <DropdownItem key="copy">
                 {" "}
                 <Tooltip content={`Edit `}>
                   <button
@@ -171,8 +174,8 @@ export default function Users() {
                     <EditIcon />
                   </button>
                 </Tooltip>
-              </DropdownItem>
-              {/* <DropdownItem
+              </DropdownItem> */}
+              <DropdownItem
                 key="edit"
                 onPress={() => {
                   setDeleteId(user._id);
@@ -184,7 +187,7 @@ export default function Users() {
                 <Tooltip color="danger" content="Delete ">
                   <DeleteIcon />
                 </Tooltip>
-              </DropdownItem> */}
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         );

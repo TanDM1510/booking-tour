@@ -169,6 +169,20 @@ export default function Activities() {
           <Table
             aria-label="Example table with custom cellsaaa"
             className="mt-10"
+            bottomContent={
+              <div className="flex flex-col gap-5">
+                <p className="text-small text-default-500">
+                  Total items: {totalItems}
+                </p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={(page) => handlePageChange(page)}
+                  showControls
+                />
+              </div>
+            }
           >
             <TableHeader columns={columnses}>
               {(column) => (
@@ -197,16 +211,6 @@ export default function Activities() {
         )}
       </div>
 
-      <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
-      </div>
       <ModelLocation
         isLoading={isLoading}
         isOpen={isOpen}

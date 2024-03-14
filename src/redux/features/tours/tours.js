@@ -29,6 +29,7 @@ export const createTour = createAsyncThunk(
   async (tour, thunkAPI) => {
     try {
       const resp = await customFetch.post("/tours", tour);
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {

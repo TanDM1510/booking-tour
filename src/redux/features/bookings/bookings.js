@@ -15,7 +15,8 @@ export const getAllBookings = createAsyncThunk(
   "getAllBookings",
   async (data, thunkAPI) => {
     try {
-      const resp = await customFetch.get(`bookings`);
+      const resp = await customFetch.get(`bookings?page=${data.page}`);
+
       console.log(resp.data);
       return resp.data;
     } catch (error) {

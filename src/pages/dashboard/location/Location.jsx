@@ -179,6 +179,20 @@ export default function Location() {
           <Table
             aria-label="Example table with custom cells111"
             className="mt-10"
+            bottomContent={
+              <div className="flex flex-col gap-5">
+                <p className="text-small text-default-500">
+                  Total items: {totalItems}
+                </p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={(page) => handlePageChange(page)}
+                  showControls
+                />
+              </div>
+            }
           >
             <TableHeader columns={columnses}>
               {(column) => (
@@ -207,16 +221,6 @@ export default function Location() {
         )}
       </div>
 
-      <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
-      </div>
       <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}

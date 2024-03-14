@@ -145,6 +145,20 @@ export default function Pois() {
           <Spinner className="flex justify-center items-center mt-10" />
         ) : (
           <Table
+            bottomContent={
+              <div className="flex flex-col gap-5">
+                <p className="text-small text-default-500">
+                  Total items: {totalItems}
+                </p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={(page) => handlePageChange(page)}
+                  showControls
+                />
+              </div>
+            }
             aria-label="Example table with custom cells111"
             className="mt-10"
           >
@@ -175,16 +189,6 @@ export default function Pois() {
         )}
       </div>
 
-      <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
-      </div>
       <ModelLocation
         isOpen={isOpen}
         onOpenChange={onOpenChange}

@@ -6,6 +6,15 @@ const columns = [
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];
+const columnses = [
+  { name: "Tour name", uid: "tourName" },
+  { name: "Price", uid: "price" },
+  { name: "Vehicle type", uid: "vehicleTypeId" },
+  { name: "Tour type", uid: "tourType" },
+  { name: "Image", uid: "image" },
+  { name: "STATUS", uid: "status" },
+  { name: "ACTIONS", uid: "actions" },
+];
 const tourType = [
   {
     id: 1,
@@ -28,4 +37,4 @@ const tourType = [
     name: "Food",
   },
 ];
-export { columns, tourType };
+export { columns, tourType, columnses };

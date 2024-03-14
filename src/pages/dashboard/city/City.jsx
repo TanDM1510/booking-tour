@@ -149,7 +149,24 @@ export default function App() {
         {isLoading ? (
           <Spinner className="flex justify-center items-center mt-10" />
         ) : (
-          <Table aria-label="Example table with custom cells" className="mt-10">
+          <Table
+            aria-label="Example table with custom cells"
+            className="mt-10"
+            bottomContent={
+              <div className="flex flex-col gap-5">
+                <p className="text-small text-default-500">
+                  Total items: {totalItems}
+                </p>
+                <Pagination
+                  total={totalPages}
+                  color="secondary"
+                  page={currentPage}
+                  onChange={(page) => handlePageChange(page)}
+                  showControls
+                />
+              </div>
+            }
+          >
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn
@@ -177,16 +194,6 @@ export default function App() {
         )}
       </div>
 
-      <div className="flex flex-col gap-5">
-        <p className="text-small text-default-500">Total items: {totalItems}</p>
-        <Pagination
-          total={totalPages}
-          color="secondary"
-          page={currentPage}
-          onChange={(page) => handlePageChange(page)}
-          showControls
-        />
-      </div>
       <ModelCity
         isOpen={isOpen}
         onOpenChange={onOpenChange}

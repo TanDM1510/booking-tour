@@ -53,7 +53,7 @@ const PointDetails = () => {
               {pois.find((l) => l.id === data.categoryPOI_ID)?.categoryName}
             </TableCell>
             <TableCell>
-              <Avatar>{data.image}</Avatar>
+              <img src={data.image} height={200} width={200} />
             </TableCell>
             <TableCell>
               <Chip

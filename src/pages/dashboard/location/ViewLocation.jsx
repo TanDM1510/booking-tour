@@ -47,7 +47,9 @@ const ViewLocation = () => {
               {city.find((c) => c.id === data.cityId)?.cityName}
             </TableCell>
             <TableCell>{data.locationAddress}</TableCell>
-
+            <TableCell>
+              <img src={data.image} height={200} width={200} />
+            </TableCell>
             <TableCell>
               <Chip
                 className="capitalize"

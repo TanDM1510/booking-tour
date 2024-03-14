@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { columns } from "./data";
+import { columnses } from "./data";
 const statusColorMap = {
   true: "success",
   false: "danger",
@@ -38,7 +38,7 @@ const ViewTour = () => {
     <div className="w-full flex flex-col items-center justify-center">
       <p className="font-semibold text-lg mb-3 ">Tour Details</p>
       <Table aria-label="Example static collection table">
-        <TableHeader columns={columns}>
+        <TableHeader columns={columnses}>
           {(column) => (
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
@@ -51,6 +51,9 @@ const ViewTour = () => {
               {vehicles.find((v) => v.id === data.vehicleTypeId)?.vehicleName}
             </TableCell>
             <TableCell>{data.tourType}</TableCell>
+            <TableCell>
+              <img src={data.image} height={200} width={200} />
+            </TableCell>
             <TableCell>
               <Chip
                 className="capitalize"
