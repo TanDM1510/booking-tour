@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateTour } from "../../../redux/features/tours/tours";
+import { clearRedirect, updateTour } from "../../../redux/features/tours/tours";
 import { getAllVehicles } from "../../../redux/features/vehicles/vehicles";
 import { tourType } from "./data";
 
@@ -55,7 +55,6 @@ const UpdateTour = () => {
     // Kiểm tra nếu có file hình ảnh được chọn, thêm nó vào formData
 
     dispatch(updateTour({ formData, id: updateData.id }));
-    if (redirect == 1) navigate("/dashboard/tours");
   };
   useEffect(() => {
     dispatch(getAllVehicles());
@@ -70,6 +69,10 @@ const UpdateTour = () => {
     const file = e.target.files[0];
     setImageFile(file);
   };
+  if (redirect == 1) {
+    dispatch(clearRedirect());
+    navigate("/dashboard/tours");
+  }
   return (
     <>
       <Card className="grid place-items-center ">

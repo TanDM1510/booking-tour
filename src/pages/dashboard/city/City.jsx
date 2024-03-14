@@ -116,7 +116,7 @@ export default function App() {
                   </Tooltip>
                 </Link>
               </DropdownItem>
-              <DropdownItem
+              {/* <DropdownItem
                 key="edit"
                 onPress={() => {
                   setDeleteId(city.id);
@@ -128,7 +128,7 @@ export default function App() {
                 <Tooltip color="danger" content="Delete city">
                   <DeleteIcon />
                 </Tooltip>
-              </DropdownItem>
+              </DropdownItem> */}
             </DropdownMenu>
           </Dropdown>
         );

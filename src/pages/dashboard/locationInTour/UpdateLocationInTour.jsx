@@ -56,6 +56,8 @@ const UpdateLocationInTour = () => {
   const navigate = useNavigate();
   const { location } = useSelector((store) => store.allLocation);
   const { tours } = useSelector((store) => store.tours);
+  const activeLocation = location.filter((l) => l.status === true);
+  const activeTours = tours.filter((l) => l.status === true);
   return (
     <>
       <Card className="grid place-items-center ">
@@ -74,7 +76,7 @@ const UpdateLocationInTour = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.locationId}
             >
-              {location.map((s) => (
+              {activeLocation.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.locationName}
                 </SelectItem>
@@ -90,7 +92,7 @@ const UpdateLocationInTour = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.tourId}
             >
-              {tours.map((s) => (
+              {activeTours.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.tourName}
                 </SelectItem>

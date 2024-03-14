@@ -50,10 +50,11 @@ const UpdatePois = () => {
             <Input
               required
               label="Category Name"
-              name="categoryName"
+              name="categotyName"
               type="text"
+              placeholder={updateData.category}
               onChange={inputChangHandler}
-              value={updateData && updateData.categoryName}
+              value={updateData && updateData.categotyName}
             />
 
             <RadioGroup

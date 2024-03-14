@@ -9,6 +9,7 @@ const initialState = {
   totalPages: 0,
   page: 1,
   totalItems: 0,
+  redirectPage: 0,
 };
 
 export const getAllLocation = createAsyncThunk(
@@ -96,6 +97,12 @@ export const searchLocation = createAsyncThunk(
 const allLocationSlice = createSlice({
   name: "allLocation",
   initialState,
+  reducers: {
+    clearRedirect: (state) => {
+      state.redirectPage = 0;
+    },
+  },
+
   extraReducers: (builder) => {
     builder
       .addCase(getAllLocation.pending, (state) => {
@@ -117,10 +124,12 @@ const allLocationSlice = createSlice({
       })
       .addCase(createLocation.fulfilled, (state) => {
         state.isLoading = false;
+        state.redirectPage = 1;
         toast.success("Create location successful !!!");
       })
       .addCase(createLocation.rejected, (state) => {
         state.isLoading = false;
+        state.redirectPage = 0;
         toast.error("Failed to create location");
       })
       .addCase(deleteLocation.pending, (state) => {
@@ -137,13 +146,16 @@ const allLocationSlice = createSlice({
       })
       .addCase(updateLocation.pending, (state) => {
         state.isLoading = true;
+        state.redirectPage = 0;
       })
       .addCase(updateLocation.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("Updated a location successful ");
+        state.redirectPage = 1;
       })
       .addCase(updateLocation.rejected, (state) => {
         state.isLoading = false;
+        state.redirectPage = 0;
         toast.error("Failed to update a location");
       })
       .addCase(searchLocation.pending, (state) => {
@@ -159,5 +171,5 @@ const allLocationSlice = createSlice({
       });
   },
 });
-
+export const { clearRedirect } = allLocationSlice.actions;
 export default allLocationSlice.reducer;

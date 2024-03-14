@@ -9,6 +9,7 @@ const initialState = {
   totalPages: 0,
   page: 1,
   totalItems: 0,
+  redirectPage: 0,
 };
 
 export const getAllPoiOfInterest = createAsyncThunk(
@@ -87,6 +88,11 @@ export const searchPoint = createAsyncThunk(
 const allPointOfInterestSlice = createSlice({
   name: "allPointOfInterest",
   initialState,
+  reducers: {
+    clearRedirect: (state) => {
+      state.redirectPage = 0;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllPoiOfInterest.pending, (state) => {
@@ -131,6 +137,7 @@ const allPointOfInterestSlice = createSlice({
       })
       .addCase(updatePoint.fulfilled, (state) => {
         state.isLoading = false;
+        state.redirectPage = 1;
         toast.success("Updated a point of interest successful ");
       })
       .addCase(updatePoint.rejected, (state) => {
@@ -150,5 +157,5 @@ const allPointOfInterestSlice = createSlice({
       });
   },
 });
-
+export const { clearRedirect } = allPointOfInterestSlice.actions;
 export default allPointOfInterestSlice.reducer;

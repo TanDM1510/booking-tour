@@ -73,6 +73,8 @@ const AddLocationInTour = () => {
 
   const { location } = useSelector((store) => store.allLocation);
   const { tours } = useSelector((store) => store.tours);
+  const activeLocation = location.filter((l) => l.status === true);
+  const activeTours = tours.filter((l) => l.status === true);
   const navigate = useNavigate();
   return (
     <>
@@ -93,7 +95,7 @@ const AddLocationInTour = () => {
                   : ""
               }
             >
-              {location.map((s) => (
+              {activeLocation.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.locationName}
                 </SelectItem>
@@ -108,7 +110,7 @@ const AddLocationInTour = () => {
                 locationInTour.tourId !== undefined ? locationInTour.tourId : ""
               }
             >
-              {tours.map((s) => (
+              {activeTours.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.tourName}
                 </SelectItem>

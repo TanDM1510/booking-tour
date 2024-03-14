@@ -24,11 +24,16 @@ const AddActivity = () => {
     activityDescription: "",
     status: true,
   });
-  console.log(activity);
+
   const dispatch = useDispatch();
   const { location } = useSelector((store) => store.allLocation);
-  useEffect(() => dispatch(getAllLocation()), [dispatch]);
-  const inputChangHandler = (e) => {
+  const activeLocation = location.filter((l) => l.status === true);
+
+  useEffect(() => {
+    dispatch(getAllLocation());
+  }, [dispatch]); // Thêm dispatch vào dependency array của useEffect
+
+  const inputChangeHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {
       value = value === "true";
@@ -48,24 +53,26 @@ const AddActivity = () => {
       !activity.activityName ||
       !activity.locationId
     ) {
-      toast.error("Please fill all the blank");
+      toast.error("Please fill all the blanks");
       return;
     }
     dispatch(createActivity(activity));
     setActivity({
+      locationId: "",
       activityName: "",
       activityDuration: "",
       activityDescription: "",
-      locationId: activity.locationId,
       status: true,
     });
   };
+
   const navigate = useNavigate();
+
   return (
     <>
-      <Card className="grid place-items-center ">
+      <Card className="grid place-items-center">
         <form onSubmit={handleSubmit}>
-          <CardHeader className="flex flex-col gap-3 lg:w-96  font-bold text-3xl">
+          <CardHeader className="flex flex-col gap-3 lg:w-96 font-bold text-3xl">
             {"Add Activity"}
           </CardHeader>
           <CardBody className="flex flex-col gap-3 w-full">
@@ -74,23 +81,18 @@ const AddActivity = () => {
               label="Activity Name"
               name="activityName"
               type="text"
-              onChange={inputChangHandler}
-              value={
-                activity.activityName !== undefined ? activity.activityName : ""
-              }
+              onChange={inputChangeHandler}
+              value={activity.activityName || ""}
             />
             <Select
-              placeholder={
-                location.find((l) => l.id === activity.locationId)
-                  ?.locationName || "Select a location"
-              }
+              placeholder="Select a location"
               label="Location name"
               required
               name="locationId"
-              onChange={inputChangHandler}
-              value={location.cityId !== undefined ? location.cityId : ""}
+              onChange={inputChangeHandler}
+              value={activity.locationId || ""}
             >
-              {location.map((s) => (
+              {activeLocation.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.locationName}
                 </SelectItem>
@@ -101,24 +103,16 @@ const AddActivity = () => {
               label="Activity duration"
               name="activityDuration"
               type="text"
-              onChange={inputChangHandler}
-              value={
-                activity.activityDuration !== undefined
-                  ? activity.activityDuration
-                  : ""
-              }
+              onChange={inputChangeHandler}
+              value={activity.activityDuration || ""}
             />
             <Input
               required
               label="Activity description"
               name="activityDescription"
               type="text"
-              onChange={inputChangHandler}
-              value={
-                activity.activityDescription !== undefined
-                  ? activity.activityDescription
-                  : ""
-              }
+              onChange={inputChangeHandler}
+              value={activity.activityDescription || ""}
             />
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
@@ -145,4 +139,5 @@ const AddActivity = () => {
     </>
   );
 };
+
 export default AddActivity;

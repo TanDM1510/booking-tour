@@ -14,13 +14,18 @@ import {
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateLocation } from "../../../redux/features/location/allLocation";
+import {
+  clearRedirect,
+  updateLocation,
+} from "../../../redux/features/location/allLocation";
 import { getAllCity } from "../../../redux/features/city/allCity";
 
 const UpdateLocation = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { location, isLoading } = useSelector((state) => state.allLocation);
+  const { location, isLoading, redirectPage } = useSelector(
+    (state) => state.allLocation
+  );
   const [updateData, setUpdateData] = useState({});
   const [imageFile, setImageFile] = useState(null);
 
@@ -64,6 +69,10 @@ const UpdateLocation = () => {
 
   const navigate = useNavigate();
 
+  if (redirectPage === 1) {
+    dispatch(clearRedirect());
+    navigate("/dashboard/location");
+  }
   const { city } = useSelector((state) => state.allCity);
   const activeCity = city.filter((c) => c.status === true);
 
@@ -78,13 +87,13 @@ const UpdateLocation = () => {
             label="City"
             placeholder={
               updateData.cityId
-                ? activeCity.find((c) => c.id === updateData.cityId)?.cityName
+                ? city.find((c) => c.id === updateData.cityId)?.cityName
                 : "Select a city"
             }
             required
             name="cityId"
             onChange={inputChangeHandler}
-            value={updateData.cityId || ""}
+            value={updateData.cityId || updateData}
           >
             {activeCity.map((s) => (
               <SelectItem key={s.id} value={s.id}>
@@ -131,7 +140,7 @@ const UpdateLocation = () => {
             name="status"
             label="Active or Disable"
             onChange={inputChangeHandler}
-            value={updateData.status || ""}
+            value={updateData && updateData.status}
           >
             <Radio value={true}>Active</Radio>
             <Radio value={false}>Disable</Radio>

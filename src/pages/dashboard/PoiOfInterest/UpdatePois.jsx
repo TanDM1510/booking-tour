@@ -14,14 +14,17 @@ import {
 } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { updatePoint } from "../../../redux/features/poiOfInterest/allPoiOfInterest";
+import {
+  clearRedirect,
+  updatePoint,
+} from "../../../redux/features/poiOfInterest/allPoiOfInterest";
 import { getAllPois } from "../../../redux/features/pois/pois";
 import { getAllLocation } from "../../../redux/features/location/allLocation";
 
 const UpdatePoint = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { pointOfInterest, isLoading } = useSelector(
+  const { pointOfInterest, isLoading, redirectPage } = useSelector(
     (state) => state.allPoiOfInterest
   );
   const [updateData, setUpdateData] = useState({});
@@ -58,7 +61,9 @@ const UpdatePoint = () => {
     dispatch(updatePoint({ formData, id: updateData.id }));
   };
   const { location } = useSelector((store) => store.allLocation);
+  const activeLocation = location.filter((l) => l.status === true);
   const { pois } = useSelector((store) => store.pois);
+  const activePois = pois.filter((p) => p.status === true);
   useEffect(() => {
     dispatch(getAllPois());
     dispatch(getAllLocation());
@@ -70,6 +75,11 @@ const UpdatePoint = () => {
 
     setImageFile(file);
   };
+
+  if (redirectPage === 1) {
+    dispatch(clearRedirect());
+    navigate("/dashboard/poiOfInterest");
+  }
   return (
     <>
       <Card className="grid place-items-center ">
@@ -104,7 +114,7 @@ const UpdatePoint = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.locationId}
             >
-              {location.map((locationItem) => (
+              {activeLocation.map((locationItem) => (
                 <SelectItem key={locationItem.id} value={locationItem.id}>
                   {locationItem.locationName}
                 </SelectItem>
@@ -120,7 +130,7 @@ const UpdatePoint = () => {
               onChange={inputChangHandler}
               value={updateData && updateData.categoryPOI_ID}
             >
-              {pois.map((poisItem) => (
+              {activePois.map((poisItem) => (
                 <SelectItem key={poisItem.id} value={poisItem.id}>
                   {poisItem.categoryName}
                 </SelectItem>

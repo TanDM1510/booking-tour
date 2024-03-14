@@ -54,6 +54,7 @@ const UpdateCity = () => {
               type="text"
               onChange={inputChangeHandler}
               value={updateData && updateData.cityName}
+              isDisabled
             />
             <Input
               required
@@ -62,6 +63,7 @@ const UpdateCity = () => {
               type="text"
               onChange={inputChangeHandler}
               value={updateData && updateData.country}
+              isDisabled
             />
             <RadioGroup
               isRequired

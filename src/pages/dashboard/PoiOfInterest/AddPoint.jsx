@@ -27,7 +27,9 @@ const AddPoint = () => {
   });
 
   const { location } = useSelector((store) => store.allLocation);
+  const activeLocation = location.filter((l) => l.status === true);
   const { pois } = useSelector((store) => store.pois);
+  const activePois = pois.filter((p) => p.status === true);
   useEffect(() => {
     dispatch(getAllPois());
     dispatch(getAllLocation());
@@ -51,9 +53,7 @@ const AddPoint = () => {
       !point.POIName ||
       !point.POIDescription ||
       !point.locationId ||
-      !point.categoryPOI_ID ||
-      !point.image ||
-      !point.status
+      !point.categoryPOI_ID
     ) {
       toast.error("Please fill all the blank");
       return;
@@ -102,7 +102,7 @@ const AddPoint = () => {
               onChange={inputChangHandler}
               value={point.locationId !== undefined ? point.locationId : ""}
             >
-              {location.map((locationItem) => (
+              {activeLocation.map((locationItem) => (
                 <SelectItem key={locationItem.id} value={locationItem.id}>
                   {locationItem.locationName}
                 </SelectItem>
@@ -117,20 +117,20 @@ const AddPoint = () => {
                 point.categoryPOI_ID !== undefined ? point.categoryPOI_ID : ""
               }
             >
-              {pois.map((poisItem) => (
+              {activePois.map((poisItem) => (
                 <SelectItem key={poisItem.id} value={poisItem.id}>
                   {poisItem.categoryName}
                 </SelectItem>
               ))}
             </Select>
-            <Input
+            {/* <Input
               required
               label="Image"
               name="image"
               type="file"
               onChange={inputChangHandler}
               value={point.image !== undefined ? point.image : ""}
-            />
+            /> */}
           </CardBody>
           <CardFooter className="flex flex-row-reverse gap-2">
             <Button
