@@ -18,6 +18,8 @@ const statusColorMap = {
   false: "danger",
 };
 import { columnses } from "./data";
+import moment from "moment";
+
 const BookingDetails = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -49,7 +51,9 @@ const BookingDetails = () => {
               {users.find((c) => c._id === data.userId)?.fullName}
             </TableCell>
             <TableCell>{data.tripId}</TableCell>
-            <TableCell>{data.bookingDate}</TableCell>
+            <TableCell>
+              {moment(data.bookingDate).format("YYYY-MM-DD ")}
+            </TableCell>
             <TableCell>{data.totalAmount}</TableCell>
             <TableCell>{data.totalCustomer}</TableCell>
             <TableCell>

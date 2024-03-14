@@ -28,6 +28,7 @@ import {
 } from "../../../redux/features/bookings/bookings";
 import { getAllTrips } from "../../../redux/features/trips/trips";
 import { getAllUser } from "../../../redux/features/user/allUser";
+import moment from "moment";
 
 const statusColorMap = {
   true: "success",
@@ -35,6 +36,7 @@ const statusColorMap = {
 };
 
 export default function Bookings() {
+  const currentDate = moment();
   const dispatch = useDispatch();
   //Xóa dữ liệu
   //Gọi dữ liệu
@@ -69,7 +71,9 @@ export default function Bookings() {
       dispatch(getAllBookings({ page: page }));
     }
   };
-
+  const format = (date) => {
+    moment(date).format("DD/MM/YY");
+  };
   //Table
   const renderCell = React.useCallback((mergedData, columnKey) => {
     const cellValue = mergedData[columnKey];
@@ -87,7 +91,7 @@ export default function Bookings() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize text-default-400">
-              {mergedData.bookingDate}
+              {moment(mergedData.bookingDate).format("YYYY-MM-DD ")}
             </p>
           </div>
         );

@@ -9,68 +9,74 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
+const transactions = [
   {
-    name: "Jan",
-    Expense: 4000,
-    Income: 2400,
+    id: 110,
+    bookingDate: "2024-03-14T21:26:27.902005",
+    userId: "65f19d67f2ccb5217aa37d20",
+    totalAmount: 615000,
+    totalCustomer: 5,
+    status: true,
+    tripId: 113,
+    paymentMethodId: null,
+    createAt: "2024-03-14T14:26:30.641Z",
+    updateAt: "2024-03-14T14:28:09.411Z",
+    deleteAt: null,
   },
   {
-    name: "Feb",
-    Expense: 3000,
-    Income: 1398,
+    id: 109,
+    bookingDate: "2024-03-14T21:17:32.239178",
+    userId: "65eec32f091eebb14e0c0217",
+    totalAmount: 492000,
+    totalCustomer: 4,
+    status: true,
+    tripId: 112,
+    paymentMethodId: null,
+    createAt: "2024-03-14T14:17:35.001Z",
+    updateAt: "2024-03-14T14:19:06.955Z",
+    deleteAt: null,
   },
   {
-    name: "Mar",
-    Expense: 2000,
-    Income: 9800,
-  },
-  {
-    name: "Apr",
-    Expense: 2780,
-    Income: 3908,
-  },
-  {
-    name: "May",
-    Expense: 1890,
-    Income: 4800,
-  },
-  {
-    name: "Jun",
-    Expense: 2390,
-    Income: 3800,
-  },
-  {
-    name: "July",
-    Expense: 3490,
-    Income: 4300,
-  },
-  {
-    name: "Aug",
-    Expense: 2000,
-    Income: 9800,
-  },
-  {
-    name: "Sep",
-    Expense: 2780,
-    Income: 3908,
-  },
-  {
-    name: "Oct",
-    Expense: 1890,
-    Income: 4800,
-  },
-  {
-    name: "Nov",
-    Expense: 2390,
-    Income: 3800,
-  },
-  {
-    name: "Dec",
-    Expense: 3490,
-    Income: 4300,
+    id: 108,
+    bookingDate: "2024-03-14T13:05:54.570867",
+    userId: "65eec32f091eebb14e0c0217",
+    totalAmount: 4000000,
+    totalCustomer: 4,
+    status: true,
+    tripId: 108,
+    paymentMethodId: null,
+    createAt: "2024-03-14T06:05:55.735Z",
+    updateAt: "2024-03-14T06:49:19.180Z",
+    deleteAt: null,
   },
 ];
+
+// Hàm định dạng số tiền
+const formatCurrency = (value) => {
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(1)}tr`;
+  } else if (value >= 1000) {
+    return `${(value / 1000).toFixed(1)}k`;
+  } else {
+    return value.toString();
+  }
+};
+
+// Tạo mảng chứa tổng số tiền được thanh toán cho mỗi tháng, ban đầu là 0 cho tất cả các tháng
+const totalAmountByMonth = new Array(12).fill(0);
+
+// Tính tổng số tiền được thanh toán cho mỗi tháng
+transactions.forEach((transaction) => {
+  const date = new Date(transaction.bookingDate);
+  const monthIndex = date.getMonth();
+  totalAmountByMonth[monthIndex] += transaction.totalAmount;
+});
+
+// Tạo dữ liệu cho biểu đồ tổng số tiền được thanh toán cho mỗi tháng
+const data = totalAmountByMonth.map((totalAmount, index) => ({
+  name: `${index + 1}`, // Tên tháng
+  TotalAmount: totalAmount, // Tổng số tiền
+}));
 
 export default function TransactionChart() {
   return (
@@ -85,17 +91,16 @@ export default function TransactionChart() {
             margin={{
               top: 20,
               right: 10,
-              left: -10,
+              left: -5,
               bottom: 0,
             }}
           >
             <CartesianGrid strokeDasharray="3 3 0 0" vertical={false} />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <Tooltip formatter={(value) => formatCurrency(value)} />
             <Legend />
-            <Bar dataKey="Income" fill="#0ea5e9" />
-            <Bar dataKey="Expense" fill="#ea580c" />
+            <Bar dataKey="TotalAmount" fill="#ea580c" />
           </BarChart>
         </ResponsiveContainer>
       </div>
