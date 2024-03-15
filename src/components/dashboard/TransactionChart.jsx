@@ -52,33 +52,33 @@ const transactions = [
 ];
 
 // Hàm định dạng số tiền
-const formatCurrency = (value) => {
-  if (value >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}tr`;
-  } else if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)}k`;
-  } else {
-    return value.toString();
-  }
-};
 
-// Tạo mảng chứa tổng số tiền được thanh toán cho mỗi tháng, ban đầu là 0 cho tất cả các tháng
-const totalAmountByMonth = new Array(12).fill(0);
+export default function TransactionChart({ datas = [] }) {
+  const formatCurrency = (value) => {
+    if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(1)}tr`;
+    } else if (value >= 1000) {
+      return `${(value / 1000).toFixed(1)}k`;
+    } else {
+      return value.toString();
+    }
+  };
 
-// Tính tổng số tiền được thanh toán cho mỗi tháng
-transactions.forEach((transaction) => {
-  const date = new Date(transaction.bookingDate);
-  const monthIndex = date.getMonth();
-  totalAmountByMonth[monthIndex] += transaction.totalAmount;
-});
+  // Tạo mảng chứa tổng số tiền được thanh toán cho mỗi tháng, ban đầu là 0 cho tất cả các tháng
+  const totalAmountByMonth = new Array(12).fill(0);
 
-// Tạo dữ liệu cho biểu đồ tổng số tiền được thanh toán cho mỗi tháng
-const data = totalAmountByMonth.map((totalAmount, index) => ({
-  name: ` Tháng ${index + 1}`, // Tên tháng
-  TotalAmount: totalAmount, // Tổng số tiền
-}));
+  // Tính tổng số tiền được thanh toán cho mỗi tháng
+  datas.forEach((transaction) => {
+    const date = new Date(transaction.bookingDate);
+    const monthIndex = date.getMonth();
+    totalAmountByMonth[monthIndex] += transaction.totalAmount;
+  });
 
-export default function TransactionChart() {
+  // Tạo dữ liệu cho biểu đồ tổng số tiền được thanh toán cho mỗi tháng
+  const data = totalAmountByMonth.map((totalAmount, index) => ({
+    name: ` Tháng ${index + 1}`, // Tên tháng
+    TotalAmount: totalAmount, // Tổng số tiền
+  }));
   return (
     <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
       <strong className="text-gray-700 font-medium">Transactions</strong>

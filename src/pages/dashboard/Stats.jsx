@@ -18,7 +18,7 @@ const Stats = () => {
     <div className="flex flex-col gap-4">
       <DashboardStatsGrid />
       <div className="flex flex-row gap-4 w-full">
-        <TransactionChart />
+        <TransactionChart datas={bookings} />
         <BuyerProfilePieChart />
       </div>
       <div className="flex flex-row gap-4 w-full">
