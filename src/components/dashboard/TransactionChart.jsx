@@ -74,7 +74,7 @@ transactions.forEach((transaction) => {
 
 // Tạo dữ liệu cho biểu đồ tổng số tiền được thanh toán cho mỗi tháng
 const data = totalAmountByMonth.map((totalAmount, index) => ({
-  name: `${index + 1}`, // Tên tháng
+  name: ` Tháng ${index + 1}`, // Tên tháng
   TotalAmount: totalAmount, // Tổng số tiền
 }));
 

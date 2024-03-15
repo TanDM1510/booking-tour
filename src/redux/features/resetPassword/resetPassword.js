@@ -18,13 +18,15 @@ export const createOTP = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const resp = await customFetch.post("/verify", { email: data });
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
         thunkAPI.dispatch(logoutUser());
         return thunkAPI.rejectWithValue("Unauthorized");
       }
-      return thunkAPI.rejectWithValue(error.response.message);
+
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -78,10 +80,10 @@ const resetPasswordSlice = createSlice({
         state.redirect = 1;
         toast.success("Please check your email to get OTP");
       })
-      .addCase(createOTP.rejected, (state) => {
+      .addCase(createOTP.rejected, (state, actions) => {
         state.isLoading = false;
         state.redirect = 0;
-        toast.error("Wrong email !!!");
+        toast.error(actions.payload.status);
       })
       .addCase(verifyOTP.pending, (state) => {
         state.isLoading = true;
