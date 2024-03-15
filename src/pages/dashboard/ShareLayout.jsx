@@ -4,13 +4,14 @@ import BigSideBar from "../../components/dashboard/BigSideBar";
 
 import NavbarDashBoard from "../../components/dashboard/Navbar";
 import { useSelector } from "react-redux";
+import ForbiddenPage from "../../components/SignUp/Forrbiden";
 
 const ShareLayout = () => {
   const { user } = useSelector((store) => store.user);
 
   return (
     <>
-      {user?.accessToken && user?.role === 0 ? (
+      {user?.accessToken && user?.role === 2 ? (
         <main className=" h-screen ">
           <div className="h-1/6">
             <NavbarDashBoard />
@@ -26,7 +27,7 @@ const ShareLayout = () => {
           </div>
         </main>
       ) : (
-        <Navigate to="/login" />
+        <ForbiddenPage />
       )}
     </>
   );
