@@ -34,7 +34,7 @@ const UpdatePoint = () => {
       const findPoint = pointOfInterest.find((us) => us.id == id);
       setUpdateData(findPoint || {});
     }
-  }, [id, updateData]);
+  }, [id]);
   const inputChangHandler = (e) => {
     let value = e.target.value;
     if (e.target.name === "status") {

@@ -32,20 +32,21 @@ const UpdateActivity = () => {
       const findActivity = activities.find((act) => act.id === parseInt(id));
       setUpdateData(findActivity || {});
     }
-  }, [id, activities]);
+  }, [id]);
 
   useEffect(() => {
     dispatch(getAllLocation());
   }, [dispatch]);
 
-  const inputChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setUpdateData((prevData) => ({
-      ...prevData,
-      [name]: name === "status" ? value === "true" : parseInt(value) || value,
-    }));
+  const inputChangHandler = (e) => {
+    let value = e.target.value;
+    if (e.target.name === "status") {
+      value = value === "true";
+    } else if (e.target.name === "locationId") {
+      value = parseInt(value);
+    }
+    setUpdateData({ ...updateData, [e.target.name]: value });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (updateData) {
@@ -57,7 +58,7 @@ const UpdateActivity = () => {
     <Card className="grid place-items-center">
       <form onSubmit={handleSubmit}>
         <CardHeader className="flex flex-col gap-3 lg:w-96 font-bold text-3xl">
-          {"Add Activity"}
+          {"Update Activity"}
         </CardHeader>
         <CardBody className="flex flex-col gap-3 w-full">
           <Input
@@ -65,7 +66,7 @@ const UpdateActivity = () => {
             label="Activity Name"
             name="activityName"
             type="text"
-            onChange={inputChangeHandler}
+            onChange={inputChangHandler}
             value={updateData.activityName || ""}
           />
           <Select
@@ -75,7 +76,7 @@ const UpdateActivity = () => {
             }
             required
             name="locationId"
-            onChange={inputChangeHandler}
+            onChange={inputChangHandler}
             value={updateData.locationId || ""}
           >
             {activeLocation.map((loc) => (
@@ -89,15 +90,15 @@ const UpdateActivity = () => {
             label="Activity duration"
             name="activityDuration"
             type="text"
-            onChange={inputChangeHandler}
-            value={updateData.activityDuration || ""}
+            onChange={inputChangHandler}
+            value={updateData && updateData.activityDuration}
           />
           <Input
             required
             label="Activity description"
             name="activityDescription"
             type="text"
-            onChange={inputChangeHandler}
+            onChange={inputChangHandler}
             value={updateData.activityDescription || ""}
           />
           <RadioGroup
@@ -105,7 +106,7 @@ const UpdateActivity = () => {
             className="mt-3"
             name="status"
             label="Active or Disable"
-            onChange={inputChangeHandler}
+            onChange={inputChangHandler}
             value={String(updateData.status)}
           >
             <Radio value={"true"}>Active</Radio>

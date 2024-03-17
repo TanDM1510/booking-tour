@@ -34,16 +34,17 @@ const UpdateLocation = () => {
       const findLocation = location.find((loc) => loc.id === parseInt(id));
       setUpdateData(findLocation || {});
     }
-  }, [id, location]);
+  }, [id]);
 
   const inputChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setUpdateData((prevData) => ({
-      ...prevData,
-      [name]: name === "status" ? value === "true" : value,
-    }));
+    let value = e.target.value;
+    if (e.target.name === "status") {
+      value = value === "true";
+    } else if (e.target.name === "cityId") {
+      value = parseInt(value);
+    }
+    setUpdateData({ ...updateData, [e.target.name]: value });
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
