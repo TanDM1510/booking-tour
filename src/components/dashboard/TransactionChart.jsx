@@ -69,9 +69,9 @@ export default function TransactionChart({ datas = [] }) {
 
   // Tính tổng số tiền được thanh toán cho mỗi tháng
   datas.forEach((transaction) => {
-    const date = new Date(transaction.bookingDate);
+    const date = new Date(transaction.paymentDate);
     const monthIndex = date.getMonth();
-    totalAmountByMonth[monthIndex] += transaction.totalAmount;
+    totalAmountByMonth[monthIndex] += transaction.amount;
   });
 
   // Tạo dữ liệu cho biểu đồ tổng số tiền được thanh toán cho mỗi tháng
@@ -80,8 +80,8 @@ export default function TransactionChart({ datas = [] }) {
     TotalAmount: totalAmount, // Tổng số tiền
   }));
   return (
-    <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
-      <strong className="text-gray-700 font-medium">Transactions</strong>
+    <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1 mt-5">
+      <strong className="text-gray-700 font-medium">Revenue by months</strong>
       <div className="mt-3 w-full flex-1 text-xs">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
