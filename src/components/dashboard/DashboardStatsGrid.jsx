@@ -8,9 +8,11 @@ import { getAllTourGuides } from "../../redux/features/tourGuide/tourGuides";
 import { getAllPayments } from "../../redux/features/payments/allPayments";
 
 export default function DashboardStatsGrid() {
-  const { bookings } = useSelector((store) => store.booking);
+  const { bookings, totalItems } = useSelector((store) => store.booking);
+  console.log(bookings.length);
+
   let totalAmount = 0;
-  const { payments, isLoading } = useSelector((store) => store.payments);
+  const { payments } = useSelector((store) => store.payments);
   if (payments && payments.length > 0) {
     totalAmount = payments.reduce((accumulator, currentBooking) => {
       return accumulator + currentBooking.amount;
