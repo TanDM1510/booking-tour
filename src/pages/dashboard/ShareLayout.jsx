@@ -11,7 +11,7 @@ const ShareLayout = () => {
 
   return (
     <>
-      {user?.accessToken && user?.role === 0 ? (
+      {user?.accessToken && user?.role === 2 ? (
         <main className=" h-screen ">
           <div className="h-1/6">
             <NavbarDashBoard />
